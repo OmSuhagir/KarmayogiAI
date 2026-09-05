@@ -57,7 +57,7 @@ app.get("/", (req, res) => {
 });
 
 // Health check
-app.get("/api/health", (req, res) => {
+app.get(["/health", "/api/health"], (req, res) => {
   res.json({
     status: "OK",
     database:
@@ -67,35 +67,24 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-// User routes
-app.use("/api/users", userRoutes);
+// Route registration helper for both /api/path and /path
+const routes = [
+  ["/users", userRoutes],
+  ["/assessments", assessmentRoutes],
+  ["/skill-gaps", skillGapRoutes],
+  ["/recommendations", recommendationRoutes],
+  ["/learning-progress", learningProgressRoutes],
+  ["/competency-history", competencyHistoryRoutes],
+  ["/documents", documentRoutes],
+  ["/generated-questions", generatedQuestionRoutes],
+  ["/admin", adminRoutes],
+  ["/chat", chatRoutes]
+];
 
-// Assessment routes
-app.use("/api/assessments", assessmentRoutes);
-
-// Skill gap routes
-app.use("/api/skill-gaps", skillGapRoutes);
-
-// Recommendation routes
-app.use("/api/recommendations", recommendationRoutes);
-
-// Learning progress routes
-app.use("/api/learning-progress", learningProgressRoutes);
-
-// Competency history routes
-app.use("/api/competency-history", competencyHistoryRoutes);
-
-// Documents
-app.use("/api/documents", documentRoutes);
-
-// Generated questions
-app.use("/api/generated-questions", generatedQuestionRoutes);
-
-// Admin
-app.use("/api/admin", adminRoutes);
-
-// AI Employee Companion Chatbot
-app.use("/api/chat", chatRoutes);
+routes.forEach(([path, handler]) => {
+  app.use(`/api${path}`, handler);
+  app.use(path, handler);
+});
 
 // Start server
 app.listen(PORT, () => {
