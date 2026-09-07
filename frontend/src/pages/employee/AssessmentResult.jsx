@@ -24,6 +24,7 @@ export default function AssessmentResult() {
   const [loading, setLoading] = useState(true);
   const [resultData, setResultData] = useState(null);
   const [auditData, setAuditData] = useState([]);
+  const [activeCategory, setActiveCategory] = useState('All');
 
   useEffect(() => {
     async function loadResultAndProfile() {
@@ -81,6 +82,18 @@ export default function AssessmentResult() {
       expectedLevel: matched?.expectedLevel || 3,
       gap: matched?.gap !== undefined ? matched.gap : Math.max(0, (matched?.expectedLevel || 3) - (rc.assessedLevel || 1)),
     };
+  });
+
+  const formatCategory = (cat) => {
+    if (!cat) return 'Functional';
+    return cat.charAt(0).toUpperCase() + cat.slice(1).toLowerCase();
+  };
+
+  const categories = ['All', ...new Set(enrichedCompetencies.map((c) => formatCategory(c.category)))];
+
+  const filteredCompetencies = enrichedCompetencies.filter((comp) => {
+    if (activeCategory === 'All') return true;
+    return formatCategory(comp.category) === activeCategory;
   });
 
   const overallScore = resultData?.overallScore !== undefined ? resultData.overallScore : 0;
@@ -189,8 +202,34 @@ export default function AssessmentResult() {
           </GlassButton>
         </div>
 
+        {/* Category Tabs */}
+        {categories.length > 2 && (
+          <div className="flex items-center gap-2 overflow-x-auto pb-1">
+            {categories.map((cat) => {
+              const count = cat === 'All'
+                ? enrichedCompetencies.length
+                : enrichedCompetencies.filter((c) => formatCategory(c.category) === cat).length;
+              const isActive = activeCategory === cat;
+              return (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setActiveCategory(cat)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all shrink-0 border ${
+                    isActive
+                      ? 'bg-[#111111] text-[#FFFDF8] border-[#111111]'
+                      : 'bg-[#FFFDF8] text-[#62615D] hover:text-[#111111] hover:bg-[#F8F6F0] border-[#DDD9CF]'
+                  }`}
+                >
+                  {cat} ({count})
+                </button>
+              );
+            })}
+          </div>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {enrichedCompetencies.map((comp, idx) => {
+          {filteredCompetencies.map((comp, idx) => {
             const isImproved = comp.assessedLevel > comp.previousLevel;
             const isLevelMet = comp.assessedLevel >= comp.expectedLevel;
 

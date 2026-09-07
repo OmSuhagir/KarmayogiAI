@@ -323,7 +323,11 @@ export default function Dashboard() {
                               <span className="text-xs font-semibold text-[#111111]">
                                 {comp.name || 'Competency'}
                               </span>
-                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#FFFDF8] text-[#62615D] border border-[#DDD9CF]">
+                              <span className={`text-[10px] px-1.5 py-0.5 rounded border capitalize ${
+                                (comp.category || '').toLowerCase() === 'behavioral'
+                                  ? 'bg-[#FAF6F0] text-[#854D0E] border-[#E8DEC8]'
+                                  : 'bg-[#FFFDF8] text-[#62615D] border-[#DDD9CF]'
+                              }`}>
                                 {comp.category || 'Functional'}
                               </span>
                             </div>
@@ -361,7 +365,7 @@ export default function Dashboard() {
                           {gap > 0 ? (
                             <Link
                               to="/employee/recommendations"
-                              className="text-xs font-semibold text-[#3348A8] hover:underline flex items-center gap-1"
+                              className="text-xs font-semibold text-[#111111] hover:underline flex items-center gap-1"
                             >
                               Build Competency &rarr;
                             </Link>
@@ -405,7 +409,7 @@ export default function Dashboard() {
               </div>
               <Link
                 to="/employee/skill-gaps"
-                className="text-xs font-semibold text-[#3348A8] hover:underline"
+                className="text-xs font-semibold text-[#111111] hover:underline"
               >
                 View All ({openGapsCount})
               </Link>
@@ -451,7 +455,7 @@ export default function Dashboard() {
               </div>
               <Link
                 to="/employee/learning"
-                className="text-xs font-semibold text-[#3348A8] hover:underline"
+                className="text-xs font-semibold text-[#111111] hover:underline"
               >
                 Learning Hub &rarr;
               </Link>
@@ -460,15 +464,15 @@ export default function Dashboard() {
             <div className="space-y-2">
               <div className="p-2.5 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] space-y-1">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] text-[#8A8882]">Module &bull; 150 mins</span>
-                  <span className="text-[10px] font-semibold text-[#52745D]">94% Match</span>
+                  <span className="text-[10px] text-[#8A8882]">Behavioral &bull; 120 mins</span>
+                  <span className="text-[10px] font-semibold text-[#52745D]">92% Match</span>
                 </div>
                 <h4 className="text-xs font-semibold text-[#111111]">
-                  Python for Data Analysis & Official Statistics
+                  Mission Karmayogi: Code of Ethics & Public Integrity
                 </h4>
                 <Link
                   to="/employee/recommendations"
-                  className="text-[11px] font-medium text-[#3348A8] hover:underline block pt-0.5"
+                  className="text-[11px] font-medium text-[#111111] hover:underline block pt-0.5"
                 >
                   Enroll Course &rarr;
                 </Link>
@@ -476,15 +480,15 @@ export default function Dashboard() {
 
               <div className="p-2.5 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] space-y-1">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] text-[#8A8882]">Module &bull; 180 mins</span>
-                  <span className="text-[10px] font-semibold text-[#52745D]">88% Match</span>
+                  <span className="text-[10px] text-[#8A8882]">Functional &bull; 150 mins</span>
+                  <span className="text-[10px] font-semibold text-[#52745D]">94% Match</span>
                 </div>
                 <h4 className="text-xs font-semibold text-[#111111]">
-                  Sampling Techniques and Field Survey Design
+                  Python for Data Analysis & Official Statistics
                 </h4>
                 <Link
                   to="/employee/recommendations"
-                  className="text-[11px] font-medium text-[#3348A8] hover:underline block pt-0.5"
+                  className="text-[11px] font-medium text-[#111111] hover:underline block pt-0.5"
                 >
                   Enroll Course &rarr;
                 </Link>
@@ -507,7 +511,7 @@ export default function Dashboard() {
             </div>
             <Link
               to="/employee/competencies"
-              className="text-[11px] font-semibold text-[#3348A8] hover:underline block pt-1"
+              className="text-[11px] font-semibold text-[#111111] hover:underline block pt-1"
             >
               View Service Dossier &rarr;
             </Link>

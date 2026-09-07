@@ -16,10 +16,57 @@ import ProgressBar from '../../components/common/ProgressBar';
 export default function LearningHub() {
   const navigate = useNavigate();
 
+  const [activeCategory, setActiveCategory] = useState('All');
+
   const [courses, setCourses] = useState([
+    {
+      id: 'course-b1',
+      title: 'Mission Karmayogi: Leadership & Team Empowerment in Civil Services',
+      category: 'behavioral',
+      provider: 'iGOT Karmayogi',
+      durationMinutes: 120,
+      targetCompetency: 'Leadership (Target: Level 3)',
+      progress: 35,
+      status: 'in_progress',
+      url: 'https://igotkarmayogi.gov.in',
+    },
+    {
+      id: 'course-b2',
+      title: 'Executive Communication, Policy Articulation & Media Briefing',
+      category: 'behavioral',
+      provider: 'iGOT Karmayogi',
+      durationMinutes: 110,
+      targetCompetency: 'Communication (Target: Level 4)',
+      progress: 50,
+      status: 'in_progress',
+      url: 'https://igotkarmayogi.gov.in',
+    },
+    {
+      id: 'course-b3',
+      title: 'Mission Karmayogi: Code of Ethics & Constitutional Values in Governance',
+      category: 'behavioral',
+      provider: 'iGOT Karmayogi',
+      durationMinutes: 150,
+      targetCompetency: 'Ethics (Target: Level 4)',
+      progress: 70,
+      status: 'in_progress',
+      url: 'https://igotkarmayogi.gov.in',
+    },
+    {
+      id: 'course-b4',
+      title: 'Leading Digital Transformation & Public Sector Change Management',
+      category: 'behavioral',
+      provider: 'iGOT Karmayogi',
+      durationMinutes: 120,
+      targetCompetency: 'Change Management (Target: Level 3)',
+      progress: 20,
+      status: 'in_progress',
+      url: 'https://igotkarmayogi.gov.in',
+    },
     {
       id: 'course-1',
       title: 'Python for Data Analysis & Tabular Processing',
+      category: 'functional',
       provider: 'iGOT Karmayogi',
       durationMinutes: 150,
       targetCompetency: 'Python for Data Analysis (Target: Level 3)',
@@ -30,6 +77,7 @@ export default function LearningHub() {
     {
       id: 'course-2',
       title: 'Sampling Techniques and Survey Design',
+      category: 'functional',
       provider: 'iGOT Karmayogi',
       durationMinutes: 180,
       targetCompetency: 'Sampling Design (Target: Level 4)',
@@ -40,11 +88,23 @@ export default function LearningHub() {
     {
       id: 'course-3',
       title: 'Data Quality Management & Validation Procedures',
+      category: 'functional',
       provider: 'iGOT Karmayogi',
       durationMinutes: 140,
       targetCompetency: 'Data Quality Management (Target: Level 4)',
       progress: 100,
       status: 'completed',
+      url: 'https://igotkarmayogi.gov.in',
+    },
+    {
+      id: 'course-b5',
+      title: 'Evidence-Based Decision Making & Administrative Risk Management',
+      category: 'behavioral',
+      provider: 'iGOT Karmayogi',
+      durationMinutes: 130,
+      targetCompetency: 'Decision Making (Target: Level 3)',
+      progress: 15,
+      status: 'in_progress',
       url: 'https://igotkarmayogi.gov.in',
     },
   ]);
@@ -64,6 +124,13 @@ export default function LearningHub() {
       })
     );
   };
+
+  const categories = ['All', 'Behavioral', 'Functional'];
+
+  const filteredCourses = courses.filter((course) => {
+    if (activeCategory === 'All') return true;
+    return (course.category || 'functional').toLowerCase() === activeCategory.toLowerCase();
+  });
 
   const completedCount = courses.filter((c) => c.status === 'completed').length;
 
@@ -96,9 +163,42 @@ export default function LearningHub() {
         </GlassButton>
       </div>
 
+      {/* Category Tabs */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-1">
+        {categories.map((cat) => {
+          const count = cat === 'All'
+            ? courses.length
+            : courses.filter((c) => (c.category || 'functional').toLowerCase() === cat.toLowerCase()).length;
+
+          return (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => setActiveCategory(cat)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex-shrink-0 flex items-center gap-1.5 ${
+                activeCategory === cat
+                  ? 'bg-[#111111] text-[#FFFDF8] font-semibold'
+                  : 'bg-[#FFFDF8] text-[#62615D] hover:text-[#111111] border border-[#DDD9CF]'
+              }`}
+            >
+              <span>{cat}</span>
+              <span
+                className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                  activeCategory === cat
+                    ? 'bg-[#333333] text-[#FFFDF8]'
+                    : 'bg-[#F8F6F0] text-[#8A8882] border border-[#DDD9CF]'
+                }`}
+              >
+                {count}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
       {/* Courses List */}
       <div className="space-y-3">
-        {courses.map((course) => (
+        {filteredCourses.map((course) => (
           <div
             key={course.id}
             className="rounded-xl bg-[#FFFDF8] border border-[#DDD9CF] p-5 space-y-3 shadow-xs"
@@ -108,6 +208,13 @@ export default function LearningHub() {
                 <div className="flex items-center gap-2">
                   <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-[#F8F6F0] text-[#62615D] border border-[#DDD9CF]">
                     {course.provider}
+                  </span>
+                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded border ${
+                    course.category === 'behavioral'
+                      ? 'bg-[#FAF6F0] text-[#854D0E] border-[#E8DEC8]'
+                      : 'bg-[#F8F6F0] text-[#62615D] border-[#DDD9CF]'
+                  }`}>
+                    {course.category === 'behavioral' ? 'Behavioral' : 'Functional'}
                   </span>
                   {course.status === 'completed' ? (
                     <GlassBadge variant="success" size="xs">

@@ -248,25 +248,130 @@ const seed = async () => {
       ],
     });
 
-    const compDigitalGov = await Competency.create({
-      _id: new mongoose.Types.ObjectId("6a93d343d6ff1fa539394c62"),
-      name: "Digital Governance & Citizen Delivery",
+    // =====================================================
+    // BEHAVIOURAL & MANAGERIAL COMPETENCIES (MISSION KARMAYOGI)
+    // 1. Leadership
+    // 2. Communication
+    // 3. Project Management
+    // 4. Ethics
+    // 5. Decision Making
+    // 6. Change Management
+    // =====================================================
+    const compLeadership = await Competency.create({
+      _id: new mongoose.Types.ObjectId("6a93d343d6ff1fa539394c65"),
+      name: "Leadership",
       category: "behavioral",
-      description: "Capacity to leverage digital public infrastructure (DPI), e-governance portals, transparent citizen service delivery, and digital ethics.",
+      description: "Ability to inspire, empower, and guide civil service teams toward institutional objectives, providing strategic direction, fostering accountability, and mentoring officers.",
       subCompetencies: [
-        { name: "DPI Integration", description: "Utilize national digital platforms for service delivery." },
-        { name: "Citizen-Centric Design", description: "Streamline digital workflows for user accessibility." },
+        { name: "Strategic Direction & Vision", description: "Articulate clear operational goals aligned with national governance priorities." },
+        { name: "Team Motivation & Empowerment", description: "Foster high morale, delegate effectively, and support staff developmental growth." },
+        { name: "Accountability & Mentorship", description: "Maintain rigorous administrative standards and mentor next-generation civil servants." },
       ],
       proficiencyLevels: [
-        { level: 1, name: "Beginner", description: "Navigates government digital tools and official communication portals." },
-        { level: 2, name: "Basic", description: "Processes citizen service requests via standard e-governance systems." },
-        { level: 3, name: "Intermediate", description: "Optimizes administrative digital workflows and data-sharing interfaces." },
-        { level: 4, name: "Advanced", description: "Designs digital transformation initiatives and DPI-enabled service delivery." },
-        { level: 5, name: "Expert", description: "Spearheads national e-governance architecture and digital ethics policy." },
+        { level: 1, name: "Beginner", description: "Demonstrates personal dependability and sets a positive work example for team peers." },
+        { level: 2, name: "Basic", description: "Guides junior staff in daily operational duties and facilitates constructive team discussions." },
+        { level: 3, name: "Intermediate", description: "Leads cross-functional task forces, delegates ownership, and resolves intra-team operational friction." },
+        { level: 4, name: "Advanced", description: "Builds high-performing institutional teams, mentors emerging leaders, and champions strategic capacity building." },
+        { level: 5, name: "Expert", description: "Exemplifies transformational civil service leadership across ministries, shaping whole-of-government leadership culture." },
       ],
     });
 
-    console.log("Competencies seeded (8 comprehensive competencies with 5-level rubrics).");
+    const compCommunication = await Competency.create({
+      _id: new mongoose.Types.ObjectId("6a93d343d6ff1fa539394c64"),
+      name: "Communication",
+      category: "behavioral",
+      description: "Skill in conveying complex public policy, empirical data, and administrative decisions clearly, persuasively, and empathetically across diverse government and public audiences.",
+      subCompetencies: [
+        { name: "Executive Briefings & Policy Articulation", description: "Synthesize intricate technical and statistical findings for cabinet notes and executive leadership." },
+        { name: "Active Listening & Stakeholder Consultation", description: "Engage diverse citizen and administrative stakeholders through respectful dialogue and consultation." },
+        { name: "Public & Crisis Communication", description: "Articulate government decisions with clarity, transparency, and public empathy during critical situations." },
+      ],
+      proficiencyLevels: [
+        { level: 1, name: "Beginner", description: "Drafts clear routine departmental notes and listens attentively in official meetings." },
+        { level: 2, name: "Basic", description: "Presents statistical and administrative updates clearly to departmental colleagues and committees." },
+        { level: 3, name: "Intermediate", description: "Authors high-impact policy briefs and communicates complex empirical findings to non-technical leaders." },
+        { level: 4, name: "Advanced", description: "Conducts high-stakes inter-ministerial negotiations and articulates public policy persuasively to external stakeholders." },
+        { level: 5, name: "Expert", description: "Champions national administrative communications strategy and serves as trusted spokesperson on institutional mandates." },
+      ],
+    });
+
+    const compProjectManagement = await Competency.create({
+      _id: new mongoose.Types.ObjectId("6a93d343d6ff1fa539394c66"),
+      name: "Project Management",
+      category: "behavioral",
+      description: "Capability to plan, execute, monitor, and deliver mission-critical government programs within scope, schedule, budget, and quality standards.",
+      subCompetencies: [
+        { name: "Project Planning & Milestone Tracking", description: "Structure multi-phase public initiatives with realistic work breakdown structures and deadlines." },
+        { name: "Resource & Budget Allocation", description: "Optimize personnel deployment, procurement timelines, and fiscal expenditure oversight." },
+        { name: "Risk Management & Quality Assurance", description: "Proactively identify bottlenecks, establish mitigation reserves, and ensure deliverable quality." },
+      ],
+      proficiencyLevels: [
+        { level: 1, name: "Beginner", description: "Tracks assigned tasks against established deadlines and reports progress to supervisors." },
+        { level: 2, name: "Basic", description: "Coordinates milestone schedules and operational deliverables for sectional work plans." },
+        { level: 3, name: "Intermediate", description: "Manages complex multi-month departmental projects, controlling timelines, budgets, and deliverable quality." },
+        { level: 4, name: "Advanced", description: "Oversees large-scale multi-stakeholder government schemes, managing comprehensive risk registers and steering committees." },
+        { level: 5, name: "Expert", description: "Directs national mega-programs and mission-mode governance projects, setting project governance standards." },
+      ],
+    });
+
+    const compEthics = await Competency.create({
+      _id: new mongoose.Types.ObjectId("6a93d343d6ff1fa539394c63"),
+      name: "Ethics",
+      category: "behavioral",
+      description: "Adherence to constitutional values, administrative integrity, impartiality, public trust, and ethical resolution of conflicts of interest in public governance.",
+      subCompetencies: [
+        { name: "Integrity & Code of Conduct", description: "Rigorous compliance with CCS Conduct Rules, honesty, and anti-corruption principles." },
+        { name: "Impartiality & Conflict of Interest", description: "Objective, unbiased administrative decision-making and mandatory disclosure of personal interests." },
+        { name: "Transparency & Whistleblower Protection", description: "Commitment to public interest transparency, ethical data disclosure, and institutional integrity." },
+      ],
+      proficiencyLevels: [
+        { level: 1, name: "Beginner", description: "Understands Central Civil Services (Conduct) Rules and foundational administrative ethics." },
+        { level: 2, name: "Basic", description: "Identifies ethical dilemmas in daily work and adheres strictly to official disclosure rules." },
+        { level: 3, name: "Intermediate", description: "Maintains steadfast impartiality under administrative pressure and resolves conflicts of interest with sound judgement." },
+        { level: 4, name: "Advanced", description: "Fosters an ethical departmental climate, mentors junior officers, and enforces zero tolerance for misconduct." },
+        { level: 5, name: "Expert", description: "Champions national civil service integrity frameworks, anti-corruption architecture, and ethical institutional policies." },
+      ],
+    });
+
+    const compDecisionMaking = await Competency.create({
+      _id: new mongoose.Types.ObjectId("6a93d343d6ff1fa539394c67"),
+      name: "Decision Making",
+      category: "behavioral",
+      description: "Capacity to analyze complex evidence, evaluate tradeoffs, anticipate unintended consequences, and make sound, timely administrative decisions under uncertainty.",
+      subCompetencies: [
+        { name: "Evidence-Based Judgment", description: "Critically synthesize empirical data, legal precedents, and policy frameworks to ground decisions." },
+        { name: "Risk Analysis & Trade-off Assessment", description: "Weigh competing priorities, fiscal impacts, and public welfare outcomes systematically." },
+        { name: "High-Stakes & Crisis Problem Solving", description: "Decisively navigate volatile, uncertain situations with composure and administrative prudence." },
+      ],
+      proficiencyLevels: [
+        { level: 1, name: "Beginner", description: "Applies standard operating procedures (SOPs) consistently to make routine operational decisions." },
+        { level: 2, name: "Basic", description: "Evaluates standard options using available data before presenting recommendations to superiors." },
+        { level: 3, name: "Intermediate", description: "Makes timely, balanced administrative decisions in non-routine cases, analyzing tradeoffs and legal implications." },
+        { level: 4, name: "Advanced", description: "Executes strategic decisions under ambiguous, high-pressure circumstances with comprehensive risk mitigation." },
+        { level: 5, name: "Expert", description: "Formulates landmark policy decisions with nationwide impact, balancing constitutional, economic, and social equities." },
+      ],
+    });
+
+    const compChangeManagement = await Competency.create({
+      _id: new mongoose.Types.ObjectId("6a93d343d6ff1fa539394c68"),
+      name: "Change Management",
+      category: "behavioral",
+      description: "Skill in guiding civil service organizations through administrative modernization, digital transitions, regulatory shifts, and public sector reforms.",
+      subCompetencies: [
+        { name: "Change Readiness & Stakeholder Buy-in", description: "Assess organizational readiness, communicate the rationale for reform, and address employee concerns." },
+        { name: "Process Re-engineering & Digital Adoption", description: "Modernize legacy bureaucratic workflows into agile, digital-first administrative processes." },
+        { name: "Institutional Resilience & Transition Leadership", description: "Sustain momentum during lengthy administrative transitions and embed enduring cultural improvements." },
+      ],
+      proficiencyLevels: [
+        { level: 1, name: "Beginner", description: "Adapts positively to routine departmental procedure updates and digital tool upgrades." },
+        { level: 2, name: "Basic", description: "Supports peers during departmental process transitions and helps colleagues adopt new digital systems." },
+        { level: 3, name: "Intermediate", description: "Champions administrative modernization initiatives, proactively addressing staff resistance and workflow friction." },
+        { level: 4, name: "Advanced", description: "Designs and leads departmental change strategies, restructuring operational workflows with measurable performance gains." },
+        { level: 5, name: "Expert", description: "Spearheads whole-of-government reform initiatives and administrative culture transformation under Mission Karmayogi." },
+      ],
+    });
+
+    console.log("Competencies seeded (6 Functional + 6 Official Behavioural Competencies).");
 
     // =====================================================
     // 4. ROLES & ROLE-COMPETENCY BENCHMARKS
@@ -277,12 +382,20 @@ const seed = async () => {
       name: "Statistical Analysis and Reporting",
       description: "Official competency profile for Statistical Officers conducting survey analysis, sampling verification, and report authoring in MoSPI.",
       competencies: [
+        // Technical / Functional Competencies
         { competencyId: compStatAnalysis._id, expectedLevel: 4 },
         { competencyId: compSamplingDesign._id, expectedLevel: 4 },
         { competencyId: compPythonData._id, expectedLevel: 3 },
         { competencyId: compSQL._id, expectedLevel: 3 },
         { competencyId: compDataViz._id, expectedLevel: 3 },
         { competencyId: compDataQuality._id, expectedLevel: 4 },
+        // Behavioural Competencies
+        { competencyId: compLeadership._id, expectedLevel: 3 },
+        { competencyId: compCommunication._id, expectedLevel: 4 },
+        { competencyId: compProjectManagement._id, expectedLevel: 3 },
+        { competencyId: compEthics._id, expectedLevel: 4 },
+        { competencyId: compDecisionMaking._id, expectedLevel: 3 },
+        { competencyId: compChangeManagement._id, expectedLevel: 3 },
       ],
       status: "active",
     });
@@ -293,12 +406,20 @@ const seed = async () => {
       name: "Advanced Survey & National Data Operations",
       description: "Senior role responsible for large-scale survey design, econometric modeling, and executive statistical dissemination.",
       competencies: [
+        // Technical / Functional Competencies
         { competencyId: compStatAnalysis._id, expectedLevel: 5 },
         { competencyId: compSamplingDesign._id, expectedLevel: 5 },
         { competencyId: compPythonData._id, expectedLevel: 4 },
         { competencyId: compSQL._id, expectedLevel: 4 },
         { competencyId: compDataViz._id, expectedLevel: 4 },
         { competencyId: compDataQuality._id, expectedLevel: 5 },
+        // Behavioural Competencies
+        { competencyId: compLeadership._id, expectedLevel: 4 },
+        { competencyId: compCommunication._id, expectedLevel: 5 },
+        { competencyId: compProjectManagement._id, expectedLevel: 4 },
+        { competencyId: compEthics._id, expectedLevel: 5 },
+        { competencyId: compDecisionMaking._id, expectedLevel: 4 },
+        { competencyId: compChangeManagement._id, expectedLevel: 4 },
       ],
       status: "active",
     });
@@ -309,15 +430,22 @@ const seed = async () => {
       name: "Administrative Capacity & Governance Analytics",
       description: "Focuses on civil services workforce metrics, capacity-building intelligence, and policy evaluation.",
       competencies: [
-        { competencyId: compDigitalGov._id, expectedLevel: 4 },
+        // Domain & Functional Competencies
         { competencyId: compPublicPolicy._id, expectedLevel: 4 },
         { competencyId: compStatAnalysis._id, expectedLevel: 3 },
         { competencyId: compDataViz._id, expectedLevel: 3 },
+        // Behavioural Competencies
+        { competencyId: compLeadership._id, expectedLevel: 3 },
+        { competencyId: compCommunication._id, expectedLevel: 4 },
+        { competencyId: compProjectManagement._id, expectedLevel: 4 },
+        { competencyId: compEthics._id, expectedLevel: 4 },
+        { competencyId: compDecisionMaking._id, expectedLevel: 4 },
+        { competencyId: compChangeManagement._id, expectedLevel: 3 },
       ],
       status: "active",
     });
 
-    console.log("Roles seeded with benchmark expected competency levels.");
+    console.log("Roles seeded with benchmark expected competency levels (Functional & Behavioural).");
 
     // =====================================================
     // 5. USERS & PROFILES (EMPLOYEES & ADMINS)
@@ -343,6 +471,13 @@ const seed = async () => {
         { competencyId: compSQL._id, currentLevel: 3, lastAssessedAt: fifteenDaysAgo }, // Required: 3 -> Met
         { competencyId: compDataViz._id, currentLevel: 2, lastAssessedAt: fifteenDaysAgo }, // Required: 3 -> Gap: 1
         { competencyId: compDataQuality._id, currentLevel: 4, lastAssessedAt: fifteenDaysAgo }, // Required: 4 -> Met
+        // Behavioural Competencies
+        { competencyId: compLeadership._id, currentLevel: 2, lastAssessedAt: fifteenDaysAgo }, // Required: 3 -> Gap: 1 (Medium)
+        { competencyId: compCommunication._id, currentLevel: 3, lastAssessedAt: fifteenDaysAgo }, // Required: 4 -> Gap: 1 (High)
+        { competencyId: compProjectManagement._id, currentLevel: 3, lastAssessedAt: fifteenDaysAgo }, // Required: 3 -> Met
+        { competencyId: compEthics._id, currentLevel: 3, lastAssessedAt: fifteenDaysAgo }, // Required: 4 -> Gap: 1 (High)
+        { competencyId: compDecisionMaking._id, currentLevel: 3, lastAssessedAt: fifteenDaysAgo }, // Required: 3 -> Met
+        { competencyId: compChangeManagement._id, currentLevel: 2, lastAssessedAt: fifteenDaysAgo }, // Required: 3 -> Gap: 1 (Medium)
       ],
       status: "active",
     });
@@ -364,6 +499,13 @@ const seed = async () => {
         { competencyId: compSQL._id, currentLevel: 4, lastAssessedAt: thirtyDaysAgo },
         { competencyId: compDataViz._id, currentLevel: 4, lastAssessedAt: thirtyDaysAgo },
         { competencyId: compDataQuality._id, currentLevel: 5, lastAssessedAt: thirtyDaysAgo },
+        // Behavioural Competencies
+        { competencyId: compLeadership._id, currentLevel: 4, lastAssessedAt: thirtyDaysAgo },
+        { competencyId: compCommunication._id, currentLevel: 5, lastAssessedAt: thirtyDaysAgo },
+        { competencyId: compProjectManagement._id, currentLevel: 4, lastAssessedAt: thirtyDaysAgo },
+        { competencyId: compEthics._id, currentLevel: 5, lastAssessedAt: thirtyDaysAgo },
+        { competencyId: compDecisionMaking._id, currentLevel: 4, lastAssessedAt: thirtyDaysAgo },
+        { competencyId: compChangeManagement._id, currentLevel: 4, lastAssessedAt: thirtyDaysAgo },
       ],
       status: "active",
     });
@@ -379,10 +521,15 @@ const seed = async () => {
       positionId: posDataAnalyst._id,
       roleId: roleGovernanceAnalyst._id,
       competencyProfile: [
-        { competencyId: compDigitalGov._id, currentLevel: 2, lastAssessedAt: thirtyDaysAgo },
         { competencyId: compPublicPolicy._id, currentLevel: 2, lastAssessedAt: thirtyDaysAgo },
         { competencyId: compStatAnalysis._id, currentLevel: 2, lastAssessedAt: thirtyDaysAgo },
         { competencyId: compDataViz._id, currentLevel: 1, lastAssessedAt: thirtyDaysAgo },
+        { competencyId: compLeadership._id, currentLevel: 2, lastAssessedAt: thirtyDaysAgo },
+        { competencyId: compCommunication._id, currentLevel: 3, lastAssessedAt: thirtyDaysAgo },
+        { competencyId: compProjectManagement._id, currentLevel: 2, lastAssessedAt: thirtyDaysAgo },
+        { competencyId: compEthics._id, currentLevel: 3, lastAssessedAt: thirtyDaysAgo },
+        { competencyId: compDecisionMaking._id, currentLevel: 2, lastAssessedAt: thirtyDaysAgo },
+        { competencyId: compChangeManagement._id, currentLevel: 2, lastAssessedAt: thirtyDaysAgo },
       ],
       status: "active",
     });
@@ -571,9 +718,180 @@ const seed = async () => {
         correctAnswer: "A",
         status: "approved",
       },
+
+      // =====================================================
+      // BEHAVIOURAL COMPETENCIES: SITUATIONAL JUDGMENT ITEMS
+      // =====================================================
+      // 1. Leadership
+      {
+        competencyId: compLeadership._id,
+        difficulty: 3,
+        question: "A multi-disciplinary field survey team is experiencing low morale and conflicting priorities between permanent statistical officers and contractual enumerators under strict census deadlines. As the survey leader, what is your most effective action?",
+        options: [
+          { id: "A", text: "Reprimand the contractual staff publicly to enforce disciplinary compliance." },
+          { id: "B", text: "Convene an alignment briefing to clarify shared mission goals, establish transparent milestone ownership, and implement peer mentorship between senior and junior staff." },
+          { id: "C", text: "Transfer all difficult field blocks exclusively to contractual staff to protect permanent staff." },
+          { id: "D", text: "Ignore interpersonal conflict and focus strictly on daily questionnaire counts." },
+        ],
+        correctAnswer: "B",
+        status: "approved",
+      },
+      {
+        competencyId: compLeadership._id,
+        difficulty: 4,
+        question: "During a critical national economic census rollout, two senior field supervisors resign abruptly. What strategic leadership approach maintains team momentum and delivery integrity?",
+        options: [
+          { id: "A", text: "Temporarily halt survey operations indefinitely until central recruitment completes." },
+          { id: "B", text: "Empower high-potential junior statistical officers with acting supervisor responsibilities, provide accelerated operational coaching, and redistribute supervisory workloads with clear accountability." },
+          { id: "C", text: "Falsify supervisory inspection sign-offs to keep the official project tracker green." },
+          { id: "D", text: "Demand that remaining enumerators work double shifts without additional administrative support." },
+        ],
+        correctAnswer: "B",
+        status: "approved",
+      },
+
+      // 2. Communication
+      {
+        competencyId: compCommunication._id,
+        difficulty: 3,
+        question: "You are tasked with presenting a quarterly inflation and consumer expenditure report to a parliamentary consultative committee comprised of non-technical members. How should you structure your communication?",
+        options: [
+          { id: "A", text: "Present only raw mathematical regression formulas and econometric matrices to prove technical rigor." },
+          { id: "B", text: "Translate complex statistical indices into clear policy implications, plain-language visual summaries, and transparent confidence caveats." },
+          { id: "C", text: "Distribute an unedited 500-page annexure and decline to summarize key findings verbally." },
+          { id: "D", text: "Omit volatile price trends to avoid parliamentary inquiry." },
+        ],
+        correctAnswer: "B",
+        status: "approved",
+      },
+      {
+        competencyId: compCommunication._id,
+        difficulty: 4,
+        question: "A major media outlet misinterprets an interim employment survey release, generating widespread public confusion regarding national jobless trends. As departmental communications lead, what is your immediate response?",
+        options: [
+          { id: "A", text: "Issue an aggressive legal notice without clarifying the underlying data." },
+          { id: "B", text: "Issue a concise, authoritative press clarification and visual explainer detailing the statistical methodology, definitions, and accurate interpretations." },
+          { id: "C", text: "Delete the official report from the ministry portal to prevent further discussion." },
+          { id: "D", text: "Remain silent and allow public speculation to run its course." },
+        ],
+        correctAnswer: "B",
+        status: "approved",
+      },
+
+      // 3. Project Management
+      {
+        competencyId: compProjectManagement._id,
+        difficulty: 3,
+        question: "Midway through a 12-month nationwide agricultural survey project, hardware vendor delays in delivering survey tablets threaten your fieldwork launch. What project management step should you take?",
+        options: [
+          { id: "A", text: "Wait passively until the vendor delivers before planning any alternative schedules." },
+          { id: "B", text: "Perform critical path impact analysis, activate contingent hybrid enumeration protocols (paper-assisted where feasible), and implement weekly vendor escalation checkpoints." },
+          { id: "C", text: "Cancel the agricultural survey for the current fiscal quarter." },
+          { id: "D", text: "Reduce sample size by 75% without statistical justification to recover lost calendar time." },
+        ],
+        correctAnswer: "B",
+        status: "approved",
+      },
+      {
+        competencyId: compProjectManagement._id,
+        difficulty: 4,
+        question: "An inter-state statistical compilation project has experienced 15% scope creep from participating agencies and risks exceeding its sanctioned budgetary grant. How should the project director resolve this?",
+        options: [
+          { id: "A", text: "Accept all new scope requests without reviewing budgetary authorization." },
+          { id: "B", text: "Convene the project steering committee, present a variance assessment, and formally baseline the core deliverables while phasing non-critical requests into future project cycles." },
+          { id: "C", text: "Divert funds from staff training without statutory financial approval." },
+          { id: "D", text: "Abandon milestone reporting to conceal the cost overrun." },
+        ],
+        correctAnswer: "B",
+        status: "approved",
+      },
+
+      // 4. Ethics
+      {
+        competencyId: compEthics._id,
+        difficulty: 3,
+        question: "A senior administrative official verbally instructs you to exclude a rural sampling block showing declining nutritional indicators from an interim press release. According to civil service ethics, what is the most appropriate course of action?",
+        options: [
+          { id: "A", text: "Immediately delete the sampling block as requested by the senior official." },
+          { id: "B", text: "Respectfully document the complete empirical dataset in writing, cite official data integrity guidelines, and escalate through appropriate institutional reporting channels." },
+          { id: "C", text: "Leak the preliminary findings anonymously to external media outlets." },
+          { id: "D", text: "Falsify the sample figures to match previous quarterly benchmarks." },
+        ],
+        correctAnswer: "B",
+        status: "approved",
+      },
+      {
+        competencyId: compEthics._id,
+        difficulty: 4,
+        question: "During a procurement evaluation for digital survey handheld devices, you discover that a close family member is a major shareholder in the lowest-bidding firm. What is your ethical obligation under the Central Civil Services (Conduct) Rules?",
+        options: [
+          { id: "A", text: "Continue evaluating the tender without disclosure, provided your scoring is objective." },
+          { id: "B", text: "Immediately submit a formal written declaration of conflict of interest and recuse yourself entirely from the evaluation committee." },
+          { id: "C", text: "Inform the bidder privately to withdraw their commercial quote." },
+          { id: "D", text: "Award the contract and donate personal proceeds to an administrative charity." },
+        ],
+        correctAnswer: "B",
+        status: "approved",
+      },
+
+      // 5. Decision Making
+      {
+        competencyId: compDecisionMaking._id,
+        difficulty: 3,
+        question: "Two days prior to an official statistical release, your audit team discovers an inconsistency in 2% of sample weights from a remote district. Recalculation will delay the cabinet briefing by 48 hours. What is the soundest administrative decision?",
+        options: [
+          { id: "A", text: "Publish the flawed figures on schedule to avoid an awkward administrative delay." },
+          { id: "B", text: "Inform the leadership immediately of the technical anomaly, request a 48-hour briefing deferral, and release verified, defensible data." },
+          { id: "C", text: "Arbitrarily overwrite the remote district weights with national averages." },
+          { id: "D", text: "Delete all records from that remote district from the master dataset permanently." },
+        ],
+        correctAnswer: "B",
+        status: "approved",
+      },
+      {
+        competencyId: compDecisionMaking._id,
+        difficulty: 4,
+        question: "Facing tight budgetary caps, you must choose between a smaller high-precision probability sample vs a larger non-probability digital web survey for an urgent economic assessment. How do you decide?",
+        options: [
+          { id: "A", text: "Default to the web survey simply because it generates a larger sample size regardless of selection bias." },
+          { id: "B", text: "Rigorously evaluate representativeness, non-response bias, and statutory policy requirements, choosing probability sampling to ensure defensible, unbiased statistical inferences." },
+          { id: "C", text: "Toss a coin to avoid taking personal responsibility for the decision." },
+          { id: "D", text: "Outsource the decision to an unvetted vendor without ministerial sign-off." },
+        ],
+        correctAnswer: "B",
+        status: "approved",
+      },
+
+      // 6. Change Management
+      {
+        competencyId: compChangeManagement._id,
+        difficulty: 3,
+        question: "Your department is transitioning from legacy paper survey schedules to tablet-based Computer Assisted Personal Interviewing (CAPI). Senior enumerators express resistance and anxiety regarding digital devices. How should you lead this change?",
+        options: [
+          { id: "A", text: "Threaten resistant staff with immediate disciplinary transfer." },
+          { id: "B", text: "Conduct empathetic hands-on workshops, pair tech-proficient peers with senior staff, listen to user interface feedback, and celebrate early milestones." },
+          { id: "C", text: "Revert entirely to paper schedules to prevent administrative discomfort." },
+          { id: "D", text: "Implement the software overnight without any training or technical support hotline." },
+        ],
+        correctAnswer: "B",
+        status: "approved",
+      },
+      {
+        competencyId: compChangeManagement._id,
+        difficulty: 4,
+        question: "A newly mandated whole-of-government digital metadata standard requires all regional offices to migrate their legacy filing workflows. How do you ensure sustainable, long-term adoption across departments?",
+        options: [
+          { id: "A", text: "Issue a one-time generic circular and take no further follow-up actions." },
+          { id: "B", text: "Design a phased transition plan with designated departmental change champions, continuous user feedback loops, and measurable transition milestones." },
+          { id: "C", text: "Disable all regional server access until all offices comply instantly." },
+          { id: "D", text: "Permit regional offices to ignore the mandate indefinitely if they prefer old workflows." },
+        ],
+        correctAnswer: "B",
+        status: "approved",
+      },
     ]);
 
-    console.log(`Question Bank seeded (${questions.length} production items).`);
+    console.log(`Question Bank seeded (${questions.length} production items, including 6 Behavioural Competency items).`);
 
     // =====================================================
     // 7. ROLE ASSESSMENT BLUEPRINTS
@@ -582,15 +900,40 @@ const seed = async () => {
       _id: new mongoose.Types.ObjectId("6a93d343d6ff1fa539394c89"),
       positionId: posStatisticalOfficer._id,
       title: "Statistical Officer Baseline Competency Assessment",
-      description: "Official evaluation measuring core competency proficiencies for Statistical Officers under Mission Karmayogi capacity building.",
+      description: "Comprehensive dual-domain evaluation measuring both technical competencies and behavioral situational judgment for Statistical Officers under Mission Karmayogi.",
       durationMinutes: 45,
       competencies: [
+        // Technical Competencies
         { competencyId: compStatAnalysis._id, requiredLevel: 4, questionCount: 1 },
         { competencyId: compSamplingDesign._id, requiredLevel: 4, questionCount: 1 },
         { competencyId: compPythonData._id, requiredLevel: 3, questionCount: 1 },
         { competencyId: compSQL._id, requiredLevel: 3, questionCount: 1 },
         { competencyId: compDataViz._id, requiredLevel: 3, questionCount: 1 },
         { competencyId: compDataQuality._id, requiredLevel: 4, questionCount: 1 },
+        // Behavioural Competencies
+        { competencyId: compLeadership._id, requiredLevel: 3, questionCount: 1 },
+        { competencyId: compCommunication._id, requiredLevel: 4, questionCount: 1 },
+        { competencyId: compProjectManagement._id, requiredLevel: 3, questionCount: 1 },
+        { competencyId: compEthics._id, requiredLevel: 4, questionCount: 1 },
+        { competencyId: compDecisionMaking._id, requiredLevel: 3, questionCount: 1 },
+        { competencyId: compChangeManagement._id, requiredLevel: 3, questionCount: 1 },
+      ],
+      status: "active",
+    });
+
+    const assessmentBehavioral = await Assessment.create({
+      _id: new mongoose.Types.ObjectId("6a93d343d6ff1fa539394c8b"),
+      positionId: posStatisticalOfficer._id,
+      title: "Civil Services Behavioural & Managerial Assessment",
+      description: "Dedicated behavioral evaluation assessing Leadership, Communication, Project Management, Ethics, Decision Making, and Change Management under administrative scenarios.",
+      durationMinutes: 30,
+      competencies: [
+        { competencyId: compLeadership._id, requiredLevel: 3, questionCount: 1 },
+        { competencyId: compCommunication._id, requiredLevel: 4, questionCount: 1 },
+        { competencyId: compProjectManagement._id, requiredLevel: 3, questionCount: 1 },
+        { competencyId: compEthics._id, requiredLevel: 4, questionCount: 1 },
+        { competencyId: compDecisionMaking._id, requiredLevel: 3, questionCount: 1 },
+        { competencyId: compChangeManagement._id, requiredLevel: 3, questionCount: 1 },
       ],
       status: "active",
     });
@@ -608,7 +951,7 @@ const seed = async () => {
       status: "active",
     });
 
-    console.log("Assessments seeded.");
+    console.log("Assessments seeded (Comprehensive Baseline, Behavioral Assessment, and Technical Specialization).");
 
     // =====================================================
     // 8. OFFICIAL LEARNING RESOURCES & DOCUMENTS
@@ -711,7 +1054,88 @@ const seed = async () => {
       status: "active",
     });
 
-    console.log("Learning resources & documents seeded.");
+    // =====================================================
+    // BEHAVIOURAL COMPETENCY LEARNING RESOURCES (iGOT KARMAYOGI)
+    // =====================================================
+    const resLeadership = await LearningResource.create({
+      _id: new mongoose.Types.ObjectId("6a93d343d6ff1fa539394c99"),
+      title: "Mission Karmayogi: Leadership & Team Empowerment in Civil Services",
+      provider: "iGOT Karmayogi",
+      source: "igot",
+      externalId: "IGOT-LEAD-301",
+      competencies: [{ competencyId: compLeadership._id }],
+      level: 3,
+      durationMinutes: 120,
+      url: "https://igotkarmayogi.gov.in/course/leadership-empowerment",
+      status: "active",
+    });
+
+    const resCommunication = await LearningResource.create({
+      _id: new mongoose.Types.ObjectId("6a93d343d6ff1fa539394c9a"),
+      title: "Executive Communication, Policy Articulation & Media Briefing",
+      provider: "iGOT Karmayogi",
+      source: "igot",
+      externalId: "IGOT-COMM-401",
+      competencies: [{ competencyId: compCommunication._id }],
+      level: 4,
+      durationMinutes: 110,
+      url: "https://igotkarmayogi.gov.in/course/executive-communication",
+      status: "active",
+    });
+
+    const resProjectManagement = await LearningResource.create({
+      _id: new mongoose.Types.ObjectId("6a93d343d6ff1fa539394c9b"),
+      title: "Government Project Management: Agile Implementation & Milestone Oversight",
+      provider: "iGOT Karmayogi",
+      source: "igot",
+      externalId: "IGOT-PM-301",
+      competencies: [{ competencyId: compProjectManagement._id }],
+      level: 3,
+      durationMinutes: 140,
+      url: "https://igotkarmayogi.gov.in/course/government-project-management",
+      status: "active",
+    });
+
+    const resEthics = await LearningResource.create({
+      _id: new mongoose.Types.ObjectId("6a93d343d6ff1fa539394c98"),
+      title: "Mission Karmayogi: Code of Ethics and Constitutional Values in Governance",
+      provider: "iGOT Karmayogi",
+      source: "igot",
+      externalId: "IGOT-ETH-401",
+      competencies: [{ competencyId: compEthics._id }],
+      level: 4,
+      durationMinutes: 150,
+      url: "https://igotkarmayogi.gov.in/course/code-of-ethics",
+      status: "active",
+    });
+
+    const resDecisionMaking = await LearningResource.create({
+      _id: new mongoose.Types.ObjectId("6a93d343d6ff1fa539394c9c"),
+      title: "Evidence-Based Decision Making & Administrative Risk Management",
+      provider: "iGOT Karmayogi",
+      source: "igot",
+      externalId: "IGOT-DM-301",
+      competencies: [{ competencyId: compDecisionMaking._id }],
+      level: 3,
+      durationMinutes: 130,
+      url: "https://igotkarmayogi.gov.in/course/evidence-based-decision-making",
+      status: "active",
+    });
+
+    const resChangeManagement = await LearningResource.create({
+      _id: new mongoose.Types.ObjectId("6a93d343d6ff1fa539394c9d"),
+      title: "Leading Digital Transformation & Public Sector Change Management",
+      provider: "iGOT Karmayogi",
+      source: "igot",
+      externalId: "IGOT-CM-301",
+      competencies: [{ competencyId: compChangeManagement._id }],
+      level: 3,
+      durationMinutes: 120,
+      url: "https://igotkarmayogi.gov.in/course/public-change-management",
+      status: "active",
+    });
+
+    console.log("Learning resources & documents seeded (Technical & 6 Behavioural Competency modules).");
 
     // =====================================================
     // 9. AI GENERATED QUESTIONS (STUDIO REVIEW QUEUE)
@@ -762,12 +1186,17 @@ const seed = async () => {
     // =====================================================
     // 10. SKILL GAPS & RECOMMENDATIONS FOR DEMO OFFICER
     // =====================================================
-    // Rahul has open gaps in:
-    // 1. Sampling Design: Level 2 vs Required Level 4 -> Gap = 2 (Critical Priority)
-    // 2. Statistical Analysis: Level 3 vs Required Level 4 -> Gap = 1 (High Priority)
-    // 3. Data Visualization: Level 2 vs Required Level 3 -> Gap = 1 (Medium Priority)
+    // Open gaps for Rahul:
+    // Technical:
+    // 1. Sampling Design: Level 2 vs Required Level 4 -> Gap = 2 (Critical)
+    // 2. Statistical Analysis: Level 3 vs Required Level 4 -> Gap = 1 (High)
+    // 3. Data Visualization: Level 2 vs Required Level 3 -> Gap = 1 (Medium)
+    // Behavioural:
+    // 4. Leadership: Level 2 vs Required Level 3 -> Gap = 1 (Medium)
+    // 5. Communication: Level 3 vs Required Level 4 -> Gap = 1 (High)
+    // 6. Ethics: Level 3 vs Required Level 4 -> Gap = 1 (High)
+    // 7. Change Management: Level 2 vs Required Level 3 -> Gap = 1 (Medium)
 
-    // Recommendations linked to Rahul's open gaps
     const gapSampling = await SkillGap.create({
       userId: empRahul._id,
       competencyId: compSamplingDesign._id,
@@ -798,7 +1227,47 @@ const seed = async () => {
       status: "open",
     });
 
-    // Resolved gaps for competencies where Rahul is at or above required level
+    const gapLeadership = await SkillGap.create({
+      userId: empRahul._id,
+      competencyId: compLeadership._id,
+      requiredLevel: 3,
+      currentLevel: 2,
+      gap: 1,
+      priority: "medium",
+      status: "open",
+    });
+
+    const gapCommunication = await SkillGap.create({
+      userId: empRahul._id,
+      competencyId: compCommunication._id,
+      requiredLevel: 4,
+      currentLevel: 3,
+      gap: 1,
+      priority: "high",
+      status: "open",
+    });
+
+    const gapEthics = await SkillGap.create({
+      userId: empRahul._id,
+      competencyId: compEthics._id,
+      requiredLevel: 4,
+      currentLevel: 3,
+      gap: 1,
+      priority: "high",
+      status: "open",
+    });
+
+    const gapChange = await SkillGap.create({
+      userId: empRahul._id,
+      competencyId: compChangeManagement._id,
+      requiredLevel: 3,
+      currentLevel: 2,
+      gap: 1,
+      priority: "medium",
+      status: "open",
+    });
+
+    // Resolved gaps where Rahul meets role benchmarks
     await SkillGap.create({
       userId: empRahul._id,
       competencyId: compPythonData._id,
@@ -829,6 +1298,26 @@ const seed = async () => {
       status: "resolved",
     });
 
+    await SkillGap.create({
+      userId: empRahul._id,
+      competencyId: compProjectManagement._id,
+      requiredLevel: 3,
+      currentLevel: 3,
+      gap: 0,
+      priority: "low",
+      status: "resolved",
+    });
+
+    await SkillGap.create({
+      userId: empRahul._id,
+      competencyId: compDecisionMaking._id,
+      requiredLevel: 3,
+      currentLevel: 3,
+      gap: 0,
+      priority: "low",
+      status: "resolved",
+    });
+
     // Recommendations matching schema: { userId, gapId, recommendations: [{ resourceId, rank, score, reason }] }
     await Recommendation.create({
       userId: empRahul._id,
@@ -853,6 +1342,62 @@ const seed = async () => {
           rank: 1,
           score: 88,
           reason: ["Targets 1-level gap in Statistical Analysis to achieve required Level 4 benchmark"],
+        },
+      ],
+      generatedAt: now,
+    });
+
+    await Recommendation.create({
+      userId: empRahul._id,
+      gapId: gapEthics._id,
+      recommendations: [
+        {
+          resourceId: resEthics._id,
+          rank: 1,
+          score: 92,
+          reason: ["Prepares officer for Level 4 Advanced Ethics & Integrity standard in public reporting"],
+        },
+      ],
+      generatedAt: now,
+    });
+
+    await Recommendation.create({
+      userId: empRahul._id,
+      gapId: gapLeadership._id,
+      recommendations: [
+        {
+          resourceId: resLeadership._id,
+          rank: 1,
+          score: 90,
+          reason: ["Strengthens team empowerment, operational delegation, and field leadership"],
+        },
+      ],
+      generatedAt: now,
+    });
+
+    await Recommendation.create({
+      userId: empRahul._id,
+      gapId: gapCommunication._id,
+      recommendations: [
+        {
+          resourceId: resCommunication._id,
+          rank: 1,
+          score: 91,
+          reason: ["Builds high-impact executive policy briefing and parliamentary reporting capability"],
+        },
+      ],
+      generatedAt: now,
+    });
+
+    await Recommendation.create({
+      userId: empRahul._id,
+      gapId: gapChange._id,
+      recommendations: [
+        {
+          resourceId: resChangeManagement._id,
+          rank: 1,
+          score: 88,
+          reason: ["Equips officer to drive digital adoption and process transitions in field survey teams"],
         },
       ],
       generatedAt: now,

@@ -253,10 +253,17 @@ export default function TakeAssessment() {
                   key={c.competencyId?._id || idx}
                   className="p-2.5 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] flex items-center justify-between text-xs"
                 >
-                  <span className="font-semibold text-[#111111] truncate pr-2">
-                    {c.competencyId?.name || 'Competency'}
-                  </span>
-                  <span className="text-[10px] text-[#62615D] bg-[#FFFDF8] px-1.5 py-0.5 rounded border border-[#DDD9CF]">
+                  <div className="flex items-center gap-2 truncate pr-2">
+                    <span className="font-semibold text-[#111111] truncate">
+                      {c.competencyId?.name || 'Competency'}
+                    </span>
+                    {c.competencyId?.category && (
+                      <span className="text-[10px] uppercase font-bold text-[#8A8882] shrink-0">
+                        ({c.competencyId.category})
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-[10px] text-[#62615D] bg-[#FFFDF8] px-2 py-0.5 rounded border border-[#DDD9CF] font-medium shrink-0">
                     {c.questionCount} Qs
                   </span>
                 </div>
@@ -332,10 +339,26 @@ export default function TakeAssessment() {
         <div className="lg:col-span-3 space-y-5">
           <div className="rounded-xl bg-[#FFFDF8] border border-[#DDD9CF] p-6 space-y-5 shadow-xs">
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#3348A8]">
-                  Question {currentIndex + 1}
-                </span>
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#111111]">
+                    Question {currentIndex + 1}
+                  </span>
+                  {currentQuestion.category && (
+                    <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider border ${
+                      currentQuestion.category?.toLowerCase() === 'behavioral'
+                        ? 'bg-[#F4F1E9] text-[#111111] border-[#DDD9CF]'
+                        : 'bg-[#F8F6F0] text-[#62615D] border-[#DDD9CF]'
+                    }`}>
+                      {currentQuestion.category?.toLowerCase() === 'behavioral' ? 'Behavioral • Situational Judgment' : 'Functional / Technical'}
+                    </span>
+                  )}
+                  {currentQuestion.competencyName && (
+                    <span className="text-xs font-semibold text-[#62615D]">
+                      &bull; {currentQuestion.competencyName}
+                    </span>
+                  )}
+                </div>
                 <span className="text-[11px] text-[#8A8882]">
                   Select 1 option
                 </span>

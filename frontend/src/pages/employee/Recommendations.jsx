@@ -58,9 +58,66 @@ export default function Recommendations() {
     }
   };
 
+  const [activeCategory, setActiveCategory] = useState('All');
+
   const sampleCourses = [
     {
+      title: 'Mission Karmayogi: Leadership & Team Empowerment in Civil Services',
+      category: 'behavioral',
+      gapDesc: 'Directly addresses evaluated Level 2 Gap in Leadership. Covers strategic vision, team delegation, accountability, and coaching next-generation civil servants.',
+      targetComp: 'Leadership',
+      levelInfo: 'Tailored for progression from Level 2 to Level 3',
+      duration: '120 Minutes',
+      matchScore: 90,
+    },
+    {
+      title: 'Executive Communication, Policy Articulation & Media Briefing',
+      category: 'behavioral',
+      gapDesc: 'Directly addresses evaluated Level 3 Gap in Communication. Covers high-stakes parliamentary briefings, crisis communication, and empirical policy articulation.',
+      targetComp: 'Communication',
+      levelInfo: 'Designed for Level 3 to Level 4 progression',
+      duration: '110 Minutes',
+      matchScore: 91,
+    },
+    {
+      title: 'Government Project Management: Agile Implementation & Oversight',
+      category: 'behavioral',
+      gapDesc: 'Covers public sector project breakdown structures, risk registers, budgetary milestone tracking, and cross-cadre deliverable quality assurance.',
+      targetComp: 'Project Management',
+      levelInfo: 'Masterclass for mission-mode program management',
+      duration: '140 Minutes',
+      matchScore: 86,
+    },
+    {
+      title: 'Mission Karmayogi: Code of Ethics & Constitutional Values in Governance',
+      category: 'behavioral',
+      gapDesc: 'Directly addresses evaluated Level 3 Gap in Ethics. Covers CCS Conduct Rules, conflict of interest mitigation, whistleblower protection, and institutional integrity.',
+      targetComp: 'Ethics',
+      levelInfo: 'Tailored for progression from Level 3 to Level 4',
+      duration: '150 Minutes',
+      matchScore: 92,
+    },
+    {
+      title: 'Evidence-Based Decision Making & Administrative Risk Management',
+      category: 'behavioral',
+      gapDesc: 'Covers empirical tradeoff analysis, legal precedent synthesis, and decisive problem solving in high-stakes public administration.',
+      targetComp: 'Decision Making',
+      levelInfo: 'Designed for Level 3 to Level 4 progression',
+      duration: '130 Minutes',
+      matchScore: 88,
+    },
+    {
+      title: 'Leading Digital Transformation & Public Sector Change Management',
+      category: 'behavioral',
+      gapDesc: 'Directly addresses evaluated Level 2 Gap in Change Management. Equips officers to lead administrative modernization, overcome resistance, and embed digital adoption.',
+      targetComp: 'Change Management',
+      levelInfo: 'Tailored for progression from Level 2 to Level 3',
+      duration: '120 Minutes',
+      matchScore: 88,
+    },
+    {
       title: 'Python for Data Analysis & Tabular Processing',
+      category: 'functional',
       gapDesc: 'Directly addresses evaluated Level 2 Gap in Python for Data Analysis. Covers Pandas data structures, data filtering, and statistical computation.',
       targetComp: 'Python Fundamentals & Pandas',
       levelInfo: 'Tailored for progression from Level 1 to Level 3',
@@ -69,6 +126,7 @@ export default function Recommendations() {
     },
     {
       title: 'Sampling Techniques and Survey Design',
+      category: 'functional',
       gapDesc: 'Directly addresses evaluated Level 2 Gap in Sampling Design. Covers probability sampling, sample size estimation, and sampling error control.',
       targetComp: 'Sampling Design',
       levelInfo: 'Designed for Level 2 to Level 4 progression',
@@ -77,6 +135,7 @@ export default function Recommendations() {
     },
     {
       title: 'Data Quality Management and Validation',
+      category: 'functional',
       gapDesc: 'Directly addresses evaluated Level 2 Gap in Data Quality Management. Focuses on data validation rules, inconsistency identification, and imputation.',
       targetComp: 'Data Quality Management',
       levelInfo: 'Focused module for immediate capacity building',
@@ -85,6 +144,7 @@ export default function Recommendations() {
     },
     {
       title: 'Data Visualization & Policy Storytelling',
+      category: 'functional',
       gapDesc: 'Directly addresses evaluated Level 1 Gap in Data Visualization. Focuses on chart selection, dashboard design, and effective communication.',
       targetComp: 'Data Visualization',
       levelInfo: 'Fast-track 100 minute duration',
@@ -92,6 +152,13 @@ export default function Recommendations() {
       matchScore: 80,
     },
   ];
+
+  const categories = ['All', 'Behavioral', 'Functional'];
+
+  const filteredCourses = sampleCourses.filter((course) => {
+    if (activeCategory === 'All') return true;
+    return (course.category || 'functional').toLowerCase() === activeCategory.toLowerCase();
+  });
 
   return (
     <div className="space-y-6 pb-12">
@@ -123,6 +190,39 @@ export default function Recommendations() {
         </GlassButton>
       </div>
 
+      {/* Category Tabs */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-1">
+        {categories.map((cat) => {
+          const count = cat === 'All'
+            ? sampleCourses.length
+            : sampleCourses.filter((c) => (c.category || 'functional').toLowerCase() === cat.toLowerCase()).length;
+
+          return (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => setActiveCategory(cat)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex-shrink-0 flex items-center gap-1.5 ${
+                activeCategory === cat
+                  ? 'bg-[#111111] text-[#FFFDF8] font-semibold'
+                  : 'bg-[#FFFDF8] text-[#62615D] hover:text-[#111111] border border-[#DDD9CF]'
+              }`}
+            >
+              <span>{cat}</span>
+              <span
+                className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                  activeCategory === cat
+                    ? 'bg-[#333333] text-[#FFFDF8]'
+                    : 'bg-[#F8F6F0] text-[#8A8882] border border-[#DDD9CF]'
+                }`}
+              >
+                {count}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
       {/* Recommendations Content */}
       {loading ? (
         <div className="py-16 text-center text-xs text-[#8A8882] space-y-2">
@@ -131,16 +231,25 @@ export default function Recommendations() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {sampleCourses.map((course, idx) => (
+          {filteredCourses.map((course, idx) => (
             <div
               key={idx}
               className="rounded-xl bg-[#FFFDF8] border border-[#DDD9CF] p-5 space-y-3 flex flex-col justify-between shadow-xs"
             >
               <div className="space-y-2.5">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-[#F8F6F0] text-[#62615D] border border-[#DDD9CF]">
-                    iGOT Karmayogi
-                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-[#F8F6F0] text-[#62615D] border border-[#DDD9CF]">
+                      iGOT Karmayogi
+                    </span>
+                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded border ${
+                      course.category === 'behavioral'
+                        ? 'bg-[#FAF6F0] text-[#854D0E] border-[#E8DEC8]'
+                        : 'bg-[#F8F6F0] text-[#62615D] border-[#DDD9CF]'
+                    }`}>
+                      {course.category === 'behavioral' ? 'Behavioral' : 'Functional'}
+                    </span>
+                  </div>
                   <span className="text-xs font-bold text-[#52745D] bg-[#EAF2EC] px-2 py-0.5 rounded border border-[#C5DDCB]">
                     {course.matchScore}% Match
                   </span>

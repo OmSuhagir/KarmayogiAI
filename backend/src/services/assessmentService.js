@@ -5,8 +5,26 @@ import User from "../models/User.js";
 import AssessmentAttempt from "../models/AssessmentAttempt.js";
 import Role from "../models/Role.js";
 import CompetencyHistory from "../models/CompetencyHistory.js";
+import Competency from "../models/Competency.js";
 import * as skillGapService from "./skillGapService.js";
 import * as recommendationService from "./recommendationService.js";
+
+// Helper: attach competency name and category to questions
+const enrichQuestionsWithCompetency = async (questions) => {
+  const compIds = [...new Set(questions.map((q) => String(q.competencyId)).filter(Boolean))];
+  const compDocs = await Competency.find({ _id: { $in: compIds } }).select("name category").lean();
+  const compMap = new Map(compDocs.map((c) => [String(c._id), c]));
+
+  return questions.map((q) => {
+    const { correctAnswer, ...rest } = q;
+    const comp = compMap.get(String(q.competencyId));
+    return {
+      ...rest,
+      competencyName: comp?.name || "Core Competency",
+      category: comp?.category || "functional"
+    };
+  });
+};
 
 // Utility: map score percentage to competency level (1-5)
 export const scoreToLevel = (score) => {
@@ -37,7 +55,7 @@ export const getAssessmentQuestions = async (assessmentId) => {
   const assessment = await Assessment.findById(assessmentId).lean();
   if (!assessment) return null;
 
-  const questions = [];
+  const rawQuestions = [];
 
   for (const comp of assessment.competencies || []) {
     const compId = comp.competencyId;
@@ -50,17 +68,16 @@ export const getAssessmentQuestions = async (assessmentId) => {
       { $sample: { size: count } }
     ]);
 
-    for (const q of sampled) {
-      const { correctAnswer, ...rest } = q;
-      questions.push(rest);
-    }
+    rawQuestions.push(...sampled);
   }
 
   // randomize overall order
-  for (let i = questions.length - 1; i > 0; i--) {
+  for (let i = rawQuestions.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [questions[i], questions[j]] = [questions[j], questions[i]];
+    [rawQuestions[i], rawQuestions[j]] = [rawQuestions[j], rawQuestions[i]];
   }
+
+  const questions = await enrichQuestionsWithCompetency(rawQuestions);
 
   return {
     assessmentId: assessment._id,
@@ -98,14 +115,11 @@ export const getActiveAttempt = async (assessmentId, userId) => {
 
   // Retrieve assigned questions
   const questions = await Question.find({ _id: { $in: attempt.questionIds } }).lean();
-  const sanitizedQuestions = attempt.questionIds
-    .map((qid) => {
-      const q = questions.find((x) => String(x._id) === String(qid));
-      if (!q) return null;
-      const { correctAnswer, ...rest } = q;
-      return rest;
-    })
+  const orderedQuestions = attempt.questionIds
+    .map((qid) => questions.find((x) => String(x._id) === String(qid)))
     .filter(Boolean);
+
+  const sanitizedQuestions = await enrichQuestionsWithCompetency(orderedQuestions);
 
   return {
     attemptId: attempt._id,
@@ -188,10 +202,7 @@ export const startAssessment = async (assessmentId, userId) => {
 
   await attempt.save();
 
-  const sanitizedQuestions = questions.map((q) => {
-    const { correctAnswer, ...rest } = q;
-    return rest;
-  });
+  const sanitizedQuestions = await enrichQuestionsWithCompetency(questions);
 
   return {
     attemptId: attempt._id,

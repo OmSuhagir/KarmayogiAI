@@ -21,6 +21,7 @@ export default function SkillGaps() {
   const [loading, setLoading] = useState(true);
   const [competencies, setCompetencies] = useState([]);
   const [activeFilter, setActiveFilter] = useState('all'); // 'all' | 'critical' | 'high' | 'medium' | 'met'
+  const [activeCategory, setActiveCategory] = useState('All'); // 'All' | 'Functional' | 'Behavioral' | 'Domain'
 
   useEffect(() => {
     async function loadGaps() {
@@ -40,6 +41,13 @@ export default function SkillGaps() {
     loadGaps();
   }, [user?._id]);
 
+  const formatCategory = (cat) => {
+    if (!cat) return 'Functional';
+    return cat.charAt(0).toUpperCase() + cat.slice(1).toLowerCase();
+  };
+
+  const categories = ['All', ...new Set(competencies.map((c) => formatCategory(c.competency?.category)))];
+
   const totalGaps = competencies.filter((c) => (c.gap || 0) > 0).length;
   const criticalCount = competencies.filter((c) => (c.gap || 0) >= 3).length;
   const highCount = competencies.filter((c) => (c.gap || 0) === 2).length;
@@ -48,6 +56,12 @@ export default function SkillGaps() {
 
   const filteredItems = competencies.filter((item) => {
     const gap = item.gap || 0;
+    const itemCat = formatCategory(item.competency?.category);
+
+    if (activeCategory !== 'All' && itemCat !== activeCategory) {
+      return false;
+    }
+
     if (activeFilter === 'all') return true;
     if (activeFilter === 'critical') return gap >= 3;
     if (activeFilter === 'high') return gap === 2;
@@ -111,6 +125,33 @@ export default function SkillGaps() {
           <span className="text-[11px] text-[#62615D]">Certified proficient</span>
         </div>
       </div>
+
+      {/* Category Tabs */}
+      {categories.length > 2 && (
+        <div className="flex items-center gap-2 overflow-x-auto pb-1">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-[#8A8882] mr-1 shrink-0">Category:</span>
+          {categories.map((cat) => {
+            const count = cat === 'All'
+              ? competencies.length
+              : competencies.filter((c) => formatCategory(c.competency?.category) === cat).length;
+            const isActive = activeCategory === cat;
+            return (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setActiveCategory(cat)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all shrink-0 border ${
+                  isActive
+                    ? 'bg-[#111111] text-[#FFFDF8] border-[#111111]'
+                    : 'bg-[#FFFDF8] text-[#62615D] hover:text-[#111111] hover:bg-[#F8F6F0] border-[#DDD9CF]'
+                }`}
+              >
+                {cat} ({count})
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       {/* Filter Tabs */}
       <div className="flex items-center gap-1.5 overflow-x-auto pb-1">

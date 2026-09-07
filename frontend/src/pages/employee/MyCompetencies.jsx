@@ -41,11 +41,15 @@ export default function MyCompetencies() {
     loadData();
   }, [user?._id]);
 
-  const categories = ['All', ...new Set(competencies.map((c) => c.competency?.category || 'Functional'))];
+  const rawCategories = ['All', ...new Set(competencies.map((c) => {
+    const cat = c.competency?.category || 'Functional';
+    return cat.charAt(0).toUpperCase() + cat.slice(1).toLowerCase();
+  }))];
 
   const filteredCompetencies = competencies.filter((item) => {
     if (activeCategory === 'All') return true;
-    return (item.competency?.category || 'Functional') === activeCategory;
+    const cat = (item.competency?.category || 'Functional').toLowerCase();
+    return cat === activeCategory.toLowerCase();
   });
 
   return (
@@ -81,20 +85,37 @@ export default function MyCompetencies() {
 
       {/* Category Tabs */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            type="button"
-            onClick={() => setActiveCategory(cat)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex-shrink-0 ${
-              activeCategory === cat
-                ? 'bg-[#111111] text-[#FFFDF8] font-semibold'
-                : 'bg-[#FFFDF8] text-[#62615D] hover:text-[#111111] border border-[#DDD9CF]'
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
+        {rawCategories.map((cat) => {
+          const count = cat === 'All'
+            ? competencies.length
+            : competencies.filter(
+                (c) => (c.competency?.category || 'Functional').toLowerCase() === cat.toLowerCase()
+              ).length;
+
+          return (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => setActiveCategory(cat)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex-shrink-0 flex items-center gap-1.5 ${
+                activeCategory === cat
+                  ? 'bg-[#111111] text-[#FFFDF8] font-semibold'
+                  : 'bg-[#FFFDF8] text-[#62615D] hover:text-[#111111] border border-[#DDD9CF]'
+              }`}
+            >
+              <span>{cat}</span>
+              <span
+                className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                  activeCategory === cat
+                    ? 'bg-[#333333] text-[#FFFDF8]'
+                    : 'bg-[#F8F6F0] text-[#8A8882] border border-[#DDD9CF]'
+                }`}
+              >
+                {count}
+              </span>
+            </button>
+          );
+        })}
       </div>
 
       {/* Competency Grid */}
@@ -111,6 +132,9 @@ export default function MyCompetencies() {
             const expected = item.expectedLevel || 1;
             const gap = item.gap || 0;
             const subComps = comp.subCompetencies || [];
+            const categoryName = comp.category
+              ? comp.category.charAt(0).toUpperCase() + comp.category.slice(1).toLowerCase()
+              : 'Functional';
 
             return (
               <div
@@ -122,8 +146,12 @@ export default function MyCompetencies() {
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-[#F8F6F0] text-[#62615D] border border-[#DDD9CF]">
-                          {comp.category || 'Functional'}
+                        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded border ${
+                          categoryName.toLowerCase() === 'behavioral'
+                            ? 'bg-[#FAF6F0] text-[#854D0E] border-[#E8DEC8]'
+                            : 'bg-[#F8F6F0] text-[#62615D] border-[#DDD9CF]'
+                        }`}>
+                          {categoryName}
                         </span>
                         {gap > 0 ? (
                           <GlassBadge variant="carmine" size="xs">
