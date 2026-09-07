@@ -213,6 +213,27 @@ export default function EmployeeLogin() {
                 {loading ? 'Signing in...' : 'Sign In to Portal'}
               </GlassButton>
             </div>
+
+            {/* Onboard Officer Callout */}
+            <div className="pt-2">
+              <Link
+                to="/onboarding"
+                className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100/80 hover:to-indigo-100/80 border border-blue-200/80 text-blue-900 text-xs font-bold flex items-center justify-between transition-all shadow-xs group"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-lg bg-blue-600 text-white flex items-center justify-center text-xs shadow-xs">
+                    +
+                  </span>
+                  <div className="text-left">
+                    <span className="block leading-tight">New Officer Joining?</span>
+                    <span className="text-[10px] text-blue-600 font-medium">
+                      Sync e-HRMS 2.0 & Service Book
+                    </span>
+                  </div>
+                </div>
+                <FiArrowRight className="text-blue-700 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
           </form>
 
           {/* Security & Access Note */}

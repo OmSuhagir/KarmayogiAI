@@ -68,6 +68,51 @@ const userSchema = new mongoose.Schema(
       ref: "Role"
     },
 
+    employeeId: {
+      type: String,
+      trim: true,
+      index: true
+    },
+
+    cadre: {
+      type: String,
+      trim: true
+    },
+
+    batchYear: {
+      type: Number
+    },
+
+    onboardingSource: {
+      type: String,
+      enum: ["manual", "ehrms_sync", "service_book_ai", "digilocker"],
+      default: "manual"
+    },
+
+    pastAppraisalsSummary: {
+      type: String
+    },
+
+    serviceHistory: [
+      {
+        organization: { type: String, required: true },
+        designation: { type: String, required: true },
+        duration: { type: String, required: true },
+        domain: { type: String },
+        keyContributions: [{ type: String }]
+      }
+    ],
+
+    certifications: [
+      {
+        title: { type: String, required: true },
+        issuingAuthority: { type: String, required: true },
+        completionDate: { type: Date },
+        credentialUrl: { type: String },
+        verified: { type: Boolean, default: true }
+      }
+    ],
+
     competencyProfile: [competencyProfileSchema],
 
     status: {

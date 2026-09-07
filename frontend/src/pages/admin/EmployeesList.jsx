@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   FiUsers,
   FiSearch,
@@ -12,6 +13,9 @@ import {
   FiRefreshCw,
   FiX,
   FiTrendingUp,
+  FiUserPlus,
+  FiDatabase,
+  FiBriefcase,
 } from 'react-icons/fi';
 import { RiBuildingLine } from 'react-icons/ri';
 import { getEmployeesList, getEmployeeDetail } from '../../services/adminService';
@@ -111,15 +115,27 @@ export default function EmployeesList() {
             </p>
           </div>
 
-          <GlassButton
-            variant="glass"
-            size="md"
-            icon={FiRefreshCw}
-            loading={loading}
-            onClick={fetchEmployees}
-          >
-            Refresh Roster
-          </GlassButton>
+          <div className="flex items-center gap-3">
+            <Link to="/onboarding">
+              <GlassButton
+                variant="primary"
+                size="md"
+                icon={FiUserPlus}
+              >
+                Onboard Officer (e-HRMS)
+              </GlassButton>
+            </Link>
+
+            <GlassButton
+              variant="glass"
+              size="md"
+              icon={FiRefreshCw}
+              loading={loading}
+              onClick={fetchEmployees}
+            >
+              Refresh Roster
+            </GlassButton>
+          </div>
         </div>
       </GlassCard>
 
@@ -188,10 +204,20 @@ export default function EmployeesList() {
                     <GlassBadge variant={emp.readinessPercent >= 75 ? 'success' : 'high'} size="xs" dot>
                       {emp.readinessPercent}% Role Readiness
                     </GlassBadge>
+                    {emp.employeeId && (
+                      <span className="text-[10px] font-mono font-bold text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">
+                        {emp.employeeId}
+                      </span>
+                    )}
+                    {emp.onboardingSource === 'ehrms_sync' && (
+                      <GlassBadge variant="default" size="xs">
+                        e-HRMS Verified
+                      </GlassBadge>
+                    )}
                   </div>
 
                   <p className="text-xs text-slate-500 font-medium truncate">
-                    {emp.email} &bull; {emp.positionId?.title || 'Statistical Officer'} &bull; {emp.departmentId?.shortName || 'MoSPI'}
+                    {emp.cadre ? `${emp.cadre} • ` : ''}{emp.email} &bull; {emp.positionId?.title || 'Statistical Officer'} &bull; {emp.departmentId?.shortName || 'MoSPI'}
                   </p>
                 </div>
               </div>
@@ -329,6 +355,39 @@ export default function EmployeesList() {
                     </span>
                   </div>
                 </div>
+
+                {/* Verified e-HRMS Service History & Certifications */}
+                {detailUser?.user?.serviceHistory && detailUser.user.serviceHistory.length > 0 && (
+                  <div className="space-y-3 pt-2 border-t border-slate-200/60">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+                        <FiDatabase className="text-blue-600" />
+                        <span>e-HRMS Service Book & Past Postings</span>
+                      </h4>
+                      <GlassBadge variant="success" size="xs">
+                        Verified Dossier
+                      </GlassBadge>
+                    </div>
+
+                    <div className="space-y-2">
+                      {detailUser.user.serviceHistory.map((post, pIdx) => (
+                        <div
+                          key={pIdx}
+                          className="p-3 rounded-xl bg-slate-50 border border-slate-200/70 text-xs space-y-1"
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold text-slate-900">{post.designation}</span>
+                            <span className="text-[10px] font-semibold text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200">
+                              {post.duration}
+                            </span>
+                          </div>
+                          <p className="text-xs text-blue-700 font-semibold">{post.organization}</p>
+                          {post.domain && <p className="text-[11px] text-slate-500">Domain: {post.domain}</p>}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
               </div>
             )}

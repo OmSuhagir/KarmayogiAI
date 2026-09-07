@@ -176,6 +176,20 @@ export function AuthProvider({ children }) {
     throw new Error('Administrator not found. Use demo credentials (admin@karmayogi.gov.in / admin123).');
   };
 
+  const setOfficerSession = (officerData) => {
+    const sessionData = {
+      user: {
+        ...officerData,
+        role: officerData.role || 'employee',
+      },
+      userType: 'employee',
+    };
+    setUser(sessionData.user);
+    setUserType('employee');
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(sessionData));
+    return sessionData;
+  };
+
   const logout = () => {
     setUser(null);
     setUserType(null);
@@ -189,6 +203,7 @@ export function AuthProvider({ children }) {
     loading,
     loginEmployee,
     loginAdmin,
+    setOfficerSession,
     logout,
   };
 

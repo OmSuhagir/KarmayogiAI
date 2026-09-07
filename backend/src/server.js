@@ -12,6 +12,7 @@ import documentRoutes from "./routes/documentRoutes.js";
 import generatedQuestionRoutes from "./routes/generatedQuestionRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
+import onboardingRoutes from "./routes/onboardingRoutes.js";
 
 // Register all models so mongoose knows the model names for populate()
 import "./models/Department.js";
@@ -78,7 +79,8 @@ const routes = [
   ["/documents", documentRoutes],
   ["/generated-questions", generatedQuestionRoutes],
   ["/admin", adminRoutes],
-  ["/chat", chatRoutes]
+  ["/chat", chatRoutes],
+  ["/onboarding", onboardingRoutes]
 ];
 
 routes.forEach(([path, handler]) => {

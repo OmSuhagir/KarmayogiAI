@@ -9,6 +9,7 @@ import AdminLayout from './layouts/AdminLayout';
 // Auth Pages
 import EmployeeLogin from './pages/auth/EmployeeLogin';
 import AdminLogin from './pages/auth/AdminLogin';
+import OfficerOnboarding from './pages/auth/OfficerOnboarding';
 
 // Employee Portal Pages
 import Dashboard from './pages/employee/Dashboard';
@@ -98,6 +99,7 @@ export default function App() {
           {/* Authentication Routes (Separate Portals) */}
           <Route path="/login/employee" element={<EmployeeLogin />} />
           <Route path="/login/admin" element={<AdminLogin />} />
+          <Route path="/onboarding" element={<OfficerOnboarding />} />
 
           {/* EMPLOYEE PORTAL (Protected via EmployeeLayout) */}
           <Route
