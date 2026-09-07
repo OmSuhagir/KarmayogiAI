@@ -55,7 +55,7 @@ export default function EmployeeLayout() {
       <header className="sticky top-0 z-40 bg-[#FFFDF8]/95 backdrop-blur-md border-b border-[#DDD9CF] shadow-xs">
         {/* Main Header Row */}
         <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-          
+
           {/* Left: Brand + Identity */}
           <div className="flex items-center gap-3 flex-shrink-0">
             {/* Mobile Hamburger Toggle */}
@@ -95,10 +95,9 @@ export default function EmployeeLayout() {
                 key={item.path}
                 to={item.path}
                 className={({ isActive }) =>
-                  `px-2.5 2xl:px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap flex-shrink-0 ${
-                    isActive
-                      ? 'bg-[#111111] text-[#FFFDF8] font-semibold shadow-xs'
-                      : 'text-[#62615D] hover:text-[#111111] hover:bg-[#F8F6F0]'
+                  `px-2.5 2xl:px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap flex-shrink-0 ${isActive
+                    ? 'bg-[#111111] text-[#FFFDF8] font-semibold shadow-xs'
+                    : 'text-[#62615D] hover:text-[#111111] hover:bg-[#F8F6F0]'
                   }`
                 }
               >
@@ -118,10 +117,6 @@ export default function EmployeeLayout() {
             >
               <div className="relative flex items-center justify-center">
                 <RiSparklingFill className="text-[#3348A8] text-sm animate-pulse group-hover:rotate-12 transition-transform duration-300" />
-                <span className="absolute -top-0.5 -right-0.5 flex h-1.5 w-1.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#3348A8] opacity-75" />
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#3348A8]" />
-                </span>
               </div>
               <span className="whitespace-nowrap">Sathi AI</span>
             </button>
@@ -196,10 +191,9 @@ export default function EmployeeLayout() {
                       to={item.path}
                       onClick={() => setMobileMenuOpen(false)}
                       className={({ isActive }) =>
-                        `flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
-                          isActive
-                            ? 'bg-[#111111] text-[#FFFDF8] font-semibold'
-                            : 'text-[#62615D] hover:bg-[#F8F6F0]'
+                        `flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${isActive
+                          ? 'bg-[#111111] text-[#FFFDF8] font-semibold'
+                          : 'text-[#62615D] hover:bg-[#F8F6F0]'
                         }`
                       }
                     >
