@@ -43,58 +43,52 @@ export default function MyCompetencies() {
 
   return (
     <div className="space-y-6 pb-12">
-      {/* Header Banner */}
-      <GlassCard variant="solid" className="p-6 sm:p-8 border-white/80">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <GlassBadge variant="primary" size="xs">
-                Competency Profile
-              </GlassBadge>
-              <span className="text-xs text-slate-400 font-medium">
-                {user?.position?.title || 'Statistical Officer'}
-              </span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              My Role Competencies
+      {/* Clean Page Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+        <div>
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+              Role Competencies
             </h1>
-            <p className="text-xs sm:text-sm text-slate-600 max-w-2xl font-normal">
-              Official competency framework requirements for your role. Compare your current evaluated proficiency against government benchmarks.
-            </p>
+            <span className="px-2 py-0.5 rounded-md text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+              {user?.position?.title || 'Statistical Officer'}
+            </span>
           </div>
-
-          <GlassButton
-            variant="primary"
-            size="md"
-            iconRight={FiArrowRight}
-            onClick={() => navigate('/employee/assessments')}
-          >
-            Take Assessment
-          </GlassButton>
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+            Official competency framework requirements and current evaluated proficiency levels.
+          </p>
         </div>
-      </GlassCard>
+
+        <GlassButton
+          variant="primary"
+          size="sm"
+          iconRight={FiArrowRight}
+          onClick={() => navigate('/employee/assessments')}
+        >
+          Take Assessment
+        </GlassButton>
+      </div>
 
       {/* Competency Grid */}
       {loading ? (
         <div className="py-16 text-center text-xs text-slate-400 space-y-3">
-          <FiRefreshCw className="animate-spin text-blue-600 text-2xl mx-auto" />
+          <FiRefreshCw className="animate-spin text-blue-600 text-xl mx-auto" />
           <p>Loading competency profile from database...</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {competencies.map((item, idx) => {
             const comp = item.competency || {};
             const current = item.currentLevel || 1;
             const expected = item.expectedLevel || 1;
             const gap = item.gap || 0;
             const subComps = comp.subCompetencies || [];
-            const levels = comp.proficiencyLevels || [];
 
             return (
-              <GlassCard key={comp._id || idx} className="p-6 space-y-5 flex flex-col justify-between">
-                <div className="space-y-4">
+              <GlassCard key={comp._id || idx} className="p-5 space-y-4 flex flex-col justify-between">
+                <div className="space-y-3">
                   {/* Card Title & Category */}
-                  <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-start justify-between gap-2">
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
                         <GlassBadge variant="primary" size="xs">
@@ -110,12 +104,12 @@ export default function MyCompetencies() {
                           </GlassBadge>
                         )}
                       </div>
-                      <h2 className="text-base sm:text-lg font-bold text-slate-900">
+                      <h2 className="text-sm font-bold text-slate-900 leading-snug">
                         {comp.name}
                       </h2>
                     </div>
 
-                    <div className="text-right">
+                    <div className="text-right flex-shrink-0">
                       <div className="text-xs font-bold text-slate-900">
                         Level {current} <span className="text-slate-400 font-normal">/ L{expected}</span>
                       </div>
@@ -123,30 +117,34 @@ export default function MyCompetencies() {
                     </div>
                   </div>
 
-                  <p className="text-xs text-slate-600 leading-relaxed">
+                  <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
                     {comp.description}
                   </p>
 
                   {/* Level Progress Bar */}
-                  <ProgressBar
-                    value={Math.round((current / 5) * 100)}
-                    variant={gap > 0 ? 'blue' : 'emerald'}
-                    size="sm"
-                    labelText={`Current Proficiency: Level ${current} of 5`}
-                    showPercentage
-                  />
+                  <div className="space-y-1.5 pt-1">
+                    <div className="flex justify-between text-[11px] text-slate-500">
+                      <span>Proficiency</span>
+                      <span className="font-semibold text-slate-700">Level {current} of 5</span>
+                    </div>
+                    <ProgressBar
+                      value={Math.round((current / 5) * 100)}
+                      variant={gap > 0 ? 'blue' : 'emerald'}
+                      size="xs"
+                    />
+                  </div>
 
                   {/* Sub-competencies */}
                   {subComps.length > 0 && (
-                    <div className="space-y-1.5 pt-2">
-                      <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                        Sub-Competencies:
+                    <div className="space-y-1.5 pt-1">
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                        Key Areas
                       </p>
                       <div className="flex flex-wrap gap-1.5">
                         {subComps.map((sc, scIdx) => (
                           <span
                             key={sc._id || scIdx}
-                            className="px-2.5 py-1 rounded-lg bg-slate-100/70 border border-slate-200/60 text-[11px] text-slate-700 font-medium"
+                            className="px-2 py-0.5 rounded-md bg-slate-100 text-[11px] text-slate-700 font-medium"
                           >
                             {sc.name}
                           </span>
@@ -157,7 +155,7 @@ export default function MyCompetencies() {
                 </div>
 
                 {/* Card Action Footer */}
-                <div className="pt-4 border-t border-slate-200/60 flex items-center justify-between">
+                <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
                   <span className="text-[11px] text-slate-500">
                     Required: <strong>Level {expected}</strong>
                   </span>
@@ -167,7 +165,7 @@ export default function MyCompetencies() {
                       onClick={() => navigate('/employee/recommendations')}
                       className="text-xs font-semibold text-blue-600 hover:text-blue-800 flex items-center gap-1"
                     >
-                      Close Gap via iGOT &rarr;
+                      Close Gap &rarr;
                     </button>
                   ) : (
                     <span className="text-xs font-medium text-emerald-700 flex items-center gap-1">

@@ -38,22 +38,20 @@ export default function Assessments() {
 
   return (
     <div className="space-y-6 pb-12">
-      {/* Header Banner */}
-      <GlassCard variant="solid" className="p-6 sm:p-8 border-white/80">
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <GlassBadge variant="primary" size="xs">
-              Continuous Capacity Building
-            </GlassBadge>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+      {/* Clean Page Header */}
+      <div className="pb-4 border-b border-slate-200">
+        <div className="flex items-center gap-2.5">
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
             Role Assessments
           </h1>
-          <p className="text-xs sm:text-sm text-slate-600 max-w-2xl font-normal leading-relaxed">
-            Standardized competency assessments evaluating your functional, domain, and behavioral proficiencies. Results automatically compute skill gaps and recommend tailored learning pathways.
-          </p>
+          <span className="px-2 py-0.5 rounded-md text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+            Competency Evaluation
+          </span>
         </div>
-      </GlassCard>
+        <p className="text-xs sm:text-sm text-slate-500 mt-1">
+          Standardized competency evaluations determining current proficiency benchmarks and skill gaps.
+        </p>
+      </div>
 
       {/* Assessments List */}
       {loading ? (

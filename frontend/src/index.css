@@ -4,100 +4,67 @@
 
 @layer base {
   :root {
-    --bg-canvas: #F4F7FB;
-    --glass-bg: rgba(255, 255, 255, 0.72);
-    --glass-bg-hover: rgba(255, 255, 255, 0.85);
-    --glass-border: rgba(255, 255, 255, 0.65);
-    --glass-border-subtle: rgba(226, 232, 240, 0.6);
+    --bg-canvas: #F8FAFC;
+    --glass-bg: #FFFFFF;
+    --glass-bg-hover: #F8FAFC;
+    --glass-border: #E2E8F0;
+    --glass-border-subtle: #F1F5F9;
   }
 
   body {
     background-color: var(--bg-canvas);
-    color: #1E293B;
+    color: #0F172A;
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
 }
 
-/* Ambient glow backgrounds for light glassmorphism */
+/* Subtle, clean canvas - lightweight and distraction-free */
 .ambient-canvas {
   position: relative;
-  background-color: #F4F7FB;
-  overflow-x: hidden;
+  background-color: #F8FAFC;
+  min-height: 100vh;
 }
 
 .ambient-glow-1 {
-  position: absolute;
-  top: -8rem;
-  left: -8rem;
-  width: 32rem;
-  height: 32rem;
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, rgba(59, 130, 246, 0) 70%);
-  border-radius: 9999px;
-  filter: blur(40px);
-  pointer-events: none;
-  z-index: 0;
+  display: none;
 }
 
 .ambient-glow-2 {
-  position: absolute;
-  top: 15%;
-  right: -10rem;
-  width: 36rem;
-  height: 36rem;
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.06) 0%, rgba(139, 92, 246, 0) 70%);
-  border-radius: 9999px;
-  filter: blur(45px);
-  pointer-events: none;
-  z-index: 0;
+  display: none;
 }
 
 .ambient-glow-3 {
-  position: absolute;
-  bottom: 5%;
-  left: 20%;
-  width: 30rem;
-  height: 30rem;
-  background: radial-gradient(circle, rgba(6, 182, 212, 0.06) 0%, rgba(6, 182, 212, 0) 70%);
-  border-radius: 9999px;
-  filter: blur(40px);
-  pointer-events: none;
-  z-index: 0;
+  display: none;
 }
 
-/* Reusable Glassmorphism Surfaces */
+/* Clean, modern enterprise surfaces */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.65);
-  box-shadow: 0 8px 30px -4px rgba(31, 38, 135, 0.04), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.02);
 }
 
 .glass-panel-subtle {
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.70);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.65);
-  box-shadow: 0 4px 20px -2px rgba(31, 38, 135, 0.03), 0 1px 3px 0 rgba(0, 0, 0, 0.02);
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.02);
 }
 
 .glass-card-interactive {
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.15s ease-in-out;
 }
 
 .glass-card-interactive:hover {
-  background: rgba(255, 255, 255, 0.88);
-  border-color: rgba(255, 255, 255, 0.9);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 30px -4px rgba(31, 38, 135, 0.07), 0 4px 8px -2px rgba(0, 0, 0, 0.03);
+  background: #FFFFFF;
+  border-color: #CBD5E1;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.06), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
 }
 
 /* Custom Scrollbar */

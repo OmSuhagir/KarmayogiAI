@@ -63,38 +63,36 @@ export default function ProgressTracking() {
 
   return (
     <div className="space-y-6 pb-12">
-      {/* Header Banner */}
-      <GlassCard variant="solid" className="p-6 sm:p-8 border-white/80">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <GlassBadge variant="success" size="xs">
-                Competency Progression
-              </GlassBadge>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              My Competency Improvement
+      {/* Clean Page Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+        <div>
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+              Competency Growth
             </h1>
-            <p className="text-xs sm:text-sm text-slate-600 max-w-2xl font-normal leading-relaxed">
-              Track your evaluated growth across capacity-building cycles: <strong className="text-slate-800">Assess &rarr; Analyze &rarr; Learn &rarr; Reassess &rarr; Improve</strong>.
-            </p>
+            <span className="px-2 py-0.5 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              Progression Loop
+            </span>
           </div>
-
-          <GlassButton
-            variant="primary"
-            size="md"
-            iconRight={FiArrowRight}
-            onClick={() => navigate('/employee/assessments')}
-          >
-            Take Reassessment
-          </GlassButton>
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+            Track evaluated improvement across capacity-building and reassessment cycles.
+          </p>
         </div>
-      </GlassCard>
+
+        <GlassButton
+          variant="primary"
+          size="sm"
+          iconRight={FiArrowRight}
+          onClick={() => navigate('/employee/assessments')}
+        >
+          Take Reassessment
+        </GlassButton>
+      </div>
 
       {/* Progression Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {competencyTimeline.map((item, idx) => (
-          <GlassCard key={idx} className="p-6 space-y-4">
+          <GlassCard key={idx} className="p-5 space-y-3">
             <div className="flex items-start justify-between">
               <div className="space-y-1">
                 <GlassBadge variant="primary" size="xs">

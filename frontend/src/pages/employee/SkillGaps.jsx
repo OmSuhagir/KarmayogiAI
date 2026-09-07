@@ -74,7 +74,6 @@ export default function SkillGaps() {
               Skill Gap Analysis
             </h1>
             <p className="text-xs sm:text-sm text-slate-600 max-w-2xl font-normal leading-relaxed">
-              Formula: <code className="bg-white/80 px-1.5 py-0.5 rounded font-mono text-slate-800 border border-slate-200">Expected Level - Current Level = Gap</code>. 
               Priority is assigned dynamically to guide personalized capacity building.
             </p>
           </div>
@@ -94,51 +93,46 @@ export default function SkillGaps() {
       <div className="flex flex-wrap items-center gap-2">
         <button
           onClick={() => setActiveFilter('all')}
-          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
-            activeFilter === 'all'
-              ? 'bg-blue-600 text-white shadow-xs'
-              : 'bg-white/70 text-slate-600 hover:bg-white border border-white/80'
-          }`}
+          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${activeFilter === 'all'
+            ? 'bg-blue-600 text-white shadow-xs'
+            : 'bg-white/70 text-slate-600 hover:bg-white border border-white/80'
+            }`}
         >
           All Competencies ({competencies.length})
         </button>
         <button
           onClick={() => setActiveFilter('critical')}
-          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
-            activeFilter === 'critical'
-              ? 'bg-rose-600 text-white shadow-xs'
-              : 'bg-white/70 text-rose-700 hover:bg-white border border-white/80'
-          }`}
+          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${activeFilter === 'critical'
+            ? 'bg-rose-600 text-white shadow-xs'
+            : 'bg-white/70 text-rose-700 hover:bg-white border border-white/80'
+            }`}
         >
           Critical ({criticalCount})
         </button>
         <button
           onClick={() => setActiveFilter('high')}
-          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
-            activeFilter === 'high'
-              ? 'bg-amber-600 text-white shadow-xs'
-              : 'bg-white/70 text-amber-800 hover:bg-white border border-white/80'
-          }`}
+          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${activeFilter === 'high'
+            ? 'bg-amber-600 text-white shadow-xs'
+            : 'bg-white/70 text-amber-800 hover:bg-white border border-white/80'
+            }`}
         >
           High Priority ({highCount})
         </button>
         <button
           onClick={() => setActiveFilter('medium')}
-          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
-            activeFilter === 'medium'
-              ? 'bg-sky-600 text-white shadow-xs'
-              : 'bg-white/70 text-sky-800 hover:bg-white border border-white/80'
-          }`}
+          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${activeFilter === 'medium'
+            ? 'bg-sky-600 text-white shadow-xs'
+            : 'bg-white/70 text-sky-800 hover:bg-white border border-white/80'
+            }`}
         >
           Medium ({mediumCount})
         </button>
         <button
           onClick={() => setActiveFilter('met')}
-          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
-            activeFilter === 'met'
-              ? 'bg-emerald-600 text-white shadow-xs'
-              : 'bg-white/70 text-emerald-800 hover:bg-white border border-white/80'
-          }`}
+          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${activeFilter === 'met'
+            ? 'bg-emerald-600 text-white shadow-xs'
+            : 'bg-white/70 text-emerald-800 hover:bg-white border border-white/80'
+            }`}
         >
           Target Met ({competencies.length - totalGaps})
         </button>

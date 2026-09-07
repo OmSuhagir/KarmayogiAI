@@ -46,6 +46,8 @@ export default function Dashboard() {
   const [learningProgress, setLearningProgress] = useState([]);
   const [history, setHistory] = useState([]);
   const [activeAssessment, setActiveAssessment] = useState(null);
+  const [compFilter, setCompFilter] = useState('all'); // 'all' | 'gaps' | 'met'
+  const [showFullHistory, setShowFullHistory] = useState(false);
 
   // Fetch real backend data for the logged-in employee
   useEffect(() => {
@@ -166,56 +168,48 @@ export default function Dashboard() {
   return (
     <div className="space-y-8 pb-12">
       
-      {/* SECTION 1: WELCOME BANNER */}
-      <GlassCard variant="solid" className="p-6 sm:p-8 border-white/80 relative overflow-hidden">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <GlassBadge variant="primary" size="xs">
-                {user?.department?.shortName || 'MoSPI'} Officer
-              </GlassBadge>
-              <span className="text-xs text-slate-400 font-medium">
-                {user?.position?.title || 'Statistical Officer'}
-              </span>
-            </div>
-            
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              {getGreeting()}, {user?.name?.split(' ')[0] || 'Officer'}
-            </h1>
-            
-            <p className="text-xs sm:text-sm text-slate-600 max-w-2xl leading-relaxed">
-              Here is your role competency profile and personalized capacity-building roadmap. 
-              Address your identified skill gaps through curated iGOT courses to prepare for reassessment.
-            </p>
+      {/* SECTION 1: CLEAN WELCOME HEADER */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200">
+              {user?.department?.shortName || 'MoSPI'} &bull; {user?.position?.title || 'Statistical Officer'}
+            </span>
           </div>
-
-          <div className="flex items-center gap-3 flex-shrink-0">
-            <GlassButton
-              variant="primary"
-              size="md"
-              iconRight={FiArrowRight}
-              onClick={() => navigate('/employee/assessments')}
-            >
-              Take Assessment
-            </GlassButton>
-            <GlassButton
-              variant="glass"
-              size="md"
-              icon={FiAlertCircle}
-              onClick={() => navigate('/employee/skill-gaps')}
-            >
-              View Skill Gaps
-            </GlassButton>
-          </div>
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight mt-1.5">
+            {getGreeting()}, {user?.name?.split(' ')[0] || 'Officer'}
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+            Role competency profile, active skill gaps, and personalized capacity roadmap.
+          </p>
         </div>
-      </GlassCard>
+
+        <div className="flex items-center gap-2.5 flex-shrink-0">
+          <GlassButton
+            variant="primary"
+            size="sm"
+            iconRight={FiArrowRight}
+            onClick={() => navigate('/employee/assessments')}
+          >
+            Take Assessment
+          </GlassButton>
+          <GlassButton
+            variant="outline"
+            size="sm"
+            icon={FiAlertCircle}
+            onClick={() => navigate('/employee/skill-gaps')}
+          >
+            Skill Gaps ({openGapsCount})
+          </GlassButton>
+        </div>
+      </div>
 
       {/* SECTION 2: PRIMARY KPI CARDS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatMetric
           title="Current Competency"
           value={loading ? '...' : `L${avgCurrentLevel}`}
-          subtitle={loading ? 'Evaluating...' : `Avg across ${totalCompetencies} role competencies`}
+          subtitle={loading ? 'Evaluating...' : `Across ${totalCompetencies} role competencies`}
           icon={FiAward}
           iconColor="blue"
           trend="Level 1-5"
@@ -229,7 +223,7 @@ export default function Dashboard() {
           subtitle={
             loading
               ? 'Analyzing gaps...'
-              : `${criticalGapsCount} Critical, ${highGapsCount} High priority`
+              : `${criticalGapsCount} critical, ${highGapsCount} high priority`
           }
           icon={FiAlertCircle}
           iconColor={openGapsCount > 0 ? 'amber' : 'emerald'}
@@ -259,7 +253,7 @@ export default function Dashboard() {
           subtitle={
             loading
               ? 'Calculating...'
-              : `${metCount} of ${totalCompetencies} target levels met`
+              : `${metCount} of ${totalCompetencies} targets met`
           }
           icon={FiTrendingUp}
           iconColor="emerald"
@@ -272,28 +266,58 @@ export default function Dashboard() {
       {/* 2-COLUMN MAIN CONTENT GRID */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        {/* LEFT COLUMN (2 Cols): Competency Overview & Priority Gaps */}
+        {/* LEFT COLUMN (2 Cols): Competency Matrix & Service Dossier */}
         <div className="lg:col-span-2 space-y-6">
           
-          {/* SECTION 3: COMPETENCY OVERVIEW */}
-          <GlassCard className="p-6 space-y-5">
-            <div className="flex items-center justify-between border-b border-slate-200/60 pb-4">
+          {/* SECTION 3: ROLE COMPETENCY MATRIX (UNIFIED) */}
+          <GlassCard className="p-5 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
               <div>
-                <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
                   <FiAward className="text-blue-600" />
-                  Role Competencies & Current Proficiency
+                  Role Competencies & Proficiency
                 </h2>
-                <p className="text-xs text-slate-500 font-normal mt-0.5">
-                  Expected vs assessed proficiency levels for <strong>{user?.roleInfo?.name || 'Statistical Officer'}</strong>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Benchmark requirements vs your current evaluated proficiency
                 </p>
               </div>
 
-              <Link
-                to="/employee/competencies"
-                className="text-xs font-semibold text-blue-600 hover:text-blue-800 flex items-center gap-1 transition-colors"
-              >
-                View Full Rubric <FiArrowRight className="text-xs" />
-              </Link>
+              {/* Filter pills */}
+              <div className="flex items-center gap-1.5 self-start sm:self-auto">
+                <button
+                  type="button"
+                  onClick={() => setCompFilter('all')}
+                  className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
+                    compFilter === 'all'
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  }`}
+                >
+                  All ({competencies.length})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCompFilter('gaps')}
+                  className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
+                    compFilter === 'gaps'
+                      ? 'bg-rose-600 text-white'
+                      : 'bg-rose-50 text-rose-700 hover:bg-rose-100'
+                  }`}
+                >
+                  Gaps ({openGapsCount})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCompFilter('met')}
+                  className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
+                    compFilter === 'met'
+                      ? 'bg-emerald-600 text-white'
+                      : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
+                  }`}
+                >
+                  Met ({metCount})
+                </button>
+              </div>
             </div>
 
             {loading ? (
@@ -306,178 +330,129 @@ export default function Dashboard() {
                 No competencies found for this role.
               </div>
             ) : (
-              <div className="space-y-4">
-                {competencies.slice(0, 4).map((item, idx) => {
-                  const comp = item.competency || {};
-                  const current = item.currentLevel || 1;
-                  const expected = item.expectedLevel || 1;
-                  const gap = item.gap || 0;
-                  const percent = Math.round((current / 5) * 100);
-
-                  return (
-                    <div
-                      key={comp._id || idx}
-                      className="p-4 rounded-xl bg-white/50 border border-white/80 hover:bg-white/80 transition-all space-y-2.5 shadow-xs"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm font-semibold text-slate-900">
-                              {comp.name || 'Competency'}
-                            </span>
-                            <GlassBadge variant="primary" size="xs">
-                              {comp.category || 'Functional'}
-                            </GlassBadge>
-                          </div>
-                          <p className="text-[11px] text-slate-500 line-clamp-1 mt-0.5">
-                            {comp.description}
-                          </p>
-                        </div>
-
-                        <div className="text-right flex items-center gap-2">
-                          <div className="text-xs">
-                            <span className="font-bold text-slate-800">L{current}</span>
-                            <span className="text-slate-400"> / L{expected} Exp</span>
-                          </div>
-                          {gap > 0 ? (
-                            <GlassBadge variant={gap >= 3 ? 'critical' : gap === 2 ? 'high' : 'medium'} size="xs" dot>
-                              Gap: {gap}
-                            </GlassBadge>
-                          ) : (
-                            <GlassBadge variant="success" size="xs">
-                              Met
-                            </GlassBadge>
-                          )}
-                        </div>
-                      </div>
-
-                      <ProgressBar
-                        value={percent}
-                        variant={gap > 0 ? 'blue' : 'emerald'}
-                        size="xs"
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </GlassCard>
-
-          {/* SECTION 4: PRIORITY SKILL GAPS */}
-          <GlassCard className="p-6 space-y-5">
-            <div className="flex items-center justify-between border-b border-slate-200/60 pb-4">
-              <div>
-                <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                  <FiAlertCircle className="text-amber-600" />
-                  Priority Skill Gaps Requiring Development
-                </h2>
-                <p className="text-xs text-slate-500 font-normal mt-0.5">
-                  Identified deficiencies where required level exceeds current proficiency
-                </p>
-              </div>
-
-              <Link
-                to="/employee/skill-gaps"
-                className="text-xs font-semibold text-blue-600 hover:text-blue-800 flex items-center gap-1 transition-colors"
-              >
-                All Gaps ({openGapsCount}) <FiArrowRight className="text-xs" />
-              </Link>
-            </div>
-
-            {loading ? (
-              <div className="py-8 text-center text-xs text-slate-400 space-y-2">
-                <FiRefreshCw className="animate-spin text-blue-600 text-xl mx-auto" />
-                <p>Analyzing skill gaps...</p>
-              </div>
-            ) : openGapsCount === 0 ? (
-              <div className="py-6 text-center text-xs text-emerald-700 bg-emerald-50/60 rounded-xl border border-emerald-200/60 flex items-center justify-center gap-2">
-                <FiCheckCircle className="text-base text-emerald-600" />
-                <span>All role competencies currently meet or exceed expected levels.</span>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-3">
                 {competencies
-                  .filter((c) => (c.gap || 0) > 0)
-                  .slice(0, 4)
+                  .filter((item) => {
+                    const gap = item.gap || 0;
+                    if (compFilter === 'gaps') return gap > 0;
+                    if (compFilter === 'met') return gap <= 0;
+                    return true;
+                  })
                   .map((item, idx) => {
                     const comp = item.competency || {};
+                    const current = item.currentLevel || 1;
+                    const expected = item.expectedLevel || 1;
                     const gap = item.gap || 0;
-                    const priority = gap >= 3 ? 'Critical' : gap === 2 ? 'High' : 'Medium';
-                    const priorityVariant = gap >= 3 ? 'critical' : gap === 2 ? 'high' : 'medium';
+                    const percent = Math.round((current / 5) * 100);
 
                     return (
                       <div
                         key={comp._id || idx}
-                        className="p-4 rounded-xl bg-white/50 border border-white/80 hover:bg-white/85 transition-all flex flex-col justify-between space-y-3"
+                        className="p-3.5 rounded-lg bg-slate-50/70 border border-slate-100 hover:bg-slate-50 transition-all space-y-2"
                       >
-                        <div className="space-y-1.5">
-                          <div className="flex items-center justify-between">
-                            <GlassBadge variant={priorityVariant} size="xs" dot>
-                              {priority} Priority
-                            </GlassBadge>
-                            <span className="text-xs font-bold text-rose-600">
-                              -{gap} Levels
-                            </span>
+                        <div className="flex items-center justify-between">
+                          <div className="space-y-0.5">
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs font-bold text-slate-900">
+                                {comp.name || 'Competency'}
+                              </span>
+                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-white text-slate-500 border border-slate-200">
+                                {comp.category || 'Functional'}
+                              </span>
+                            </div>
+                            <p className="text-[11px] text-slate-500 line-clamp-1">
+                              {comp.description}
+                            </p>
                           </div>
 
-                          <h3 className="text-sm font-semibold text-slate-900 leading-tight">
-                            {comp.name}
-                          </h3>
-
-                          <p className="text-[11px] text-slate-500">
-                            Current: <strong>Level {item.currentLevel}</strong> &bull; Target: <strong>Level {item.expectedLevel}</strong>
-                          </p>
+                          <div className="text-right flex items-center gap-2 flex-shrink-0">
+                            <span className="text-xs text-slate-600 font-medium">
+                              <strong className="text-slate-900">L{current}</strong> / L{expected}
+                            </span>
+                            {gap > 0 ? (
+                              <span className="text-xs font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
+                                -{gap} Gap
+                              </span>
+                            ) : (
+                              <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                                Met
+                              </span>
+                            )}
+                          </div>
                         </div>
 
-                        <div className="pt-2 border-t border-slate-200/50 flex items-center justify-between">
-                          <span className="text-[10px] text-slate-400">iGOT Learning Recommended</span>
-                          <button
-                            onClick={() => navigate('/employee/recommendations')}
-                            className="text-xs font-semibold text-blue-600 hover:text-blue-800 flex items-center gap-1"
-                          >
-                            Close Gap &rarr;
-                          </button>
+                        <div className="flex items-center gap-3">
+                          <div className="flex-1">
+                            <ProgressBar
+                              value={percent}
+                              variant={gap > 0 ? 'blue' : 'emerald'}
+                              size="xs"
+                            />
+                          </div>
+                          {gap > 0 ? (
+                            <button
+                              type="button"
+                              onClick={() => navigate('/employee/recommendations')}
+                              className="text-[11px] font-semibold text-blue-600 hover:text-blue-800 flex items-center gap-0.5 flex-shrink-0"
+                            >
+                              Close Gap &rarr;
+                            </button>
+                          ) : (
+                            <span className="text-[11px] text-emerald-700 font-medium flex items-center gap-1 flex-shrink-0">
+                              <FiCheckCircle className="text-xs" /> Certified
+                            </span>
+                          )}
                         </div>
                       </div>
                     );
                   })}
               </div>
             )}
+
+            <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+              <span className="text-slate-400">
+                {metCount} of {totalCompetencies} benchmarks achieved
+              </span>
+              <Link
+                to="/employee/competencies"
+                className="font-semibold text-blue-600 hover:text-blue-800 flex items-center gap-1"
+              >
+                Full Competency Rubric &rarr;
+              </Link>
+            </div>
           </GlassCard>
 
           {/* SECTION 4B: VERIFIED SERVICE RECORD & EHRMS POSTINGS */}
-          <GlassCard className="p-6 space-y-5">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/60 pb-4">
+          <GlassCard className="p-5 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                  <h2 className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
                     <FiDatabase className="text-blue-600" />
-                    Digital Service Book & Historical Postings
+                    Digital Service Dossier
                   </h2>
                   <GlassBadge variant="success" size="xs" dot>
                     e-HRMS 2.0 Verified
                   </GlassBadge>
                 </div>
-                <p className="text-xs text-slate-500 font-normal mt-0.5">
-                  Synchronized government service record, prior ministerial postings, and accredited credentials
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Synchronized government service book & accredited credentials
                 </p>
               </div>
 
-              <div className="flex items-center gap-2">
-                <span className="text-[11px] font-mono text-slate-500 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200 font-bold">
-                  {profile?.employeeId || user?.employeeId || 'GOI-MOSPI-2022-419'}
-                </span>
-              </div>
+              <span className="text-[11px] font-mono text-slate-600 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 font-semibold w-fit">
+                {profile?.employeeId || user?.employeeId || 'GOI-MOSPI-2022-419'}
+              </span>
             </div>
 
             {/* Cadre & Performance Appraisal Summary */}
-            <div className="p-3.5 rounded-xl bg-blue-50/70 border border-blue-200/70 text-xs text-blue-950 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="p-3 rounded-lg bg-blue-50/60 border border-blue-100 text-xs text-blue-950 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div className="space-y-0.5">
-                <span className="font-bold block">
+                <span className="font-bold text-slate-900 block">
                   {profile?.cadre || 'Indian Statistical Service (ISS)'} &bull; Batch of {profile?.batchYear || 2021}
                 </span>
                 <span className="text-[11px] text-slate-600">
-                  {profile?.pastAppraisalsSummary || 'SPARROW Annual Performance Appraisal: Outstanding (Grade 9.2/10). Quantitative rigor commended in national survey field operations.'}
+                  {profile?.pastAppraisalsSummary || 'SPARROW Annual Performance Appraisal: Outstanding (Grade 9.2/10).'}
                 </span>
               </div>
               <GlassBadge variant="primary" size="xs">
@@ -485,143 +460,126 @@ export default function Dashboard() {
               </GlassBadge>
             </div>
 
-            {/* Historical Postings Timeline */}
-            <div className="space-y-3">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700">
-                Prior Ministerial Assignments & Postings
-              </h3>
-
-              <div className="space-y-2.5">
-                {(profile?.serviceHistory && profile.serviceHistory.length > 0 ? profile.serviceHistory : [
-                  {
-                    organization: 'Ministry of Health & Family Welfare (MoHFW)',
-                    designation: 'Assistant Director (Surveillance & Health Metrics)',
-                    duration: 'July 2021 - May 2023',
-                    domain: 'Public Health Statistics & Epidemiological Surveys',
-                    keyContributions: [
-                      'Led district-level sampling for immunization coverage across 4 aspirational districts.',
-                      'Standardized demographic indicator pipelines for automated MIS dashboard.'
-                    ]
-                  },
-                  {
-                    organization: 'National Sample Survey Office (NSSO) - Western Zone',
-                    designation: 'Field Statistical Investigator',
-                    duration: 'Jan 2020 - June 2021',
-                    domain: 'Socio-Economic Household Surveys',
-                    keyContributions: [
-                      'Supervised urban consumer expenditure rounds covering 1,200 sample units.'
-                    ]
-                  }
-                ]).map((post, pIdx) => (
-                  <div
-                    key={pIdx}
-                    className="p-3.5 rounded-xl bg-white/60 border border-slate-200/70 text-xs space-y-1 hover:bg-white/90 transition-all"
-                  >
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-                      <span className="font-bold text-slate-900">{post.designation}</span>
-                      <span className="text-[11px] font-semibold text-slate-500 bg-slate-50 px-2 py-0.5 rounded border border-slate-200 w-fit">
-                        {post.duration}
-                      </span>
-                    </div>
-                    <p className="text-xs text-blue-700 font-semibold">{post.organization}</p>
-                    {post.domain && (
-                      <p className="text-[11px] text-slate-500">Domain: {post.domain}</p>
-                    )}
-                    {post.keyContributions && post.keyContributions.length > 0 && (
-                      <ul className="list-disc list-inside text-[11px] text-slate-600 pt-0.5 space-y-0.5">
-                        {post.keyContributions.map((c, cIdx) => (
-                          <li key={cIdx}>{c}</li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-
             {/* Verified Certifications Badges */}
-            <div className="space-y-2.5 pt-1">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                <FiCheckCircle className="text-emerald-600" />
-                <span>Verified Training Credentials & DigiLocker Badges</span>
-              </h3>
+            <div className="space-y-2">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
+                <FiCheckCircle className="text-emerald-600" /> Verified Accreditations
+              </span>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {(profile?.certifications && profile.certifications.length > 0 ? profile.certifications : [
                   {
-                    title: 'iGOT Karmayogi: Advanced Public Statistics & Econometric Modeling',
+                    title: 'iGOT Karmayogi: Advanced Public Statistics',
                     issuingAuthority: 'DoPT & NSSTA Academy',
-                    verified: true
                   },
                   {
-                    title: 'General Financial Rules (GFR 2017) & GeM Public Procurement',
-                    issuingAuthority: 'Institute of Secretariat Training (ISTM)',
-                    verified: true
+                    title: 'General Financial Rules (GFR 2017) & GeM',
+                    issuingAuthority: 'ISTM',
                   }
                 ]).map((cert, cIdx) => (
                   <div
                     key={cIdx}
-                    className="p-3 rounded-xl bg-emerald-50/50 border border-emerald-200/70 text-xs flex items-start gap-2"
+                    className="p-2.5 rounded-lg bg-slate-50 border border-slate-100 text-xs flex items-center gap-2"
                   >
-                    <FiAward className="text-emerald-700 text-sm flex-shrink-0 mt-0.5" />
-                    <div>
-                      <span className="font-bold text-slate-900 block leading-tight">{cert.title}</span>
+                    <FiAward className="text-emerald-600 text-sm flex-shrink-0" />
+                    <div className="truncate">
+                      <span className="font-semibold text-slate-900 block truncate">{cert.title}</span>
                       <span className="text-[10px] text-slate-500 block">{cert.issuingAuthority}</span>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
+
+            {/* Collapsible History Toggle */}
+            <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
+              <button
+                type="button"
+                onClick={() => setShowFullHistory(!showFullHistory)}
+                className="text-xs font-semibold text-blue-600 hover:text-blue-800 flex items-center gap-1"
+              >
+                {showFullHistory ? 'Hide Postings Timeline' : 'View Prior Postings & Career Timeline'} &rarr;
+              </button>
+            </div>
+
+            {/* Historical Postings Timeline (Collapsible) */}
+            {showFullHistory && (
+              <div className="space-y-2.5 pt-2 border-t border-slate-100">
+                {(profile?.serviceHistory && profile.serviceHistory.length > 0 ? profile.serviceHistory : [
+                  {
+                    organization: 'Ministry of Health & Family Welfare (MoHFW)',
+                    designation: 'Assistant Director (Surveillance & Health Metrics)',
+                    duration: 'July 2021 - May 2023',
+                    domain: 'Public Health Statistics & Epidemiological Surveys',
+                  },
+                  {
+                    organization: 'National Sample Survey Office (NSSO) - Western Zone',
+                    designation: 'Field Statistical Investigator',
+                    duration: 'Jan 2020 - June 2021',
+                    domain: 'Socio-Economic Household Surveys',
+                  }
+                ]).map((post, pIdx) => (
+                  <div
+                    key={pIdx}
+                    className="p-3 rounded-lg bg-slate-50 border border-slate-200/60 text-xs space-y-0.5"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-slate-900">{post.designation}</span>
+                      <span className="text-[10px] text-slate-500 bg-white px-1.5 py-0.5 rounded border border-slate-200">
+                        {post.duration}
+                      </span>
+                    </div>
+                    <p className="text-xs text-blue-700 font-medium">{post.organization}</p>
+                    {post.domain && <p className="text-[11px] text-slate-500">Domain: {post.domain}</p>}
+                  </div>
+                ))}
+              </div>
+            )}
           </GlassCard>
         </div>
 
-        {/* RIGHT COLUMN (1 Col): Recommended Learning & Recent Progress */}
+        {/* RIGHT COLUMN (1 Col): Recommended Learning & Assistant */}
         <div className="space-y-6">
           
-          {/* KARMAYOGI SATHI AI COMPANION PROMPT CARD */}
-          <GlassCard className="p-5 relative overflow-hidden bg-gradient-to-br from-blue-600 via-indigo-700 to-blue-800 text-white shadow-xl shadow-blue-500/20 border-white/20">
-            <div className="relative z-10 space-y-3">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center text-amber-300 shadow-inner">
-                  <RiSparklingFill className="text-lg" />
+          {/* KARMAYOGI SATHI AI COMPANION CARD */}
+          <div className="p-4 rounded-xl bg-gradient-to-br from-blue-700 to-indigo-800 text-white shadow-xs space-y-2.5">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-lg bg-white/20 flex items-center justify-center text-amber-300">
+                  <RiSparklingFill className="text-base" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-extrabold text-white leading-tight">Ask Karmayogi Sathi</h3>
-                  <p className="text-[11px] text-blue-100 font-medium">Your 24/7 AI Capacity & Career Copilot</p>
+                  <h3 className="text-xs font-bold leading-tight">Karmayogi Sathi</h3>
+                  <p className="text-[10px] text-blue-200">AI Capacity Copilot</p>
                 </div>
               </div>
-              <p className="text-xs text-blue-100/90 leading-relaxed">
-                Have questions about your {openGapsCount} skill gaps, course roadmaps, or assessment preparation? Sathi is ready to guide you.
-              </p>
-              <div className="pt-1 flex items-center justify-between">
-                <span className="text-[11px] text-blue-200 font-medium flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  Synced with your profile
-                </span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const btn = document.querySelector('[aria-label="Open Karmayogi Sathi AI Companion"]');
-                    if (btn) btn.click();
-                  }}
-                  className="px-3 py-1.5 rounded-xl bg-white text-blue-800 font-bold text-xs hover:bg-blue-50 transition-all shadow-xs active:scale-95 cursor-pointer"
-                >
-                  Chat Now &rarr;
-                </button>
-              </div>
+              <span className="w-2 h-2 rounded-full bg-emerald-400" />
             </div>
-          </GlassCard>
+            <p className="text-xs text-blue-100 leading-snug">
+              Ask Sathi about your {openGapsCount} skill gaps, course roadmaps, or assessment preparation.
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                const btn = document.querySelector('[aria-label="Open Karmayogi Sathi AI Companion"]');
+                if (btn) btn.click();
+              }}
+              className="w-full py-1.5 rounded-lg bg-white text-blue-800 font-bold text-xs hover:bg-blue-50 transition-all text-center cursor-pointer"
+            >
+              Open AI Assistant &rarr;
+            </button>
+          </div>
 
           {/* SECTION 5: RECOMMENDED LEARNING */}
-          <GlassCard className="p-6 space-y-5">
-            <div className="flex items-center justify-between border-b border-slate-200/60 pb-3">
+          <GlassCard className="p-5 space-y-3">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
               <div>
-                <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                <h2 className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
                   <FiZap className="text-purple-600" />
-                  Recommended Learning
+                  Recommended Courses
                 </h2>
-                <p className="text-xs text-slate-500 font-normal mt-0.5">
-                  AI-ranked resources from iGOT
+                <p className="text-[11px] text-slate-500">
+                  AI-ranked from iGOT Karmayogi
                 </p>
               </div>
 
@@ -639,19 +597,18 @@ export default function Dashboard() {
                 <p>Matching learning resources...</p>
               </div>
             ) : (
-              <div className="space-y-3">
-                {/* 3 Real Curated Course Cards */}
-                <div className="p-3.5 rounded-xl bg-white/50 border border-white/80 hover:bg-white/85 transition-all space-y-2">
+              <div className="space-y-2.5">
+                <div className="p-3 rounded-lg bg-slate-50 border border-slate-100 space-y-1.5 hover:bg-slate-100/70 transition-all">
                   <div className="flex items-center justify-between">
-                    <GlassBadge variant="default" size="xs">iGOT Karmayogi</GlassBadge>
-                    <span className="text-[11px] text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+                    <span className="text-[10px] text-slate-500 font-medium">iGOT Karmayogi</span>
+                    <span className="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
                       94% Match
                     </span>
                   </div>
                   <h4 className="text-xs font-bold text-slate-900 leading-snug">
                     Python for Data Analysis & Tabular Processing
                   </h4>
-                  <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1">
+                  <div className="flex items-center justify-between text-[11px] text-slate-500 pt-0.5">
                     <span className="flex items-center gap-1">
                       <FiClock className="text-xs" /> 150 mins
                     </span>
@@ -664,17 +621,17 @@ export default function Dashboard() {
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-white/50 border border-white/80 hover:bg-white/85 transition-all space-y-2">
+                <div className="p-3 rounded-lg bg-slate-50 border border-slate-100 space-y-1.5 hover:bg-slate-100/70 transition-all">
                   <div className="flex items-center justify-between">
-                    <GlassBadge variant="default" size="xs">iGOT Karmayogi</GlassBadge>
-                    <span className="text-[11px] text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+                    <span className="text-[10px] text-slate-500 font-medium">iGOT Karmayogi</span>
+                    <span className="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
                       88% Match
                     </span>
                   </div>
                   <h4 className="text-xs font-bold text-slate-900 leading-snug">
                     Sampling Techniques and Survey Design
                   </h4>
-                  <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1">
+                  <div className="flex items-center justify-between text-[11px] text-slate-500 pt-0.5">
                     <span className="flex items-center gap-1">
                       <FiClock className="text-xs" /> 180 mins
                     </span>
@@ -687,17 +644,17 @@ export default function Dashboard() {
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-white/50 border border-white/80 hover:bg-white/85 transition-all space-y-2">
+                <div className="p-3 rounded-lg bg-slate-50 border border-slate-100 space-y-1.5 hover:bg-slate-100/70 transition-all">
                   <div className="flex items-center justify-between">
-                    <GlassBadge variant="default" size="xs">iGOT Karmayogi</GlassBadge>
-                    <span className="text-[11px] text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+                    <span className="text-[10px] text-slate-500 font-medium">iGOT Karmayogi</span>
+                    <span className="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
                       85% Match
                     </span>
                   </div>
                   <h4 className="text-xs font-bold text-slate-900 leading-snug">
                     Data Quality Management and Validation
                   </h4>
-                  <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1">
+                  <div className="flex items-center justify-between text-[11px] text-slate-500 pt-0.5">
                     <span className="flex items-center gap-1">
                       <FiClock className="text-xs" /> 140 mins
                     </span>
@@ -713,16 +670,16 @@ export default function Dashboard() {
             )}
           </GlassCard>
 
-          {/* SECTION 6: RECENT PROGRESS & CONTINUOUS LOOP */}
-          <GlassCard className="p-6 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-200/60 pb-3">
+          {/* SECTION 6: COMPETENCY CYCLE */}
+          <GlassCard className="p-5 space-y-3">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
               <div>
-                <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                <h2 className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
                   <FiTrendingUp className="text-emerald-600" />
-                  Competency Cycle
+                  Development Cycle
                 </h2>
-                <p className="text-xs text-slate-500 font-normal mt-0.5">
-                  Continuous improvement loop
+                <p className="text-[11px] text-slate-500">
+                  Assess &bull; Learn &bull; Advance
                 </p>
               </div>
 
@@ -730,26 +687,16 @@ export default function Dashboard() {
                 to="/employee/progress"
                 className="text-xs font-semibold text-blue-600 hover:text-blue-800 flex items-center gap-1"
               >
-                History <FiArrowRight className="text-xs" />
+                Analytics <FiArrowRight className="text-xs" />
               </Link>
             </div>
 
-            <div className="space-y-3 text-xs">
-              <div className="p-3 rounded-xl bg-blue-50/50 border border-blue-100/70 space-y-1">
-                <div className="flex items-center justify-between font-semibold text-blue-900">
-                  <span>Continuous Development</span>
-                  <GlassBadge variant="primary" size="xs">Assess &rarr; Learn</GlassBadge>
-                </div>
-                <p className="text-[11px] text-slate-600">
-                  Complete your assigned modules to become eligible for reassessment and advance your proficiency level.
+            <div className="space-y-2.5 text-xs">
+              <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100 space-y-1">
+                <span className="font-semibold text-slate-900 block">Current Focus</span>
+                <p className="text-[11px] text-slate-500">
+                  Complete {openGapsCount} courses to unlock reassessment and advance proficiency.
                 </p>
-              </div>
-
-              <div className="pt-2 flex items-center justify-between text-[11px] text-slate-500">
-                <span>Active Assessment:</span>
-                <span className="font-semibold text-slate-800">
-                  {activeAssessment?.title || 'Statistical Officer Assessment'}
-                </span>
               </div>
 
               <GlassButton

@@ -45,6 +45,12 @@ export default function AdminLayout() {
           description: 'Workforce KPIs & overview',
         },
         {
+          label: 'Officer Onboarding',
+          path: '/onboarding',
+          icon: FiUserCheck,
+          description: 'e-HRMS & past service ingestion',
+        },
+        {
           label: 'Workforce Analytics',
           path: '/admin/analytics',
           icon: FiTrendingUp,

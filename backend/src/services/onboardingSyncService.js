@@ -230,6 +230,208 @@ export const PRESET_EHRMS_OFFICERS = [
         rationale: "Authored policy whitepapers for state chief secretaries and central ministries."
       }
     ]
+  },
+  {
+    employeeId: "GOI-MOSPI-2020-312",
+    name: "Dr. Rajeshwardhan Kulkarni",
+    email: "rajesh.kulkarni@mospi.gov.in",
+    cadre: "Indian Statistical Service (ISS)",
+    batchYear: 2020,
+    targetMinistry: "MoSPI",
+    departmentName: "Ministry of Statistics and Programme Implementation",
+    positionTitle: "Senior Statistical Officer",
+    roleName: "Statistical Analysis and Reporting",
+    pastAppraisalsSummary: "Grade 9.4/10 (Outstanding) - Exceptional innovation in real-time commodity price tracking indices and econometric inflation models.",
+    serviceHistory: [
+      {
+        organization: "Ministry of Consumer Affairs, Food & Public Distribution",
+        designation: "Assistant Director (Price Monitoring Division)",
+        duration: "2021 - 2023",
+        domain: "Price Monitoring & Inflation Econometrics",
+        keyContributions: [
+          "Architected daily wholesale and retail essential commodity price index algorithms covering 550 market centers.",
+          "Performed econometric time-series forecasting for food inflation volatility indices."
+        ]
+      },
+      {
+        organization: "National Statistical Office (NSO) - Industrial Statistics Wing",
+        designation: "Statistical Officer (ASI Field Unit)",
+        duration: "2020 - 2021",
+        domain: "Industrial Survey & Sample Design",
+        keyContributions: [
+          "Led field audit of Annual Survey of Industries (ASI) for large-scale manufacturing clusters.",
+          "Evaluated sample non-response biases and variance estimations."
+        ]
+      }
+    ],
+    certifications: [
+      {
+        title: "iGOT Karmayogi: Public Procurement on GeM and Contract Management",
+        issuingAuthority: "DoPT & GeM Academy",
+        completionDate: "2023-11-20",
+        credentialUrl: "https://igotkarmayogi.gov.in/verify/CERT-GEM-2023",
+        verified: true
+      },
+      {
+        title: "LBSNAA: Mid-Career Governance & Quantitative Policy Formulation",
+        issuingAuthority: "Lal Bahadur Shastri National Academy of Administration (LBSNAA)",
+        completionDate: "2022-05-18",
+        credentialUrl: "https://lbsnaa.gov.in/credentials/MC-POL-2022",
+        verified: true
+      },
+      {
+        title: "DigiLocker Verified: M.Sc. in Statistics",
+        issuingAuthority: "Indian Statistical Institute (ISI Kolkata)",
+        completionDate: "2018-06-25",
+        credentialUrl: "https://digilocker.gov.in/verify/ISI-STAT-2018",
+        verified: true
+      }
+    ],
+    inferredCompetencies: [
+      {
+        competencyName: "Statistical Analysis",
+        suggestedLevel: 4,
+        rationale: "Engineered price volatility time-series models and multivariate commodity indices."
+      },
+      {
+        competencyName: "Sampling Design",
+        suggestedLevel: 4,
+        rationale: "Managed ASI industrial cluster sampling and non-response variance corrections."
+      },
+      {
+        competencyName: "Data Interpretation",
+        suggestedLevel: 3,
+        rationale: "Produced ministerial inflation briefings used by the Inter-Ministerial Committee on Prices."
+      },
+      {
+        competencyName: "Public Policy Analysis",
+        suggestedLevel: 3,
+        rationale: "Authored price stabilization policy recommendation dossiers."
+      }
+    ]
+  },
+  {
+    employeeId: "GOI-MEITY-2021-628",
+    name: "Vikramaditya Rathore",
+    email: "vikram.rathore@meity.gov.in",
+    cadre: "Indian Telecom Service (ITS) / Digital Governance",
+    batchYear: 2021,
+    targetMinistry: "MeitY",
+    departmentName: "Ministry of Electronics and Information Technology",
+    positionTitle: "Joint Director (Digital Public Infrastructure)",
+    roleName: "Technical Program Management",
+    pastAppraisalsSummary: "Grade 9.1/10 (Outstanding) - Key architect for Open Digital Ecosystem APIs and zero-trust government cloud compliance.",
+    serviceHistory: [
+      {
+        organization: "Digital India Corporation (MeitY)",
+        designation: "Deputy Director (National Enterprise Architecture)",
+        duration: "2022 - Present",
+        domain: "Digital Public Infrastructure & IndEA 2.0",
+        keyContributions: [
+          "Supervised microservices interoperability protocols across 8 state citizen portals.",
+          "Conducted cyber resiliency and STQC security posture audits."
+        ]
+      },
+      {
+        organization: "Department of Telecommunications (DoT)",
+        designation: "Assistant Divisional Engineer",
+        duration: "2021 - 2022",
+        domain: "Telecom Policy & Optical Fiber Network Rollout",
+        keyContributions: [
+          "Monitored BharatNet optical fiber broadband installation across 180 Gram Panchayats."
+        ]
+      }
+    ],
+    certifications: [
+      {
+        title: "iGOT Karmayogi: Information Security & Zero Trust Architecture in Government",
+        issuingAuthority: "CERT-In & DoPT",
+        completionDate: "2023-10-05",
+        credentialUrl: "https://igotkarmayogi.gov.in/verify/CERT-CYBER-2023",
+        verified: true
+      },
+      {
+        title: "DigiLocker: M.Tech in Computer Science & Systems",
+        issuingAuthority: "IIT Roorkee (DigiLocker Verified)",
+        completionDate: "2020-07-15",
+        credentialUrl: "https://digilocker.gov.in/verify/IITR-CS-2020",
+        verified: true
+      }
+    ],
+    inferredCompetencies: [
+      {
+        competencyName: "Data Interpretation",
+        suggestedLevel: 4,
+        rationale: "Evaluates high-throughput API telemetry, network uptime, and security incidents."
+      },
+      {
+        competencyName: "Public Policy Analysis",
+        suggestedLevel: 3,
+        rationale: "Drafted data governance compliance guidelines for state enterprise architecture."
+      },
+      {
+        competencyName: "Statistical Analysis",
+        suggestedLevel: 3,
+        rationale: "Analyzed telecom bandwidth load distribution and network QoS performance metrics."
+      }
+    ]
+  },
+  {
+    employeeId: "GOI-FIN-2019-741",
+    name: "Sunita Deshmukh",
+    email: "sunita.deshmukh@nic.in",
+    cadre: "Indian Audit & Accounts Service (IA&AS)",
+    batchYear: 2019,
+    targetMinistry: "Ministry of Finance",
+    departmentName: "Department of Expenditure, Ministry of Finance",
+    positionTitle: "Deputy Controller of Accounts",
+    roleName: "Public Financial Management & Audit",
+    pastAppraisalsSummary: "Grade 9.3/10 (Outstanding) - Led critical expenditure efficiency audits and PFMS integration for Direct Benefit Transfer.",
+    serviceHistory: [
+      {
+        organization: "Office of the Comptroller & Auditor General of India (CAG)",
+        designation: "Deputy Accountant General (Commercial Audit)",
+        duration: "2020 - 2023",
+        domain: "Public Sector Enterprise Audit & Compliance",
+        keyContributions: [
+          "Audited capital expenditures of central public sector enterprises adhering to GFR 2017.",
+          "Implemented automated data extraction scripts for tallying PFMS ledger discrepancies."
+        ]
+      }
+    ],
+    certifications: [
+      {
+        title: "iGOT Karmayogi: Public Financial Management System (PFMS) & Treasury Operations",
+        issuingAuthority: "National Institute of Financial Management (NIFM)",
+        completionDate: "2023-03-12",
+        credentialUrl: "https://igotkarmayogi.gov.in/verify/CERT-PFMS-2023",
+        verified: true
+      },
+      {
+        title: "Certified Public Finance Professional",
+        issuingAuthority: "Institute of Public Auditors of India (IPAI)",
+        completionDate: "2021-11-20",
+        credentialUrl: "https://ipai.org/verify/CPFP-2021-741",
+        verified: true
+      }
+    ],
+    inferredCompetencies: [
+      {
+        competencyName: "Public Policy Analysis",
+        suggestedLevel: 4,
+        rationale: "Expertise in General Financial Rules (GFR), fiscal responsibility, and treasury oversight."
+      },
+      {
+        competencyName: "Data Interpretation",
+        suggestedLevel: 4,
+        rationale: "Audited financial balance sheets, PFMS DBT flows, and expenditure reconciliations."
+      },
+      {
+        competencyName: "Statistical Analysis",
+        suggestedLevel: 2,
+        rationale: "Applies risk-based audit sampling and statistical materiality thresholds."
+      }
+    ]
   }
 ];
 
@@ -483,9 +685,9 @@ export const completeOfficerOnboarding = async ({
   }
 
   // 3. Resolve Role
-  let role = await Role.findOne({ positionId: position._id });
+  let role = await Role.findOne({ positionId: position._id }).populate("competencies.competencyId");
   if (!role) {
-    role = await Role.findOne() || await Role.create({
+    role = await Role.findOne().populate("competencies.competencyId") || await Role.create({
       positionId: position._id,
       name: "Statistical Analysis and Reporting",
       code: "ROLE-SAR"
@@ -495,23 +697,53 @@ export const completeOfficerOnboarding = async ({
   // 4. Map Inferred Competencies to actual Competency ObjectIds in DB
   const allComps = await Competency.find({ status: "active" });
   const competencyProfile = [];
+  const addedCompIds = new Set();
 
+  // A. First ensure ALL role's required competencies are present
+  if (role && Array.isArray(role.competencies)) {
+    for (const req of role.competencies) {
+      if (!req.competencyId) continue;
+      const compId = req.competencyId._id ? req.competencyId._id.toString() : req.competencyId.toString();
+      const compName = (req.competencyId.name || "").toLowerCase();
+
+      // Check if e-HRMS dossier inferred this competency
+      const matchedInferred = inferredCompetencies.find((item) => {
+        const iName = (item.competencyName || "").trim().toLowerCase();
+        return iName === compName || compName.includes(iName) || iName.includes(compName);
+      });
+
+      // If matched, use suggested level (bounded 1-5); if not, baseline is 2 (or 1)
+      const currentLevel = matchedInferred
+        ? Math.min(Math.max(matchedInferred.suggestedLevel || 2, 1), 5)
+        : Math.min(Math.max(req.expectedLevel ? req.expectedLevel - 1 : 2, 1), 5);
+
+      competencyProfile.push({
+        competencyId: req.competencyId._id || req.competencyId,
+        currentLevel,
+        lastAssessedAt: new Date()
+      });
+      addedCompIds.add(compId);
+    }
+  }
+
+  // B. Next add any extra inferred competencies that were outside the role
   for (const item of inferredCompetencies) {
     const compName = (item.competencyName || "").trim().toLowerCase();
     const matchedComp = allComps.find(
       (c) => c.name.toLowerCase() === compName || compName.includes(c.name.toLowerCase()) || c.name.toLowerCase().includes(compName)
     );
 
-    if (matchedComp) {
+    if (matchedComp && !addedCompIds.has(matchedComp._id.toString())) {
       competencyProfile.push({
         competencyId: matchedComp._id,
         currentLevel: Math.min(Math.max(item.suggestedLevel || 2, 1), 5),
         lastAssessedAt: new Date()
       });
+      addedCompIds.add(matchedComp._id.toString());
     }
   }
 
-  // If no competencies matched, assign at least the primary competency of the department
+  // If no competencies matched at all, assign at least the primary competency
   if (competencyProfile.length === 0 && allComps.length > 0) {
     competencyProfile.push({
       competencyId: allComps[0]._id,
@@ -563,21 +795,23 @@ export const completeOfficerOnboarding = async ({
   // 6. Automatically generate initial Skill Gap records
   // Compare user's competencyProfile with role requirements
   try {
-    const roleWithComps = await Role.findById(role._id).populate("competencyRequirements.competencyId");
-    if (roleWithComps?.competencyRequirements?.length > 0) {
+    const roleWithComps = await Role.findById(role._id).populate("competencies.competencyId");
+    if (roleWithComps?.competencies?.length > 0) {
       await SkillGap.deleteMany({ userId: user._id }); // Clear stale gaps for new baseline
 
-      for (const req of roleWithComps.competencyRequirements) {
+      for (const req of roleWithComps.competencies) {
+        if (!req.competencyId) continue;
+        const reqCompId = (req.competencyId._id || req.competencyId).toString();
         const userComp = competencyProfile.find(
-          (p) => p.competencyId.toString() === req.competencyId?._id?.toString()
+          (p) => (p.competencyId._id || p.competencyId).toString() === reqCompId
         );
         const currentLvl = userComp ? userComp.currentLevel : 1;
-        const requiredLvl = req.requiredProficiencyLevel || 3;
+        const requiredLvl = req.expectedLevel || 3;
 
         if (currentLvl < requiredLvl) {
           await SkillGap.create({
             userId: user._id,
-            competencyId: req.competencyId._id,
+            competencyId: req.competencyId._id || req.competencyId,
             currentLevel: currentLvl,
             requiredLevel: requiredLvl,
             gap: requiredLvl - currentLvl,

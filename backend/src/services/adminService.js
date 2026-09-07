@@ -203,22 +203,81 @@ export const getEmployeeCompetencies = async (userId) => {
   const user = await User.findById(userId).populate("competencyProfile.competencyId").lean();
   if (!user) return null;
 
-  const role = await Role.findOne({ positionId: user.positionId }).lean();
-  const expectedMap = new Map();
-  if (role && role.competencies) {
-    for (const c of role.competencies) expectedMap.set(String(c.competencyId), c.expectedLevel);
+  // Resolve role by user.roleId or user.positionId
+  let role = null;
+  if (user.roleId) {
+    role = await Role.findById(user.roleId).populate("competencies.competencyId").lean();
+  }
+  if (!role && user.positionId) {
+    role = await Role.findOne({ positionId: user.positionId }).populate("competencies.competencyId").lean();
+  }
+
+  // Map of user's evaluated competencies
+  const userProfileMap = new Map();
+  for (const p of user.competencyProfile || []) {
+    if (p.competencyId) {
+      const compId = String(p.competencyId._id || p.competencyId);
+      userProfileMap.set(compId, {
+        competency: p.competencyId,
+        currentLevel: p.currentLevel || 1,
+        lastAssessedAt: p.lastAssessedAt
+      });
+    }
   }
 
   const results = [];
-  for (const p of user.competencyProfile || []) {
-    const compId = p.competencyId ? String(p.competencyId._id || p.competencyId) : null;
-    const currentLevel = p.currentLevel;
-    const expectedLevel = expectedMap.has(compId) ? expectedMap.get(compId) : 3;
-    const gap = expectedLevel != null ? expectedLevel - currentLevel : 0;
+  const processedCompIds = new Set();
 
-    const history = await CompetencyHistory.find({ userId, competencyId: compId }).sort({ recordedAt: 1 }).lean();
+  // 1. First, include ALL competencies required by the officer's official role
+  if (role && Array.isArray(role.competencies)) {
+    for (const req of role.competencies) {
+      if (!req.competencyId) continue;
+      const compId = String(req.competencyId._id || req.competencyId);
+      processedCompIds.add(compId);
 
-    results.push({ competency: p.competencyId, currentLevel, expectedLevel, gap, history });
+      const userComp = userProfileMap.get(compId);
+      const currentLevel = userComp ? userComp.currentLevel : 1;
+      const expectedLevel = req.expectedLevel || 3;
+      const rawGap = expectedLevel - currentLevel;
+
+      const history = await CompetencyHistory.find({ userId, competencyId: compId }).sort({ recordedAt: 1 }).lean();
+
+      let competencyObj = (userComp && userComp.competency?._id) ? userComp.competency : req.competencyId;
+      if (!competencyObj?.name) {
+        competencyObj = await Competency.findById(compId).lean() || { _id: compId, name: "Competency" };
+      }
+
+      results.push({
+        competency: competencyObj,
+        currentLevel,
+        expectedLevel,
+        gap: rawGap > 0 ? rawGap : 0,
+        isMet: currentLevel >= expectedLevel,
+        isRequired: true,
+        history
+      });
+    }
+  }
+
+  // 2. Also include any additional competencies in user's profile beyond role requirements
+  for (const [compId, p] of userProfileMap.entries()) {
+    if (!processedCompIds.has(compId)) {
+      processedCompIds.add(compId);
+      const currentLevel = p.currentLevel || 1;
+      const expectedLevel = 3;
+      const rawGap = expectedLevel - currentLevel;
+      const history = await CompetencyHistory.find({ userId, competencyId: compId }).sort({ recordedAt: 1 }).lean();
+
+      results.push({
+        competency: p.competency,
+        currentLevel,
+        expectedLevel,
+        gap: rawGap > 0 ? rawGap : 0,
+        isMet: currentLevel >= expectedLevel,
+        isRequired: false,
+        history
+      });
+    }
   }
 
   return { user: { id: user._id, name: user.name, email: user.email }, competencies: results };

@@ -14,12 +14,12 @@ export default function GlassCard({
   ...props
 }) {
   const variantStyles = {
-    default: 'bg-white/70 backdrop-blur-md border border-white/60 shadow-glass',
-    solid: 'bg-white/90 backdrop-blur-lg border border-white/80 shadow-glass',
-    subtle: 'bg-white/45 backdrop-blur-sm border border-white/40 shadow-glass-sm',
-    tinted: 'bg-blue-50/50 backdrop-blur-md border border-blue-100/60 shadow-glass',
-    danger: 'bg-rose-50/40 backdrop-blur-md border border-rose-100/70 shadow-glass-sm',
-    success: 'bg-emerald-50/40 backdrop-blur-md border border-emerald-100/70 shadow-glass-sm',
+    default: 'bg-white border border-slate-200/80 shadow-xs',
+    solid: 'bg-white border border-slate-200 shadow-xs',
+    subtle: 'bg-slate-50/70 border border-slate-200/60 shadow-none',
+    tinted: 'bg-blue-50/60 border border-blue-100 shadow-xs',
+    danger: 'bg-rose-50/50 border border-rose-200/70 shadow-xs',
+    success: 'bg-emerald-50/50 border border-emerald-200/70 shadow-xs',
   };
 
   const interactiveStyles = interactive
