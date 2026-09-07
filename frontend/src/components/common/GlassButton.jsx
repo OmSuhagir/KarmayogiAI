@@ -27,19 +27,21 @@ export default function GlassButton({
 
   const variantStyles = {
     primary:
-      'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/20 hover:from-blue-700 hover:to-indigo-700 hover:shadow-lg hover:shadow-blue-500/25 active:scale-[0.98]',
+      'bg-[#111111] hover:bg-[#222222] text-[#FFFDF8] font-medium transition-colors border border-[#111111] shadow-warm',
     secondary:
-      'bg-white/80 hover:bg-white text-slate-700 border border-slate-200/80 shadow-sm hover:shadow active:scale-[0.98] backdrop-blur-sm',
+      'bg-[#FFFDF8] hover:bg-[#F8F6F0] text-[#111111] border border-[#C9C4B8] font-medium transition-colors',
     glass:
-      'bg-white/60 hover:bg-white/90 text-slate-800 border border-white/80 shadow-glass-sm hover:shadow-glass active:scale-[0.98] backdrop-blur-md',
+      'bg-[#FFFDF8] hover:bg-[#F8F6F0] text-[#171717] border border-[#DDD9CF] font-medium transition-colors',
     outline:
-      'bg-transparent hover:bg-blue-50/50 text-blue-700 border border-blue-200 hover:border-blue-300 active:scale-[0.98]',
+      'bg-transparent hover:bg-[#F8F6F0] text-[#111111] border border-[#DDD9CF] font-medium transition-colors',
+    accent:
+      'bg-[#3348A8] hover:bg-[#253685] text-white font-medium transition-colors border border-[#3348A8]',
     ghost:
-      'bg-transparent hover:bg-slate-100/60 text-slate-600 hover:text-slate-900 active:scale-[0.98]',
+      'bg-transparent hover:bg-[#F1EDE3] text-[#62615D] hover:text-[#111111] transition-colors',
     danger:
-      'bg-rose-50/80 hover:bg-rose-100/90 text-rose-700 border border-rose-200 shadow-sm active:scale-[0.98]',
+      'bg-[#F8E9E7] hover:bg-[#F1DBD8] text-[#A54C45] border border-[#A54C45]/30 font-medium transition-colors',
     success:
-      'bg-emerald-50/80 hover:bg-emerald-100/90 text-emerald-700 border border-emerald-200 shadow-sm active:scale-[0.98]',
+      'bg-[#EAF2EC] hover:bg-[#DDE9E0] text-[#52745D] border border-[#52745D]/30 font-medium transition-colors',
   };
 
   const disabledStyles = disabled || loading

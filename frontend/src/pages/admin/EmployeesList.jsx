@@ -3,35 +3,23 @@ import { Link } from 'react-router-dom';
 import {
   FiUsers,
   FiSearch,
-  FiFilter,
   FiArrowRight,
-  FiCheckCircle,
-  FiAlertCircle,
-  FiAward,
-  FiBookOpen,
-  FiClock,
   FiRefreshCw,
   FiX,
-  FiTrendingUp,
   FiUserPlus,
   FiDatabase,
-  FiBriefcase,
 } from 'react-icons/fi';
-import { RiBuildingLine } from 'react-icons/ri';
 import { getEmployeesList, getEmployeeDetail } from '../../services/adminService';
 import GlassCard from '../../components/common/GlassCard';
 import GlassButton from '../../components/common/GlassButton';
 import GlassBadge from '../../components/common/GlassBadge';
-import ProgressBar from '../../components/common/ProgressBar';
 
 export default function EmployeesList() {
   const [loading, setLoading] = useState(true);
   const [employees, setEmployees] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedDept, setSelectedDept] = useState('all');
   const [selectedReadiness, setSelectedReadiness] = useState('all');
 
-  // Detail Modal State
   const [detailUser, setDetailUser] = useState(null);
   const [detailLoading, setDetailLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -71,16 +59,10 @@ export default function EmployeesList() {
     }
   };
 
-  // Filter logic
   const filteredEmployees = employees.filter((emp) => {
     const matchSearch =
       emp.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       emp.email?.toLowerCase().includes(searchTerm.toLowerCase());
-
-    const matchDept =
-      selectedDept === 'all' ||
-      emp.departmentId?._id === selectedDept ||
-      emp.departmentId?.name === selectedDept;
 
     const matchReadiness =
       selectedReadiness === 'all' ||
@@ -90,75 +72,69 @@ export default function EmployeesList() {
         (emp.readinessPercent || 0) < 80) ||
       (selectedReadiness === 'low' && (emp.readinessPercent || 0) < 50);
 
-    return matchSearch && matchDept && matchReadiness;
+    return matchSearch && matchReadiness;
   });
 
   return (
     <div className="space-y-6 pb-12">
       {/* Header Banner */}
-      <GlassCard variant="solid" className="p-6 sm:p-8 border-white/80 space-y-2 shadow-glass">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <GlassBadge variant="purple" size="xs">
-                Workforce Directory
-              </GlassBadge>
-              <span className="text-xs text-slate-400 font-medium">
-                {employees.length} Enrolled Officers
-              </span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Officer Rosters & Role Readiness
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-600 max-w-2xl font-normal leading-relaxed">
-              Track officer competency profiles, assessment status, active skill gaps, and role readiness against government benchmarks.
-            </p>
+      <div className="rounded-2xl bg-[#FFFDF8] border border-[#DDD9CF] p-5 sm:p-6 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-[#F8F6F0] text-[#62615D] border border-[#DDD9CF]">
+              {employees.length} Enrolled Officers
+            </span>
+            <span className="text-[11px] text-[#8A8882]">Workforce Directory &middot; MoSPI</span>
           </div>
-
-          <div className="flex items-center gap-3">
-            <Link to="/onboarding">
-              <GlassButton
-                variant="primary"
-                size="md"
-                icon={FiUserPlus}
-              >
-                Onboard Officer (e-HRMS)
-              </GlassButton>
-            </Link>
-
-            <GlassButton
-              variant="glass"
-              size="md"
-              icon={FiRefreshCw}
-              loading={loading}
-              onClick={fetchEmployees}
-            >
-              Refresh Roster
-            </GlassButton>
-          </div>
+          <h1 className="text-xl sm:text-2xl font-bold text-[#111111] tracking-tight mt-1.5">
+            Officer Rosters & Role Readiness
+          </h1>
+          <p className="text-xs sm:text-sm text-[#62615D] mt-0.5">
+            Individualized officer competency audits, assessment timelines, skill gap counts, and role readiness benchmarks.
+          </p>
         </div>
-      </GlassCard>
 
-      {/* Search & Filter Toolbar */}
-      <GlassCard className="p-4 flex flex-col md:flex-row items-center justify-between gap-3">
-        {/* Search */}
+        <div className="flex items-center gap-2.5">
+          <Link to="/onboarding">
+            <GlassButton
+              variant="primary"
+              size="sm"
+              icon={FiUserPlus}
+            >
+              Onboard Officer
+            </GlassButton>
+          </Link>
+
+          <GlassButton
+            variant="secondary"
+            size="sm"
+            icon={FiRefreshCw}
+            loading={loading}
+            onClick={fetchEmployees}
+          >
+            Refresh
+          </GlassButton>
+        </div>
+      </div>
+
+      {/* Toolbar */}
+      <div className="rounded-xl bg-[#FFFDF8] border border-[#DDD9CF] p-3.5 flex flex-col md:flex-row items-center justify-between gap-3 shadow-xs">
         <div className="relative w-full md:w-80">
-          <FiSearch className="absolute left-3.5 top-3 text-slate-400 text-sm" />
+          <FiSearch className="absolute left-3 top-2.5 text-[#8A8882] text-xs" />
           <input
             type="text"
             placeholder="Search by officer name or email..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 rounded-xl bg-white/70 border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 font-medium"
+            className="w-full pl-9 pr-3 py-1.5 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-xs text-[#111111] placeholder:text-[#8A8882] focus:outline-none focus:border-[#111111]"
           />
         </div>
 
-        {/* Filters */}
-        <div className="flex items-center gap-2 w-full md:w-auto self-end">
+        <div className="flex items-center gap-2 w-full md:w-auto">
           <select
             value={selectedReadiness}
             onChange={(e) => setSelectedReadiness(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-white/70 border border-slate-200 text-xs text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="px-3 py-1.5 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-xs text-[#111111] font-medium focus:outline-none"
           >
             <option value="all">All Readiness Levels</option>
             <option value="high">High Readiness (&ge; 80%)</option>
@@ -166,28 +142,27 @@ export default function EmployeesList() {
             <option value="low">Needs Attention (&lt; 50%)</option>
           </select>
         </div>
-      </GlassCard>
+      </div>
 
-      {/* Officers List Table */}
+      {/* Officers List */}
       {loading ? (
-        <div className="py-16 text-center text-xs text-slate-400 space-y-3">
-          <FiRefreshCw className="animate-spin text-indigo-600 text-2xl mx-auto" />
+        <div className="py-16 text-center text-xs text-[#8A8882] space-y-2">
+          <FiRefreshCw className="animate-spin text-[#111111] text-xl mx-auto" />
           <p>Loading officer rosters from database...</p>
         </div>
       ) : filteredEmployees.length === 0 ? (
-        <GlassCard className="p-8 text-center text-xs text-slate-500">
+        <div className="rounded-xl bg-[#FFFDF8] border border-[#DDD9CF] p-8 text-center text-xs text-[#8A8882]">
           No officers match your search or filter criteria.
-        </GlassCard>
+        </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-2.5">
           {filteredEmployees.map((emp) => (
-            <GlassCard
+            <div
               key={emp._id}
-              className="p-5 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 hover:bg-white/90 transition-all border-white/80"
+              className="rounded-xl bg-[#FFFDF8] border border-[#DDD9CF] p-4 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 hover:border-[#111111] transition-all shadow-xs"
             >
-              {/* Officer Main Info */}
-              <div className="flex items-start sm:items-center gap-3.5 min-w-0">
-                <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-100 to-purple-100 border border-indigo-200 text-indigo-900 font-bold text-sm flex items-center justify-center flex-shrink-0 shadow-xs">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-10 h-10 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-[#111111] font-bold text-xs flex items-center justify-center flex-shrink-0">
                   {emp.name
                     ?.split(' ')
                     .map((n) => n[0])
@@ -198,132 +173,106 @@ export default function EmployeesList() {
 
                 <div className="space-y-0.5 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h3 className="text-sm font-bold text-slate-900 leading-snug">
+                    <h3 className="text-xs sm:text-sm font-bold text-[#111111]">
                       {emp.name}
                     </h3>
-                    <GlassBadge variant={emp.readinessPercent >= 75 ? 'success' : 'high'} size="xs" dot>
-                      {emp.readinessPercent}% Role Readiness
+                    <GlassBadge variant={emp.readinessPercent >= 75 ? 'success' : 'warning'} size="xs">
+                      {emp.readinessPercent}% Readiness
                     </GlassBadge>
                     {emp.employeeId && (
-                      <span className="text-[10px] font-mono font-bold text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">
+                      <span className="text-[10px] font-mono text-[#62615D] bg-[#F8F6F0] px-1.5 py-0.5 rounded border border-[#DDD9CF]">
                         {emp.employeeId}
                       </span>
                     )}
-                    {emp.onboardingSource === 'ehrms_sync' && (
-                      <GlassBadge variant="default" size="xs">
-                        e-HRMS Verified
-                      </GlassBadge>
-                    )}
                   </div>
 
-                  <p className="text-xs text-slate-500 font-medium truncate">
+                  <p className="text-xs text-[#62615D] truncate">
                     {emp.cadre ? `${emp.cadre} • ` : ''}{emp.email} &bull; {emp.positionId?.title || 'Statistical Officer'} &bull; {emp.departmentId?.shortName || 'MoSPI'}
                   </p>
                 </div>
               </div>
 
-              {/* Status Pills & Action */}
-              <div className="flex flex-wrap items-center gap-4 w-full lg:w-auto justify-between lg:justify-end pt-3 lg:pt-0 border-t lg:border-t-0 border-slate-200/50">
+              <div className="flex items-center gap-4 w-full lg:w-auto justify-between lg:justify-end pt-2 lg:pt-0 border-t lg:border-t-0 border-[#DDD9CF]">
                 <div className="text-left sm:text-right">
-                  <div className="text-xs font-bold text-slate-900">
+                  <div className="text-xs font-semibold text-[#111111]">
                     {emp.gapCount > 0 ? (
-                      <span className="text-amber-700 font-semibold">{emp.gapCount} Active Gaps</span>
+                      <span className="text-[#A8752E]">{emp.gapCount} Active Gaps</span>
                     ) : (
-                      <span className="text-emerald-700 font-semibold">Target Satisfied</span>
+                      <span className="text-[#52745D]">All Targets Met</span>
                     )}
                   </div>
-                  <span className="text-[11px] text-slate-400 block">
-                    Avg Level: L{emp.avgLevel || '3.0'} / L5.0
+                  <span className="text-[10px] text-[#8A8882]">
+                    Avg: L{emp.avgLevel || '3.0'} / L5.0
                   </span>
                 </div>
 
-                <div className="text-left sm:text-right">
-                  <GlassBadge variant={emp.lastAssessmentDate ? 'primary' : 'default'} size="xs">
-                    {emp.assessmentStatus}
-                  </GlassBadge>
-                </div>
+                <GlassBadge variant={emp.lastAssessmentDate ? 'primary' : 'neutral'} size="xs">
+                  {emp.assessmentStatus}
+                </GlassBadge>
 
                 <GlassButton
                   variant="outline"
-                  size="sm"
+                  size="xs"
                   iconRight={FiArrowRight}
                   onClick={() => handleOpenDetail(emp._id)}
                 >
                   View Profile
                 </GlassButton>
               </div>
-            </GlassCard>
+            </div>
           ))}
         </div>
       )}
 
-      {/* OFFICER DETAIL MODAL / DRAWER */}
+      {/* OFFICER DETAIL MODAL */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/25 backdrop-blur-xs">
-          <div className="relative w-full max-w-3xl max-h-[90vh] bg-white/95 backdrop-blur-md rounded-2xl border border-white/80 p-6 sm:p-8 shadow-glass-lg space-y-6 overflow-y-auto">
-            
-            {/* Modal Header */}
-            <div className="flex items-start justify-between border-b border-slate-200/60 pb-4">
-              <div className="flex items-center gap-3.5">
-                <div className="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-900 font-bold text-base flex items-center justify-center shadow-xs">
-                  {detailUser?.user?.name
-                    ?.split(' ')
-                    .map((n) => n[0])
-                    .join('')
-                    .substring(0, 2)
-                    .toUpperCase()}
-                </div>
-                <div>
-                  <h2 className="text-lg font-bold text-slate-900">
-                    {detailUser?.user?.name}
-                  </h2>
-                  <p className="text-xs text-slate-500 font-medium">
-                    {detailUser?.user?.positionId?.title || 'Statistical Officer'} &bull; {detailUser?.user?.departmentId?.name || 'MoSPI'}
-                  </p>
-                </div>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/35 backdrop-blur-xs">
+          <div className="relative w-full max-w-2xl max-h-[85vh] bg-[#FFFDF8] rounded-2xl border border-[#DDD9CF] p-6 shadow-xl space-y-5 overflow-y-auto">
+            <div className="flex items-start justify-between border-b border-[#DDD9CF] pb-3">
+              <div>
+                <h2 className="text-base font-bold text-[#111111]">
+                  {detailUser?.user?.name}
+                </h2>
+                <p className="text-xs text-[#62615D]">
+                  {detailUser?.user?.positionId?.title || 'Statistical Officer'} &bull; {detailUser?.user?.departmentId?.name || 'MoSPI'}
+                </p>
               </div>
-
               <button
                 onClick={() => setModalOpen(false)}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+                className="p-1 rounded text-[#8A8882] hover:text-[#111111]"
               >
-                <FiX className="text-xl" />
+                <FiX className="text-lg" />
               </button>
             </div>
 
             {detailLoading ? (
-              <div className="py-12 text-center text-xs text-slate-400 space-y-2">
-                <FiRefreshCw className="animate-spin text-indigo-600 text-xl mx-auto" />
-                <p>Retrieving detailed officer audit...</p>
+              <div className="py-12 text-center text-xs text-[#8A8882]">
+                Retrieving detailed officer audit...
               </div>
             ) : (
-              <div className="space-y-6 text-left">
-                
-                {/* Competency Audit Table */}
-                <div className="space-y-3">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700">
+              <div className="space-y-4 text-left">
+                {/* Competency Audit */}
+                <div className="space-y-2">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-[#111111]">
                     Competency Breakdown & Gap Analysis
                   </h4>
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     {(detailUser?.competencies || []).map((c, idx) => {
                       const comp = c.competency || {};
                       const isMet = (c.currentLevel || 1) >= (c.expectedLevel || 3);
                       return (
                         <div
                           key={idx}
-                          className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center justify-between gap-3 text-xs"
+                          className="p-3 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] flex items-center justify-between text-xs"
                         >
                           <div>
-                            <span className="font-bold text-slate-900 block">{comp.name || 'Competency'}</span>
-                            <span className="text-[11px] text-slate-500">{comp.category || 'Functional'}</span>
+                            <span className="font-semibold text-[#111111] block">{comp.name || 'Competency'}</span>
+                            <span className="text-[10px] text-[#8A8882]">{comp.category || 'Functional'}</span>
                           </div>
 
-                          <div className="flex items-center gap-3">
-                            <div className="text-right">
-                              <span className="font-bold text-slate-800">L{c.currentLevel}</span>
-                              <span className="text-slate-400"> / L{c.expectedLevel} Exp</span>
-                            </div>
-                            <GlassBadge variant={isMet ? 'success' : 'high'} size="xs">
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-[#111111]">L{c.currentLevel} / L{c.expectedLevel}</span>
+                            <GlassBadge variant={isMet ? 'success' : 'warning'} size="xs">
                               {isMet ? 'Satisfied' : `Gap: ${c.gap}`}
                             </GlassBadge>
                           </div>
@@ -333,79 +282,40 @@ export default function EmployeesList() {
                   </div>
                 </div>
 
-                {/* Skill Gaps & Reassessment History */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                  <div className="p-4 rounded-xl bg-amber-50/70 border border-amber-200/70 space-y-2">
-                    <span className="text-xs font-bold text-amber-900 block">Open Skill Gaps</span>
-                    <p className="text-2xl font-extrabold text-amber-900">
-                      {detailUser?.skillGaps?.filter((g) => g.status === 'open').length || 0}
-                    </p>
-                    <span className="text-[11px] text-amber-700 block">
-                      Targeted for continuous capacity building
-                    </span>
-                  </div>
-
-                  <div className="p-4 rounded-xl bg-indigo-50/70 border border-indigo-200/70 space-y-2">
-                    <span className="text-xs font-bold text-indigo-900 block">Evaluations Logged</span>
-                    <p className="text-2xl font-extrabold text-indigo-900">
-                      {detailUser?.history?.length || 0}
-                    </p>
-                    <span className="text-[11px] text-indigo-700 block">
-                      Historical competency assessment records
-                    </span>
-                  </div>
-                </div>
-
-                {/* Verified e-HRMS Service History & Certifications */}
+                {/* Service History */}
                 {detailUser?.user?.serviceHistory && detailUser.user.serviceHistory.length > 0 && (
-                  <div className="space-y-3 pt-2 border-t border-slate-200/60">
-                    <div className="flex items-center justify-between">
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                        <FiDatabase className="text-blue-600" />
-                        <span>e-HRMS Service Book & Past Postings</span>
-                      </h4>
-                      <GlassBadge variant="success" size="xs">
-                        Verified Dossier
-                      </GlassBadge>
-                    </div>
-
-                    <div className="space-y-2">
+                  <div className="space-y-2 pt-2 border-t border-[#DDD9CF]">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-[#111111]">
+                      e-HRMS Service History
+                    </h4>
+                    <div className="space-y-1.5">
                       {detailUser.user.serviceHistory.map((post, pIdx) => (
-                        <div
-                          key={pIdx}
-                          className="p-3 rounded-xl bg-slate-50 border border-slate-200/70 text-xs space-y-1"
-                        >
+                        <div key={pIdx} className="p-2.5 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-xs">
                           <div className="flex items-center justify-between">
-                            <span className="font-bold text-slate-900">{post.designation}</span>
-                            <span className="text-[10px] font-semibold text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200">
-                              {post.duration}
-                            </span>
+                            <span className="font-semibold text-[#111111]">{post.designation}</span>
+                            <span className="text-[10px] text-[#8A8882]">{post.duration}</span>
                           </div>
-                          <p className="text-xs text-blue-700 font-semibold">{post.organization}</p>
-                          {post.domain && <p className="text-[11px] text-slate-500">Domain: {post.domain}</p>}
+                          <p className="text-[11px] text-[#3348A8]">{post.organization}</p>
                         </div>
                       ))}
                     </div>
                   </div>
                 )}
-
               </div>
             )}
 
-            <div className="pt-2 border-t border-slate-200/60 flex justify-end">
+            <div className="pt-2 border-t border-[#DDD9CF] flex justify-end">
               <GlassButton
-                variant="glass"
+                variant="secondary"
                 size="sm"
                 onClick={() => setModalOpen(false)}
               >
-                Close Profile
+                Close
               </GlassButton>
             </div>
-
           </div>
         </div>
       )}
-
     </div>
   );
 }

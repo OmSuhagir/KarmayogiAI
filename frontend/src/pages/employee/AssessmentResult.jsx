@@ -3,22 +3,17 @@ import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
 import {
   FiCheckCircle,
   FiAward,
-  FiTrendingUp,
   FiArrowRight,
   FiAlertCircle,
-  FiBookOpen,
   FiHome,
-  FiLayers,
   FiRefreshCw,
-  FiCalendar,
 } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 import { getEmployeeCompetencyAudit } from '../../services/employeeService';
-import { getAssessmentResult } from '../../services/assessmentService';
 import GlassCard from '../../components/common/GlassCard';
 import GlassButton from '../../components/common/GlassButton';
 import GlassBadge from '../../components/common/GlassBadge';
-import ProgressBar from '../../components/common/ProgressBar';
+import ProficiencyScale from '../../components/common/ProficiencyScale';
 
 export default function AssessmentResult() {
   const { id: assessmentId } = useParams();
@@ -34,8 +29,6 @@ export default function AssessmentResult() {
     async function loadResultAndProfile() {
       try {
         setLoading(true);
-
-        // 1. Retrieve submission result from navigation state or session storage
         let storedResult = location.state?.resultData || location.state?.result;
 
         if (!storedResult) {
@@ -52,7 +45,6 @@ export default function AssessmentResult() {
 
         setResultData(storedResult || null);
 
-        // 2. Fetch updated competency audit to enrich with names, categories, and expected levels
         if (user?._id) {
           const audit = await getEmployeeCompetencyAudit(user._id);
           if (audit?.competencies) {
@@ -69,7 +61,6 @@ export default function AssessmentResult() {
     loadResultAndProfile();
   }, [assessmentId, user?._id, location.state]);
 
-  // Merge backend competencyScores with rich metadata from competency audit
   const rawCompetencies = resultData?.competencies || [];
 
   const enrichedCompetencies = rawCompetencies.map((rc) => {
@@ -97,9 +88,9 @@ export default function AssessmentResult() {
 
   if (loading) {
     return (
-      <div className="py-20 text-center space-y-3">
-        <FiRefreshCw className="animate-spin text-blue-600 text-3xl mx-auto" />
-        <p className="text-xs text-slate-500 font-medium">
+      <div className="py-20 text-center space-y-2">
+        <FiRefreshCw className="animate-spin text-[#111111] text-2xl mx-auto" />
+        <p className="text-xs text-[#8A8882]">
           Retrieving official evaluation results...
         </p>
       </div>
@@ -108,80 +99,83 @@ export default function AssessmentResult() {
 
   if (!resultData && enrichedCompetencies.length === 0) {
     return (
-      <div className="space-y-6 pb-12 max-w-3xl mx-auto text-center">
-        <GlassCard variant="solid" className="p-8 space-y-4 border-white/80">
-          <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 border border-amber-200 flex items-center justify-center mx-auto">
-            <FiAlertCircle className="text-2xl" />
+      <div className="space-y-6 pb-12 max-w-2xl mx-auto text-center">
+        <div className="rounded-2xl bg-[#FFFDF8] border border-[#DDD9CF] p-8 space-y-4">
+          <div className="w-10 h-10 rounded-xl bg-[#F8F6F0] border border-[#DDD9CF] text-[#62615D] flex items-center justify-center mx-auto">
+            <FiAlertCircle className="text-xl" />
           </div>
-          <h2 className="text-xl font-bold text-slate-900">
+          <h2 className="text-lg font-bold text-[#111111]">
             No Recent Assessment Session Found
           </h2>
-          <p className="text-xs text-slate-600 max-w-md mx-auto">
-            Take a role assessment to evaluate your proficiencies and calculate updated skill gaps.
+          <p className="text-xs text-[#62615D] max-w-sm mx-auto">
+            Take a role assessment to evaluate proficiencies and calculate updated skill gaps.
           </p>
-          <div className="pt-2 flex justify-center gap-3">
+          <div className="pt-2 flex justify-center">
             <GlassButton
               variant="primary"
-              size="md"
+              size="sm"
               onClick={() => navigate('/employee/assessments')}
             >
               Go to Assessments
             </GlassButton>
           </div>
-        </GlassCard>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 pb-12 max-w-4xl mx-auto text-left">
-      
-      {/* SECTION 1: OVERALL OUTCOME BANNER */}
-      <GlassCard variant="solid" className="p-6 sm:p-8 border-white/80 space-y-6 shadow-glass">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <GlassBadge variant={isPassed ? 'success' : 'high'} size="xs" dot>
-                {isPassed ? 'Assessment Completed' : 'Needs Development'}
+    <div className="space-y-6 pb-12 max-w-4xl mx-auto">
+      {/* 1. OVERALL OUTCOME BANNER */}
+      <div className="rounded-2xl bg-[#FFFDF8] border border-[#DDD9CF] p-6 sm:p-8 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            {isPassed ? (
+              <GlassBadge variant="success" size="xs">
+                Assessment Completed
               </GlassBadge>
-              <span className="text-xs text-slate-400 font-medium">
-                Official Result Logged in MongoDB
-              </span>
-            </div>
-
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Assessment Evaluation Summary
-            </h1>
-
-            <p className="text-xs sm:text-sm text-slate-600 max-w-xl leading-relaxed">
-              Your responses have been authoritatively scored by the backend evaluation engine. Your competency profile has been updated and skill gaps recalculated.
-            </p>
-          </div>
-
-          {/* Overall Score Badge Pill */}
-          <div className="p-5 rounded-2xl bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-200/80 text-center flex-shrink-0 min-w-[140px] shadow-xs">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-700 block">
-              Overall Score
-            </span>
-            <span className="text-3xl sm:text-4xl font-extrabold text-indigo-900 block my-1">
-              {overallScore}%
-            </span>
-            <span className="text-[10px] text-slate-500 font-semibold block">
-              {enrichedCompetencies.length} Competencies Evaluated
+            ) : (
+              <GlassBadge variant="warning" size="xs">
+                Development Needed
+              </GlassBadge>
+            )}
+            <span className="text-[11px] text-[#8A8882]">
+              Official Result Logged & Calibrated
             </span>
           </div>
+
+          <h1 className="text-xl sm:text-2xl font-bold text-[#111111] tracking-tight">
+            Assessment Evaluation Summary
+          </h1>
+
+          <p className="text-xs sm:text-sm text-[#62615D] max-w-xl leading-relaxed">
+            Your responses have been authoritatively evaluated by the backend assessment engine. Your role profile has been updated and skill gaps recalculated.
+          </p>
         </div>
-      </GlassCard>
 
-      {/* SECTION 2: COMPETENCY-WISE LEVEL PROGRESSION */}
+        {/* Overall Score Badge */}
+        <div className="p-4 rounded-xl bg-[#F8F6F0] border border-[#DDD9CF] text-center flex-shrink-0 min-w-[130px]">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-[#8A8882] block">
+            Overall Score
+          </span>
+          <span className="text-3xl font-bold text-[#111111] block my-0.5">
+            {overallScore}%
+          </span>
+          <span className="text-[10px] text-[#62615D] block">
+            {enrichedCompetencies.length} Competencies
+          </span>
+        </div>
+      </div>
+
+      {/* 2. COMPETENCY BREAKDOWN */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between px-1">
+        <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-base font-bold text-slate-900">
-              Evaluated Competency Breakdown
+            <h2 className="text-sm font-bold text-[#111111]">
+              Competency Breakdown & Progression
             </h2>
-            <p className="text-xs text-slate-500">
-              Previous Level vs Newly Assessed Level
+            <p className="text-xs text-[#8A8882]">
+              Previous evaluated level vs newly assessed proficiency
             </p>
           </div>
 
@@ -191,7 +185,7 @@ export default function AssessmentResult() {
             iconRight={FiArrowRight}
             onClick={() => navigate('/employee/skill-gaps')}
           >
-            View Updated Skill Gaps
+            View Skill Gaps
           </GlassButton>
         </div>
 
@@ -201,98 +195,79 @@ export default function AssessmentResult() {
             const isLevelMet = comp.assessedLevel >= comp.expectedLevel;
 
             return (
-              <GlassCard
+              <div
                 key={comp.competencyId || idx}
-                className="p-5 space-y-4 flex flex-col justify-between"
+                className="rounded-xl bg-[#FFFDF8] border border-[#DDD9CF] p-5 space-y-4 flex flex-col justify-between"
               >
                 <div className="space-y-3">
                   <div className="flex items-start justify-between gap-2">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-1.5">
-                        <GlassBadge variant="primary" size="xs">
+                    <div>
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-[#F8F6F0] text-[#62615D] border border-[#DDD9CF]">
                           {comp.category}
-                        </GlassBadge>
+                        </span>
                         {isImproved && (
                           <GlassBadge variant="success" size="xs">
                             +1 Level Up
                           </GlassBadge>
                         )}
                       </div>
-                      <h3 className="text-sm font-bold text-slate-900 leading-snug">
+                      <h3 className="text-sm font-bold text-[#111111] leading-snug">
                         {comp.name}
                       </h3>
                     </div>
 
-                    <div className="text-right">
-                      <span className="text-xs font-extrabold text-indigo-800 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100 block">
-                        {comp.score}% Score
-                      </span>
-                    </div>
+                    <span className="text-xs font-bold text-[#111111] bg-[#F8F6F0] px-2 py-0.5 rounded border border-[#DDD9CF]">
+                      {comp.score}% Score
+                    </span>
                   </div>
 
-                  {/* Level Stepper Visualization */}
-                  <div className="grid grid-cols-3 gap-2 p-3 rounded-xl bg-slate-50/80 border border-slate-200/60 text-center">
-                    <div>
-                      <span className="text-[10px] text-slate-400 font-bold uppercase block">Previous</span>
-                      <span className="text-xs font-bold text-slate-600">Level {comp.previousLevel}</span>
-                    </div>
-                    <div className="border-x border-slate-200/80 bg-indigo-50/50 rounded-lg">
-                      <span className="text-[10px] text-indigo-600 font-bold uppercase block">Assessed</span>
-                      <span className="text-sm font-extrabold text-indigo-700">Level {comp.assessedLevel}</span>
-                    </div>
-                    <div>
-                      <span className="text-[10px] text-slate-400 font-bold uppercase block">Required</span>
-                      <span className="text-xs font-bold text-slate-800">Level {comp.expectedLevel}</span>
-                    </div>
-                  </div>
-
-                  {/* Visual Progress Bar */}
-                  <ProgressBar
-                    value={Math.round((comp.assessedLevel / 5) * 100)}
-                    color={isLevelMet ? 'emerald' : 'amber'}
-                    size="sm"
+                  <ProficiencyScale
+                    currentLevel={comp.assessedLevel}
+                    targetLevel={comp.expectedLevel}
+                    compact={true}
+                    showLabels={false}
                   />
                 </div>
 
-                <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-xs">
-                  <span className="text-slate-500 font-medium">Status:</span>
+                <div className="pt-3 border-t border-[#DDD9CF] flex items-center justify-between text-xs">
+                  <span className="text-[#8A8882]">Status:</span>
                   <span
-                    className={`font-semibold flex items-center gap-1 ${
-                      isLevelMet ? 'text-emerald-700' : 'text-amber-700'
+                    className={`font-medium flex items-center gap-1 ${
+                      isLevelMet ? 'text-[#52745D]' : 'text-[#A8752E]'
                     }`}
                   >
                     {isLevelMet ? (
                       <>
-                        <FiCheckCircle className="text-xs" /> Target Satisfied
+                        <FiCheckCircle className="text-xs" /> Target Achieved
                       </>
                     ) : (
                       <>
-                        <FiAlertCircle className="text-xs" /> Gap: {comp.gap} Level
-                        {comp.gap > 1 ? 's' : ''}
+                        <FiAlertCircle className="text-xs" /> Gap: +{comp.gap} Level{comp.gap > 1 ? 's' : ''}
                       </>
                     )}
                   </span>
                 </div>
-              </GlassCard>
+              </div>
             );
           })}
         </div>
       </div>
 
-      {/* SECTION 3: NEXT ACTION CTA BAR */}
-      <GlassCard className="p-6 border-indigo-200/80 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="space-y-1 text-center sm:text-left">
-          <h3 className="text-sm font-bold text-slate-900">
-            Capacity Building & Next Steps
+      {/* 3. BOTTOM CTA */}
+      <div className="rounded-xl bg-[#FFFDF8] border border-[#DDD9CF] p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="space-y-0.5 text-center sm:text-left">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-[#111111]">
+            Next Action in Capacity Building
           </h3>
-          <p className="text-xs text-slate-600">
-            Your learning recommendations have been refreshed based on your newly assessed competency profile.
+          <p className="text-xs text-[#62615D]">
+            Learning recommendations have been updated to target newly identified gaps.
           </p>
         </div>
 
-        <div className="flex items-center gap-3 flex-shrink-0">
+        <div className="flex items-center gap-2 flex-shrink-0">
           <GlassButton
-            variant="glass"
+            variant="secondary"
             size="sm"
             icon={FiHome}
             onClick={() => navigate('/employee/dashboard')}
@@ -303,14 +278,12 @@ export default function AssessmentResult() {
             variant="primary"
             size="sm"
             iconRight={FiArrowRight}
-            className="bg-gradient-to-r from-indigo-700 to-slate-900 text-white"
             onClick={() => navigate('/employee/recommendations')}
           >
             Start Recommended Learning
           </GlassButton>
         </div>
-      </GlassCard>
-
+      </div>
     </div>
   );
 }

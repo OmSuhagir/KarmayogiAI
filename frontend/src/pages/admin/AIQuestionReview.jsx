@@ -9,9 +9,6 @@ import {
   FiX,
   FiHelpCircle,
   FiShield,
-  FiAward,
-  FiClock,
-  FiInfo,
 } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 import {
@@ -35,9 +32,8 @@ export default function AIQuestionReview() {
   const [generatedQuestions, setGeneratedQuestions] = useState([]);
   const [documents, setDocuments] = useState([]);
   const [competencies, setCompetencies] = useState([]);
-  const [statusFilter, setStatusFilter] = useState('all'); // 'all' | 'pending' | 'approved' | 'rejected'
+  const [statusFilter, setStatusFilter] = useState('all');
 
-  // AI Generator Form State
   const [genForm, setGenForm] = useState({
     documentId: '',
     competencyId: '',
@@ -131,65 +127,61 @@ export default function AIQuestionReview() {
   const approvedCount = generatedQuestions.filter((q) => q.validation?.status === 'approved').length;
 
   return (
-    <div className="space-y-8 pb-12">
+    <div className="space-y-6 pb-12">
       {/* Header Banner */}
-      <GlassCard variant="solid" className="p-6 sm:p-8 border-white/80 space-y-2 shadow-glass">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <GlassBadge variant="purple" size="xs">
-                Gemini GenAI Studio
-              </GlassBadge>
-              <span className="text-xs text-slate-400 font-medium">
-                {pendingCount} Pending Review &bull; {approvedCount} Approved
-              </span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              AI Question Generation & Review Studio
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-600 max-w-2xl font-normal leading-relaxed">
-              Synthesize 4-option MCQs from approved training documents using Gemini AI. Human-in-the-loop review approves items directly into the production question bank.
-            </p>
+      <div className="rounded-2xl bg-[#FFFDF8] border border-[#DDD9CF] p-5 sm:p-6 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-[#F8F6F0] text-[#62615D] border border-[#DDD9CF]">
+              Gemini GenAI Studio
+            </span>
+            <span className="text-[11px] text-[#8A8882]">
+              {pendingCount} Pending Review &bull; {approvedCount} Approved
+            </span>
           </div>
-
-          <GlassButton
-            variant="glass"
-            size="md"
-            icon={FiRefreshCw}
-            loading={loading}
-            onClick={loadData}
-          >
-            Refresh Studio
-          </GlassButton>
+          <h1 className="text-xl sm:text-2xl font-bold text-[#111111] tracking-tight mt-1.5">
+            AI Question Generation & Review
+          </h1>
+          <p className="text-xs sm:text-sm text-[#62615D] mt-0.5">
+            Synthesize 4-option MCQs from approved training documents using Gemini AI. Human review approves items into the active question bank.
+          </p>
         </div>
-      </GlassCard>
 
-      {/* SECTION 1: GEMINI AI GENERATOR CONTROL PANEL */}
-      <GlassCard className="p-6 space-y-4 border-indigo-200/80">
-        <div className="flex items-center gap-2.5 pb-3 border-b border-slate-200/60">
-          <div className="w-8 h-8 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center font-bold">
-            <FiZap className="text-base" />
+        <GlassButton
+          variant="secondary"
+          size="sm"
+          icon={FiRefreshCw}
+          loading={loading}
+          onClick={loadData}
+        >
+          Refresh Studio
+        </GlassButton>
+      </div>
+
+      {/* GENERATOR CONTROL PANEL */}
+      <div className="rounded-xl bg-[#FFFDF8] border border-[#DDD9CF] p-5 space-y-4 shadow-xs">
+        <div className="flex items-center gap-2 pb-3 border-b border-[#DDD9CF]">
+          <div className="w-7 h-7 rounded bg-[#111111] text-[#FFFDF8] flex items-center justify-center font-bold text-xs">
+            <FiZap />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-slate-900">
-              Generate Questions from Official Document
+            <h3 className="text-xs font-bold text-[#111111] uppercase tracking-wider">
+              Generate Questions from Official Documents
             </h3>
-            <p className="text-[11px] text-slate-500 font-normal">
+            <p className="text-[11px] text-[#8A8882]">
               Select source text, competency rubric, and target difficulty level
             </p>
           </div>
         </div>
 
-        <form onSubmit={handleGenerate} className="space-y-4 text-left">
+        <form onSubmit={handleGenerate} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            
-            {/* Source Document */}
             <div className="space-y-1">
-              <label className="text-xs font-bold text-slate-700 uppercase">Source Document</label>
+              <label className="text-[11px] font-bold text-[#111111] uppercase">Source Document</label>
               <select
                 value={genForm.documentId}
                 onChange={(e) => setGenForm({ ...genForm, documentId: e.target.value })}
-                className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500/20"
+                className="w-full px-3 py-1.5 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-xs text-[#111111] focus:outline-none"
               >
                 {documents.map((d) => (
                   <option key={d._id} value={d._id}>
@@ -199,13 +191,12 @@ export default function AIQuestionReview() {
               </select>
             </div>
 
-            {/* Target Competency */}
             <div className="space-y-1">
-              <label className="text-xs font-bold text-slate-700 uppercase">Target Competency</label>
+              <label className="text-[11px] font-bold text-[#111111] uppercase">Target Competency</label>
               <select
                 value={genForm.competencyId}
                 onChange={(e) => setGenForm({ ...genForm, competencyId: e.target.value })}
-                className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500/20"
+                className="w-full px-3 py-1.5 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-xs text-[#111111] focus:outline-none"
               >
                 {competencies.map((c) => (
                   <option key={c._id} value={c._id}>
@@ -215,88 +206,88 @@ export default function AIQuestionReview() {
               </select>
             </div>
 
-            {/* Target Difficulty */}
             <div className="space-y-1">
-              <label className="text-xs font-bold text-slate-700 uppercase">Target Difficulty</label>
+              <label className="text-[11px] font-bold text-[#111111] uppercase">Difficulty Level</label>
               <select
                 value={genForm.difficulty}
                 onChange={(e) => setGenForm({ ...genForm, difficulty: Number(e.target.value) })}
-                className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500/20"
+                className="w-full px-3 py-1.5 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-xs text-[#111111] focus:outline-none"
               >
-                <option value="1">Level 1 - Beginner</option>
-                <option value="2">Level 2 - Basic</option>
-                <option value="3">Level 3 - Intermediate</option>
-                <option value="4">Level 4 - Advanced</option>
-                <option value="5">Level 5 - Expert</option>
+                <option value="1">L1 - Basic</option>
+                <option value="2">L2 - Working</option>
+                <option value="3">L3 - Proficient</option>
+                <option value="4">L4 - Advanced</option>
+                <option value="5">L5 - Expert</option>
               </select>
             </div>
 
-            {/* Number of Items */}
             <div className="space-y-1">
-              <label className="text-xs font-bold text-slate-700 uppercase">Questions Count</label>
+              <label className="text-[11px] font-bold text-[#111111] uppercase">Count</label>
               <input
                 type="number"
                 min="1"
                 max="5"
                 value={genForm.numQuestions}
                 onChange={(e) => setGenForm({ ...genForm, numQuestions: Number(e.target.value) })}
-                className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500/20"
+                className="w-full px-3 py-1.5 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-xs text-[#111111] focus:outline-none"
               />
             </div>
-
           </div>
 
-          <div className="flex items-center justify-between pt-2">
-            <span className="text-[11px] text-slate-500 flex items-center gap-1.5">
-              <FiShield className="text-indigo-600" />
+          <div className="flex items-center justify-between pt-2 border-t border-[#DDD9CF]">
+            <span className="text-[11px] text-[#8A8882] flex items-center gap-1">
+              <FiShield className="text-[#3348A8]" />
               Strict 4-option validation enforced by questionValidationService
             </span>
 
             <GlassButton
               type="submit"
               variant="primary"
-              size="md"
+              size="sm"
               loading={generating}
               icon={FiZap}
-              className="bg-gradient-to-r from-purple-700 to-indigo-800 text-white shadow-md shadow-purple-500/20"
             >
               {generating ? 'Synthesizing with Gemini...' : 'Generate Questions via AI'}
             </GlassButton>
           </div>
         </form>
-      </GlassCard>
+      </div>
 
-      {/* SECTION 2: HUMAN-IN-THE-LOOP REVIEW QUEUE */}
+      {/* HUMAN-IN-THE-LOOP REVIEW QUEUE */}
       <div className="space-y-4">
-        
-        {/* Filter Toolbar */}
         <div className="flex items-center justify-between">
-          <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
-            <FiHelpCircle className="text-indigo-600" />
+          <h2 className="text-sm font-bold text-[#111111] flex items-center gap-1.5">
+            <FiHelpCircle className="text-[#3348A8]" />
             AI Question Review Queue ({filteredQuestions.length})
           </h2>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <button
               onClick={() => setStatusFilter('all')}
-              className={`px-3 py-1 rounded-xl text-xs font-semibold ${
-                statusFilter === 'all' ? 'bg-indigo-700 text-white shadow-xs' : 'bg-white/70 text-slate-600'
+              className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
+                statusFilter === 'all'
+                  ? 'bg-[#111111] text-[#FFFDF8] font-semibold'
+                  : 'bg-[#FFFDF8] text-[#62615D] border border-[#DDD9CF]'
               }`}
             >
               All ({generatedQuestions.length})
             </button>
             <button
               onClick={() => setStatusFilter('pending')}
-              className={`px-3 py-1 rounded-xl text-xs font-semibold ${
-                statusFilter === 'pending' ? 'bg-amber-600 text-white shadow-xs' : 'bg-white/70 text-slate-600'
+              className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
+                statusFilter === 'pending'
+                  ? 'bg-[#111111] text-[#FFFDF8] font-semibold'
+                  : 'bg-[#FFFDF8] text-[#62615D] border border-[#DDD9CF]'
               }`}
             >
               Pending ({pendingCount})
             </button>
             <button
               onClick={() => setStatusFilter('approved')}
-              className={`px-3 py-1 rounded-xl text-xs font-semibold ${
-                statusFilter === 'approved' ? 'bg-emerald-600 text-white shadow-xs' : 'bg-white/70 text-slate-600'
+              className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
+                statusFilter === 'approved'
+                  ? 'bg-[#111111] text-[#FFFDF8] font-semibold'
+                  : 'bg-[#FFFDF8] text-[#62615D] border border-[#DDD9CF]'
               }`}
             >
               Approved ({approvedCount})
@@ -304,18 +295,17 @@ export default function AIQuestionReview() {
           </div>
         </div>
 
-        {/* Questions Cards */}
         {loading ? (
-          <div className="py-16 text-center text-xs text-slate-400 space-y-3">
-            <FiRefreshCw className="animate-spin text-indigo-600 text-2xl mx-auto" />
+          <div className="py-16 text-center text-xs text-[#8A8882] space-y-2">
+            <FiRefreshCw className="animate-spin text-[#111111] text-xl mx-auto" />
             <p>Loading AI question review queue...</p>
           </div>
         ) : filteredQuestions.length === 0 ? (
-          <GlassCard className="p-8 text-center text-xs text-slate-500">
-            No generated questions match this filter. Use the generator above to synthesize new items.
-          </GlassCard>
+          <div className="rounded-xl bg-[#FFFDF8] border border-[#DDD9CF] p-8 text-center text-xs text-[#8A8882]">
+            No generated questions match this filter.
+          </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3">
             {filteredQuestions.map((item) => {
               const status = item.validation?.status || 'pending';
               const isPending = status === 'pending';
@@ -323,85 +313,91 @@ export default function AIQuestionReview() {
               const isRejected = status === 'rejected';
 
               return (
-                <GlassCard key={item._id} className="p-6 space-y-4 border-white/80">
+                <div
+                  key={item._id}
+                  className="rounded-xl bg-[#FFFDF8] border border-[#DDD9CF] p-5 space-y-3 shadow-xs"
+                >
                   <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
                     <div className="space-y-1">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <GlassBadge
-                          variant={isApproved ? 'success' : isPending ? 'high' : 'critical'}
-                          size="xs"
-                          dot
-                        >
-                          {status === 'approved' ? 'Approved & in Question Bank' : status === 'pending' ? 'Pending Human Review' : 'Rejected'}
-                        </GlassBadge>
+                        {isApproved ? (
+                          <GlassBadge variant="success" size="xs">
+                            Approved &bull; Active in Bank
+                          </GlassBadge>
+                        ) : isPending ? (
+                          <GlassBadge variant="warning" size="xs">
+                            Pending Review
+                          </GlassBadge>
+                        ) : (
+                          <GlassBadge variant="critical" size="xs">
+                            Rejected
+                          </GlassBadge>
+                        )}
 
-                        <span className="text-[11px] font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100">
-                          Level {item.difficulty || 3} Difficulty
+                        <span className="text-[10px] font-semibold text-[#111111] bg-[#F8F6F0] px-1.5 py-0.5 rounded border border-[#DDD9CF]">
+                          Level {item.difficulty || 3}
                         </span>
 
                         {item.aiConfidence && (
-                          <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
-                            {Math.round(item.aiConfidence * 100)}% AI Confidence
+                          <span className="text-[10px] text-[#52745D] font-semibold">
+                            {Math.round(item.aiConfidence * 100)}% Confidence
                           </span>
                         )}
                       </div>
 
-                      <h3 className="text-sm sm:text-base font-bold text-slate-900 leading-snug pt-1">
+                      <h3 className="text-xs sm:text-sm font-bold text-[#111111] leading-snug pt-0.5">
                         {item.question}
                       </h3>
                     </div>
 
-                    {/* Review Actions */}
-                    <div className="flex items-center gap-2 self-end sm:self-start flex-shrink-0">
+                    <div className="flex items-center gap-2 flex-shrink-0">
                       {isPending && (
                         <>
                           <button
                             onClick={() => handleReview(item._id, 'approved')}
                             disabled={reviewingId === item._id}
-                            className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs flex items-center gap-1.5 shadow-xs transition-colors"
+                            className="px-2.5 py-1 rounded bg-[#111111] hover:bg-[#222222] text-[#FFFDF8] text-xs font-semibold transition-colors flex items-center gap-1"
                           >
                             <FiCheck className="text-xs" /> Approve
                           </button>
                           <button
                             onClick={() => handleReview(item._id, 'rejected')}
                             disabled={reviewingId === item._id}
-                            className="px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-semibold text-xs flex items-center gap-1.5 transition-colors"
+                            className="px-2.5 py-1 rounded bg-[#F8E9E7] hover:bg-[#F2D7D4] text-[#A54C45] border border-[#E8C2BF] text-xs font-semibold transition-colors flex items-center gap-1"
                           >
                             <FiX className="text-xs" /> Reject
                           </button>
                         </>
                       )}
                       {isApproved && (
-                        <span className="text-xs font-bold text-emerald-700 flex items-center gap-1">
-                          <FiCheckCircle /> Question Bank Active
+                        <span className="text-xs font-semibold text-[#52745D] flex items-center gap-1">
+                          <FiCheckCircle /> Active
                         </span>
                       )}
                       {isRejected && (
-                        <span className="text-xs font-bold text-rose-600 flex items-center gap-1">
+                        <span className="text-xs font-semibold text-[#A54C45] flex items-center gap-1">
                           <FiXCircle /> Rejected
                         </span>
                       )}
                     </div>
                   </div>
 
-                  {/* Options (A, B, C, D) */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2">
+                  {/* Options */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
                     {(item.options || []).map((opt) => {
                       const isCorrect = opt.id === item.correctAnswer;
                       return (
                         <div
                           key={opt.id}
-                          className={`p-3 rounded-xl border flex items-start gap-2.5 text-xs ${
+                          className={`p-2.5 rounded-lg border text-xs flex items-start gap-2 ${
                             isCorrect
-                              ? 'bg-emerald-50/80 border-emerald-300 text-emerald-950 font-bold'
-                              : 'bg-slate-50 border-slate-200 text-slate-700'
+                              ? 'bg-[#EAF2EC] border-[#C5DDCB] text-[#111111] font-semibold'
+                              : 'bg-[#F8F6F0] border-[#DDD9CF] text-[#62615D]'
                           }`}
                         >
                           <span
-                            className={`w-6 h-6 rounded-lg flex items-center justify-center font-bold text-[11px] flex-shrink-0 ${
-                              isCorrect
-                                ? 'bg-emerald-600 text-white shadow-xs'
-                                : 'bg-slate-200 text-slate-600'
+                            className={`w-5 h-5 rounded flex items-center justify-center font-bold text-[10px] flex-shrink-0 ${
+                              isCorrect ? 'bg-[#52745D] text-white' : 'bg-[#DDD9CF] text-[#111111]'
                             }`}
                           >
                             {opt.id}
@@ -412,21 +408,19 @@ export default function AIQuestionReview() {
                     })}
                   </div>
 
-                  {/* Rationale */}
                   {item.rationale && (
-                    <div className="p-3 rounded-xl bg-purple-50/60 border border-purple-100 text-xs text-purple-950 space-y-1">
-                      <span className="font-bold text-[10px] uppercase tracking-wider text-purple-800 block">
-                        AI Rationale & Pedagogical Explanation:
+                    <div className="p-2.5 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-xs text-[#62615D]">
+                      <span className="font-semibold text-[#111111] block mb-0.5 text-[10px] uppercase tracking-wider">
+                        AI Rationale:
                       </span>
-                      <p className="text-[11px] leading-relaxed text-purple-900">{item.rationale}</p>
+                      <p className="text-[11px] leading-relaxed">{item.rationale}</p>
                     </div>
                   )}
-                </GlassCard>
+                </div>
               );
             })}
           </div>
         )}
-
       </div>
     </div>
   );

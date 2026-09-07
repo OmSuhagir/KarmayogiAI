@@ -3,59 +3,58 @@ import GlassCard from './GlassCard';
 
 /**
  * Reusable StatMetric card for displaying quantitative indicators,
- * KPIs, and progress summaries in a light glass container.
+ * KPIs, and progress summaries in warm beige GovTech styling.
  */
 export default function StatMetric({
   title,
   value,
   subtitle,
   icon: Icon,
-  iconColor = 'blue', // 'blue' | 'purple' | 'emerald' | 'amber' | 'cyan' | 'rose'
+  iconColor = 'blue', // 'blue' | 'emerald' | 'amber' | 'neutral' | 'rose'
   trend,
   trendDirection = 'neutral', // 'up' | 'down' | 'neutral'
   className = '',
   onClick,
 }) {
   const iconThemes = {
-    blue: 'bg-blue-50 text-blue-600 border-blue-100',
-    purple: 'bg-purple-50 text-purple-600 border-purple-100',
-    emerald: 'bg-emerald-50 text-emerald-600 border-emerald-100',
-    amber: 'bg-amber-50 text-amber-600 border-amber-100',
-    cyan: 'bg-cyan-50 text-cyan-700 border-cyan-100',
-    rose: 'bg-rose-50 text-rose-600 border-rose-100',
+    blue: 'bg-[#E9EDFF] text-[#3348A8] border-[#CAD5FF]',
+    emerald: 'bg-[#EAF2EC] text-[#52745D] border-[#C5DDCB]',
+    amber: 'bg-[#F7EEDC] text-[#A8752E] border-[#ECD9BA]',
+    neutral: 'bg-[#F8F6F0] text-[#111111] border-[#DDD9CF]',
+    rose: 'bg-[#F8E9E7] text-[#A54C45] border-[#E8C2BF]',
   };
 
   const trendStyles = {
-    up: 'text-emerald-700 bg-emerald-50/80 border-emerald-200/80',
-    down: 'text-rose-700 bg-rose-50/80 border-rose-200/80',
-    neutral: 'text-slate-600 bg-slate-100/80 border-slate-200/80',
+    up: 'text-[#52745D] bg-[#EAF2EC] border-[#C5DDCB]',
+    down: 'text-[#A54C45] bg-[#F8E9E7] border-[#E8C2BF]',
+    neutral: 'text-[#62615D] bg-[#F8F6F0] border-[#DDD9CF]',
   };
 
   return (
     <GlassCard
       interactive={!!onClick}
       onClick={onClick}
-      className={`relative overflow-hidden transition-all duration-200 ${className}`}
+      className={`relative overflow-hidden transition-all duration-200 bg-[#FFFDF8] border border-[#DDD9CF] ${className}`}
     >
       <div className="flex items-start justify-between">
         <div className="space-y-1">
-          <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+          <p className="text-xs font-semibold uppercase tracking-wider text-[#8A8882]">
             {title}
           </p>
           <div className="flex items-baseline gap-2">
-            <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
+            <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111111]">
               {value}
             </h3>
             {trend && (
               <span
-                className={`inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full border ${trendStyles[trendDirection] || trendStyles.neutral}`}
+                className={`inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-md border ${trendStyles[trendDirection] || trendStyles.neutral}`}
               >
                 {trend}
               </span>
             )}
           </div>
           {subtitle && (
-            <p className="text-xs text-slate-500 font-normal pt-0.5">
+            <p className="text-xs text-[#62615D] font-normal pt-0.5">
               {subtitle}
             </p>
           )}
@@ -63,9 +62,9 @@ export default function StatMetric({
 
         {Icon && (
           <div
-            className={`w-11 h-11 rounded-xl flex items-center justify-center border shadow-xs flex-shrink-0 ${iconThemes[iconColor] || iconThemes.blue}`}
+            className={`w-10 h-10 rounded-lg flex items-center justify-center border shadow-xs flex-shrink-0 ${iconThemes[iconColor] || iconThemes.neutral}`}
           >
-            <Icon className="text-xl" />
+            <Icon className="text-lg" />
           </div>
         )}
       </div>

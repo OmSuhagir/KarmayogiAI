@@ -8,16 +8,10 @@ import {
   FiAlertCircle,
   FiRefreshCw,
   FiDatabase,
-  FiFileText,
   FiAward,
   FiBriefcase,
-  FiUser,
-  FiCalendar,
-  FiZap,
   FiLayers,
-  FiExternalLink,
   FiCpu,
-  FiLock,
   FiCheck,
 } from 'react-icons/fi';
 import { RiGovernmentLine, RiSparklingFill } from 'react-icons/ri';
@@ -35,31 +29,24 @@ import GlassCard from '../../components/common/GlassCard';
 import GlassButton from '../../components/common/GlassButton';
 import GlassBadge from '../../components/common/GlassBadge';
 
-const SAMPLE_SERVICE_DOSSIER = SAMPLE_DOSSIERS[0].text;
-
 export default function OfficerOnboarding() {
   const navigate = useNavigate();
   const { setOfficerSession } = useAuth();
 
-  // Wizard Step: 1 (Ingest Source) -> 2 (Review Past Dossier) -> 3 (Final Success)
   const [step, setStep] = useState(1);
   const [activeTab, setActiveTab] = useState('ehrms'); // 'ehrms' | 'ai_parser' | 'digilocker'
 
-  // Presets & Form state
   const [presets, setPresets] = useState(DEMO_PRESET_OFFICERS);
   const [selectedPresetId, setSelectedPresetId] = useState('GOI-MOSPI-2022-419');
   const [customEmployeeId, setCustomEmployeeId] = useState('');
   const [pastedDossierText, setPastedDossierText] = useState('');
 
-  // Loading & error
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Extracted/Synced Record Dossier
   const [dossier, setDossier] = useState(null);
   const [onboardedUser, setOnboardedUser] = useState(null);
 
-  // Load presets on mount
   useEffect(() => {
     async function loadPresets() {
       try {
@@ -79,7 +66,6 @@ export default function OfficerOnboarding() {
           setSelectedPresetId(DEMO_PRESET_OFFICERS[0].employeeId);
         }
       } catch (err) {
-        console.warn('Could not load preset officers, using built-in demo dataset:', err);
         setPresets(DEMO_PRESET_OFFICERS);
         setSelectedPresetId(DEMO_PRESET_OFFICERS[0].employeeId);
       }
@@ -87,7 +73,6 @@ export default function OfficerOnboarding() {
     loadPresets();
   }, []);
 
-  // Handle Ingest via e-HRMS 2.0 / iGOT
   const handleSyncEhrms = async (idToUse) => {
     setError('');
     const targetId = idToUse || customEmployeeId.trim() || selectedPresetId;
@@ -116,11 +101,10 @@ export default function OfficerOnboarding() {
     }
   };
 
-  // Handle Ingest via AI Service Book Parser (Gemini)
   const handleParseWithAi = async () => {
     setError('');
     if (!pastedDossierText || pastedDossierText.trim().length < 20) {
-      setError('Please paste or enter sufficient text from the Service Dossier or Resume.');
+      setError('Please enter sufficient text from the Service Dossier.');
       return;
     }
 
@@ -145,7 +129,7 @@ export default function OfficerOnboarding() {
         });
         setStep(2);
       } else {
-        throw new Error('AI parser could not extract structured records from document.');
+        throw new Error('AI parser could not extract structured records.');
       }
     } catch (err) {
       setError(err.message || 'AI document analysis failed.');
@@ -154,13 +138,11 @@ export default function OfficerOnboarding() {
     }
   };
 
-  // Handle Ingest via DigiLocker
   const handleSyncDigiLocker = (employeeId) => {
     const idToSync = employeeId || 'GOI-NITI-2023-552';
     handleSyncEhrms(idToSync);
   };
 
-  // Change competency level in review
   const handleUpdateCompetencyLevel = (idx, newLevel) => {
     if (!dossier?.inferredCompetencies) return;
     const updated = [...dossier.inferredCompetencies];
@@ -171,7 +153,6 @@ export default function OfficerOnboarding() {
     setDossier({ ...dossier, inferredCompetencies: updated });
   };
 
-  // Finalize Onboarding and commit to DB
   const handleCompleteOnboarding = async () => {
     if (!dossier) return;
     setError('');
@@ -195,7 +176,6 @@ export default function OfficerOnboarding() {
       const res = await completeOnboarding(payload);
       const savedUser = res?.data || res;
 
-      // Update active authentication session
       setOfficerSession(savedUser);
       setOnboardedUser(savedUser);
       setStep(3);
@@ -207,351 +187,257 @@ export default function OfficerOnboarding() {
   };
 
   return (
-    <div className="min-h-screen ambient-canvas bg-canvas text-slate-800 flex flex-col justify-between relative px-4 py-6 sm:py-10">
-      {/* Ambient Blurred Elements */}
-      <div className="ambient-glow-1" />
-      <div className="ambient-glow-2" />
-      <div className="ambient-glow-3" />
-
+    <div className="min-h-screen bg-[#F4F1E9] text-[#171717] flex flex-col justify-between px-4 py-6 sm:py-10">
       {/* Top Header */}
-      <header className="max-w-5xl mx-auto w-full flex items-center justify-between relative z-10">
+      <header className="max-w-4xl mx-auto w-full flex items-center justify-between pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
-            <RiGovernmentLine className="text-2xl" />
+          <div className="w-9 h-9 rounded-lg bg-[#111111] text-[#FFFDF8] flex items-center justify-center font-bold">
+            <RiGovernmentLine className="text-xl" />
           </div>
           <div>
-            <span className="text-lg font-extrabold text-slate-900 tracking-tight block leading-tight">
-              Karmayogi AI
+            <span className="text-sm font-bold text-[#111111] tracking-tight block">
+              Karmayogi AI &middot; Service Ingestion
             </span>
-            <span className="text-[11px] text-slate-500 font-medium tracking-wide block">
-              Automated Officer Onboarding & Service Book Ingestion
+            <span className="text-[10px] text-[#8A8882] block">
+              Automated Officer Onboarding & e-HRMS 2.0 Ingestion
             </span>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <GlassBadge variant="purple" size="sm" icon={FiCpu}>
-            Smart Ingest Engine
-          </GlassBadge>
-          <Link
-            to="/login/employee"
-            className="text-xs font-semibold text-slate-600 hover:text-blue-700 transition-colors ml-2"
-          >
-            Back to Login
-          </Link>
-        </div>
+        <Link
+          to="/login/employee"
+          className="text-xs font-medium text-[#62615D] hover:text-[#111111]"
+        >
+          &larr; Back to Login
+        </Link>
       </header>
 
-      {/* Progress Step Bar */}
-      <div className="max-w-3xl w-full mx-auto my-4 relative z-10">
+      {/* Progress Steps */}
+      <div className="max-w-2xl w-full mx-auto my-3">
         <div className="flex items-center justify-between px-2 sm:px-6">
           <div className="flex items-center gap-2">
             <div
-              className={`w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center transition-all ${
-                step >= 1
-                  ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/30'
-                  : 'bg-slate-200 text-slate-500'
+              className={`w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center ${
+                step >= 1 ? 'bg-[#111111] text-[#FFFDF8]' : 'bg-[#DDD9CF] text-[#8A8882]'
               }`}
             >
               1
             </div>
-            <span
-              className={`text-xs font-semibold ${
-                step >= 1 ? 'text-slate-900' : 'text-slate-400'
-              }`}
-            >
-              Data Ingest
-            </span>
+            <span className="text-xs font-medium text-[#111111]">Data Ingestion</span>
           </div>
 
-          <div
-            className={`flex-1 h-0.5 mx-3 transition-colors ${
-              step >= 2 ? 'bg-blue-600' : 'bg-slate-200'
-            }`}
-          />
+          <div className={`flex-1 h-0.5 mx-3 ${step >= 2 ? 'bg-[#111111]' : 'bg-[#DDD9CF]'}`} />
 
           <div className="flex items-center gap-2">
             <div
-              className={`w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center transition-all ${
-                step >= 2
-                  ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/30'
-                  : 'bg-slate-200 text-slate-500'
+              className={`w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center ${
+                step >= 2 ? 'bg-[#111111] text-[#FFFDF8]' : 'bg-[#DDD9CF] text-[#8A8882]'
               }`}
             >
               2
             </div>
-            <span
-              className={`text-xs font-semibold ${
-                step >= 2 ? 'text-slate-900' : 'text-slate-400'
-              }`}
-            >
-              Service Dossier & Rubric Audit
+            <span className={`text-xs font-medium ${step >= 2 ? 'text-[#111111]' : 'text-[#8A8882]'}`}>
+              Dossier Audit
             </span>
           </div>
 
-          <div
-            className={`flex-1 h-0.5 mx-3 transition-colors ${
-              step >= 3 ? 'bg-emerald-600' : 'bg-slate-200'
-            }`}
-          />
+          <div className={`flex-1 h-0.5 mx-3 ${step >= 3 ? 'bg-[#52745D]' : 'bg-[#DDD9CF]'}`} />
 
           <div className="flex items-center gap-2">
             <div
-              className={`w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center transition-all ${
-                step === 3
-                  ? 'bg-emerald-600 text-white shadow-sm shadow-emerald-500/30'
-                  : 'bg-slate-200 text-slate-500'
+              className={`w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center ${
+                step === 3 ? 'bg-[#52745D] text-white' : 'bg-[#DDD9CF] text-[#8A8882]'
               }`}
             >
               3
             </div>
-            <span
-              className={`text-xs font-semibold ${
-                step === 3 ? 'text-slate-900' : 'text-slate-400'
-              }`}
-            >
-              Profile Synchronized
+            <span className={`text-xs font-medium ${step === 3 ? 'text-[#52745D]' : 'text-[#8A8882]'}`}>
+              Initialized
             </span>
           </div>
         </div>
       </div>
 
-      {/* Main Content Area */}
-      <main className="max-w-4xl w-full mx-auto my-auto relative z-10 py-2">
+      {/* Main Container */}
+      <main className="max-w-3xl w-full mx-auto my-auto py-2">
         {error && (
-          <div className="mb-4 p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-2.5 shadow-xs">
-            <FiAlertCircle className="text-rose-600 text-base flex-shrink-0 mt-0.5" />
-            <div className="flex-1 font-medium">{error}</div>
+          <div className="mb-4 p-3 rounded-lg bg-[#F8E9E7] border border-[#E8C2BF] text-[#A54C45] text-xs flex items-center gap-2">
+            <FiAlertCircle className="text-sm flex-shrink-0" />
+            <span>{error}</span>
           </div>
         )}
 
-        {/* STEP 1: CHOOSE DATA INGESTION SOURCE */}
+        {/* STEP 1 */}
         {step === 1 && (
-          <GlassCard variant="solid" className="p-6 sm:p-9 border-white/80 shadow-glass-lg space-y-6">
-            <div className="text-center space-y-2 max-w-xl mx-auto">
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          <div className="rounded-2xl bg-[#FFFDF8] border border-[#DDD9CF] p-6 sm:p-8 space-y-6 shadow-xs">
+            <div className="text-center space-y-1 max-w-lg mx-auto">
+              <h1 className="text-xl sm:text-2xl font-bold text-[#111111] tracking-tight">
                 Officer Service Book Ingestion
               </h1>
-              <p className="text-xs sm:text-sm text-slate-600">
-                Synchronize past government postings, verified iGOT Karmayogi certifications, and APAR grading to initialize your role competency baseline.
+              <p className="text-xs text-[#62615D]">
+                Synchronize past postings, iGOT Karmayogi certifications, and APAR grading to initialize your role competency baseline.
               </p>
             </div>
 
             {/* Ingestion Source Tabs */}
-            <div className="flex items-center justify-center gap-2 border-b border-slate-200/80 pb-3">
+            <div className="flex items-center justify-center gap-2 border-b border-[#DDD9CF] pb-3">
               <button
                 type="button"
                 onClick={() => setActiveTab('ehrms')}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 ${
                   activeTab === 'ehrms'
-                    ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/30'
-                    : 'text-slate-600 hover:bg-slate-100'
+                    ? 'bg-[#111111] text-[#FFFDF8] font-semibold'
+                    : 'text-[#62615D] hover:bg-[#F8F6F0]'
                 }`}
               >
-                <FiDatabase className="text-sm" />
-                <span>e-HRMS 2.0 & iGOT Sync</span>
+                <FiDatabase className="text-xs" />
+                <span>e-HRMS 2.0 & iGOT</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setActiveTab('ai_parser')}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 ${
                   activeTab === 'ai_parser'
-                    ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/30'
-                    : 'text-slate-600 hover:bg-slate-100'
+                    ? 'bg-[#111111] text-[#FFFDF8] font-semibold'
+                    : 'text-[#62615D] hover:bg-[#F8F6F0]'
                 }`}
               >
-                <RiSparklingFill className="text-sm text-amber-500" />
-                <span>AI Service Book / CV Ingestion</span>
+                <RiSparklingFill className="text-xs text-amber-500" />
+                <span>AI Service Book Parser</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setActiveTab('digilocker')}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 ${
                   activeTab === 'digilocker'
-                    ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/30'
-                    : 'text-slate-600 hover:bg-slate-100'
+                    ? 'bg-[#111111] text-[#FFFDF8] font-semibold'
+                    : 'text-[#62615D] hover:bg-[#F8F6F0]'
                 }`}
               >
-                <FiShield className="text-sm text-emerald-500" />
+                <FiShield className="text-xs text-emerald-600" />
                 <span>DigiLocker Verification</span>
               </button>
             </div>
 
-            {/* TAB A: e-HRMS SYNC */}
+            {/* TAB: e-HRMS */}
             {activeTab === 'ehrms' && (
-              <div className="space-y-5 pt-2">
-                {/* Clean Dropdown for Profile Selection */}
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <label
-                      htmlFor="profilePresetSelect"
-                      className="block text-xs font-bold uppercase tracking-wider text-slate-700"
-                    >
-                      Select Civil Servant Record (e-HRMS 2.0 Repository)
-                    </label>
-                    <span className="text-[11px] text-blue-600 font-semibold">
-                      Digital Service Book
-                    </span>
-                  </div>
+              <div className="space-y-4 pt-1">
+                <div className="space-y-1.5">
+                  <label
+                    htmlFor="profilePresetSelect"
+                    className="block text-xs font-bold uppercase tracking-wider text-[#111111]"
+                  >
+                    Select Civil Servant Record (e-HRMS 2.0 Repository)
+                  </label>
 
-                  <div className="relative">
-                    <select
-                      id="profilePresetSelect"
-                      value={selectedPresetId}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        setSelectedPresetId(val);
-                        setCustomEmployeeId(val);
-                      }}
-                      className="w-full pl-3.5 pr-10 py-2.5 text-xs sm:text-sm rounded-xl bg-white/90 border border-slate-300 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 shadow-xs appearance-none cursor-pointer"
-                    >
-                      <option value="">-- Choose Officer Record from e-HRMS 2.0 Database --</option>
-                      {presets.map((p) => (
-                        <option key={p.employeeId} value={p.employeeId}>
-                          {p.name} — {p.cadre} ({p.targetMinistry} &bull; {p.employeeId})
-                        </option>
-                      ))}
-                    </select>
-                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500">
-                      <FiLayers className="text-sm" />
-                    </div>
-                  </div>
+                  <select
+                    id="profilePresetSelect"
+                    value={selectedPresetId}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setSelectedPresetId(val);
+                      setCustomEmployeeId(val);
+                    }}
+                    className="w-full px-3 py-2 text-xs rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-[#111111] font-medium focus:outline-none focus:border-[#111111]"
+                  >
+                    <option value="">-- Choose Officer Record from e-HRMS 2.0 Database --</option>
+                    {presets.map((p) => (
+                      <option key={p.employeeId} value={p.employeeId}>
+                        {p.name} — {p.cadre} ({p.targetMinistry} &bull; {p.employeeId})
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
-                {/* Selected Officer Preview Card */}
+                {/* Selected Officer Preview */}
                 {(() => {
                   const activePreset = presets.find((p) => p.employeeId === (selectedPresetId || customEmployeeId));
                   if (!activePreset) return null;
                   return (
-                    <div className="p-4 rounded-xl bg-gradient-to-br from-blue-50/70 via-indigo-50/40 to-slate-50/70 border border-blue-200/80 space-y-3 shadow-xs">
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white font-bold text-xs flex items-center justify-center shadow-xs flex-shrink-0">
-                            {activePreset.name.split(' ').map((n) => n[0]).join('').substring(0, 2).toUpperCase()}
-                          </div>
-                          <div>
-                            <div className="flex items-center gap-2">
-                              <span className="text-sm font-bold text-slate-900">{activePreset.name}</span>
-                              <GlassBadge variant="primary" size="xs">
-                                {activePreset.targetMinistry}
-                              </GlassBadge>
-                            </div>
-                            <p className="text-[11px] text-slate-500 font-medium">
-                              {activePreset.cadre} &bull; Batch {activePreset.batchYear} &bull; <span className="font-mono text-slate-600">{activePreset.employeeId}</span>
-                            </p>
-                          </div>
+                    <div className="p-4 rounded-xl bg-[#F8F6F0] border border-[#DDD9CF] space-y-2.5">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="text-sm font-bold text-[#111111]">{activePreset.name}</h3>
+                          <p className="text-[11px] text-[#62615D]">
+                            {activePreset.cadre} &bull; Batch {activePreset.batchYear} &bull; {activePreset.employeeId}
+                          </p>
                         </div>
-
-                        <GlassBadge variant="success" size="xs" dot>
-                          Verified Service Book
+                        <GlassBadge variant="success" size="xs">
+                          e-HRMS Synced
                         </GlassBadge>
                       </div>
 
                       {activePreset.pastAppraisalsSummary && (
-                        <div className="p-2.5 rounded-lg bg-white/80 border border-slate-200/70 text-[11px] text-slate-700 flex items-start gap-2">
-                          <FiAward className="text-blue-600 text-sm flex-shrink-0 mt-0.5" />
-                          <div>
-                            <strong className="text-slate-900">APAR / Performance Summary:</strong>{' '}
-                            <span>{activePreset.pastAppraisalsSummary}</span>
-                          </div>
-                        </div>
+                        <p className="text-[11px] text-[#62615D]">
+                          <strong>APAR / SPARROW:</strong> {activePreset.pastAppraisalsSummary}
+                        </p>
                       )}
 
-                      <div className="flex flex-wrap items-center justify-between gap-2 pt-1 text-[11px]">
-                        <div className="flex items-center gap-4 text-slate-600 font-medium">
-                          <span>
-                            <strong>{activePreset.serviceHistory?.length || 0}</strong> Prior Postings
-                          </span>
-                          <span>
-                            <strong>{activePreset.certifications?.length || 0}</strong> Verified Credentials
-                          </span>
-                          <span className="text-indigo-700">
-                            <strong>{activePreset.inferredCompetencies?.length || 4}</strong> Inferred Rubrics
-                          </span>
-                        </div>
-
-                        <button
-                          type="button"
-                          disabled={loading}
+                      <div className="flex items-center justify-between pt-1 border-t border-[#DDD9CF]/60 text-[11px] text-[#8A8882]">
+                        <span>{activePreset.serviceHistory?.length || 0} Postings &bull; {activePreset.certifications?.length || 0} Certifications</span>
+                        <GlassButton
+                          variant="primary"
+                          size="xs"
+                          loading={loading}
                           onClick={() => handleSyncEhrms(activePreset.employeeId)}
-                          className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-xs flex items-center gap-1.5 active:scale-95 disabled:opacity-50"
                         >
-                          <FiDatabase className="text-xs" />
-                          <span>Sync This Service Book</span>
-                          <FiArrowRight className="text-xs" />
-                        </button>
+                          Sync This Record &rarr;
+                        </GlassButton>
                       </div>
                     </div>
                   );
                 })()}
 
-                {/* Manual PRAN / Employee ID Input */}
-                <div className="pt-2 border-t border-slate-200/60 space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <label
-                      htmlFor="employeeId"
-                      className="block text-xs font-semibold text-slate-600"
-                    >
-                      Or Query by Government PRAN / Employee ID
-                    </label>
-                    <span className="text-[10px] text-slate-400 font-mono">e.g. GOI-MOSPI-2022-419</span>
-                  </div>
-
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                      <FiBriefcase className="text-base" />
-                    </div>
-                    <input
-                      id="employeeId"
-                      type="text"
-                      placeholder="Enter Employee ID / PRAN / Karma ID"
-                      value={customEmployeeId}
-                      onChange={(e) => {
-                        setCustomEmployeeId(e.target.value);
-                        setSelectedPresetId(e.target.value);
-                      }}
-                      className="w-full pl-10 pr-4 py-2 text-xs sm:text-sm rounded-xl bg-white/70 border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 font-mono"
-                    />
-                  </div>
+                {/* Manual PRAN */}
+                <div className="pt-2 border-t border-[#DDD9CF] space-y-1">
+                  <label htmlFor="employeeId" className="block text-xs text-[#62615D]">
+                    Or enter Government Employee ID / PRAN manually
+                  </label>
+                  <input
+                    id="employeeId"
+                    type="text"
+                    placeholder="e.g. GOI-MOSPI-2022-419"
+                    value={customEmployeeId}
+                    onChange={(e) => {
+                      setCustomEmployeeId(e.target.value);
+                      setSelectedPresetId(e.target.value);
+                    }}
+                    className="w-full px-3 py-1.5 text-xs rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-[#111111] font-mono focus:outline-none focus:border-[#111111]"
+                  />
                 </div>
 
                 <div className="pt-2 flex justify-end">
                   <GlassButton
                     variant="primary"
-                    size="lg"
+                    size="md"
                     iconRight={FiArrowRight}
                     loading={loading}
                     onClick={() => handleSyncEhrms()}
                   >
-                    {loading ? 'Connecting to e-HRMS 2.0...' : 'Sync Service Book & Review'}
+                    Sync Service Book & Review
                   </GlassButton>
                 </div>
               </div>
             )}
 
-            {/* TAB B: SMART AI DOCUMENT PARSER */}
+            {/* TAB: AI PARSER */}
             {activeTab === 'ai_parser' && (
-              <div className="space-y-4 pt-2">
-                <div className="space-y-2">
-                  <label
-                    htmlFor="sampleDossierSelect"
-                    className="block text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5"
-                  >
-                    <RiSparklingFill className="text-amber-500" />
-                    <span>Select Service Dossier / Resume (Demo Preview)</span>
+              <div className="space-y-3 pt-1">
+                <div className="space-y-1">
+                  <label htmlFor="sampleDossierSelect" className="block text-xs font-semibold text-[#111111]">
+                    Select Sample Dossier:
                   </label>
-
                   <select
                     id="sampleDossierSelect"
                     defaultValue=""
                     onChange={(e) => {
                       if (e.target.value) setPastedDossierText(e.target.value);
                     }}
-                    className="w-full px-3.5 py-2 text-xs rounded-xl bg-white/90 border border-slate-300 text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 shadow-xs cursor-pointer"
+                    className="w-full px-3 py-1.5 text-xs rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-[#111111]"
                   >
-                    <option value="">-- Choose Sample Service Dossier / Document --</option>
+                    <option value="">-- Choose Sample Document --</option>
                     {SAMPLE_DOSSIERS.map((s) => (
                       <option key={s.id} value={s.text}>
                         {s.label}
@@ -561,279 +447,149 @@ export default function OfficerOnboarding() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-xs font-semibold text-slate-600 block">
-                    Document Text (Past Postings, Achievements, Credentials)
+                  <label className="text-xs text-[#62615D] block">
+                    Or paste text from service book / resume:
                   </label>
                   <textarea
-                    rows={8}
-                    placeholder="Paste text from officer's physical service book, resume, transfer orders, or training certificates..."
+                    rows={6}
+                    placeholder="Paste service history, transfer orders, or training text here..."
                     value={pastedDossierText}
                     onChange={(e) => setPastedDossierText(e.target.value)}
-                    className="w-full p-3.5 rounded-xl bg-white/80 border border-slate-200 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 font-mono leading-relaxed"
+                    className="w-full p-3 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-xs text-[#111111] font-mono focus:outline-none focus:border-[#111111]"
                   />
-                </div>
-
-                <div className="p-3 rounded-xl bg-amber-50/70 border border-amber-200/70 text-[11px] text-amber-900 flex items-start gap-2">
-                  <RiSparklingFill className="text-amber-600 text-sm flex-shrink-0 mt-0.5" />
-                  <span>
-                    <strong>Karmayogi AI Parser:</strong> Automatically extracts postings, accredited trainings, and APAR marks, mapping them to official national competency rubrics.
-                  </span>
                 </div>
 
                 <div className="pt-2 flex justify-end">
                   <GlassButton
                     variant="primary"
-                    size="lg"
+                    size="md"
                     iconRight={RiSparklingFill}
                     loading={loading}
                     onClick={handleParseWithAi}
                   >
-                    {loading ? 'AI Analyzing Service Records...' : 'Analyze with Karmayogi AI'}
+                    Analyze with AI Parser
                   </GlassButton>
                 </div>
               </div>
             )}
 
-            {/* TAB C: DIGILOCKER */}
+            {/* TAB: DIGILOCKER */}
             {activeTab === 'digilocker' && (
-              <div className="space-y-5 pt-2">
-                <div className="text-center space-y-1.5 max-w-md mx-auto">
-                  <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto text-2xl shadow-sm mb-1">
-                    <FiShield />
-                  </div>
-                  <h3 className="text-base sm:text-lg font-bold text-slate-900">
-                    National Academic Depository (DigiLocker)
+              <div className="space-y-4 pt-1">
+                <div className="text-center space-y-1 max-w-sm mx-auto">
+                  <h3 className="text-sm font-bold text-[#111111]">
+                    DigiLocker / National Academic Depository
                   </h3>
-                  <p className="text-xs text-slate-600">
-                    Direct integration with DigiLocker to pull verified university degrees and professional credentials.
+                  <p className="text-xs text-[#62615D]">
+                    Direct verification of degrees and educational credentials.
                   </p>
                 </div>
 
-                {/* DigiLocker Credential Selector Dropdown */}
-                <div className="space-y-2">
-                  <label
-                    htmlFor="digilockerSelect"
-                    className="block text-xs font-bold uppercase tracking-wider text-slate-700"
-                  >
-                    Select Verified Credential (NAD / DigiLocker Registry)
-                  </label>
-
-                  <select
-                    id="digilockerSelect"
-                    defaultValue="GOI-NITI-2023-552"
-                    onChange={(e) => {
-                      if (e.target.value) handleSyncDigiLocker(e.target.value);
-                    }}
-                    className="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl bg-white/90 border border-slate-300 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 shadow-xs cursor-pointer"
-                  >
-                    <option value="">-- Choose Verified Credential to Ingest --</option>
-                    {DIGILOCKER_PRESETS.map((cert) => (
-                      <option key={cert.id} value={cert.employeeId}>
-                        {cert.name} — {cert.degree} ({cert.institution} &bull; Verified)
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Preview Cards for DigiLocker Credentials */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {DIGILOCKER_PRESETS.map((cert) => (
                     <div
                       key={cert.id}
-                      className="p-3.5 rounded-xl bg-white/90 border border-slate-200/80 hover:border-emerald-300 hover:bg-emerald-50/20 transition-all flex flex-col justify-between shadow-xs"
+                      className="p-3.5 rounded-xl bg-[#F8F6F0] border border-[#DDD9CF] space-y-1.5 flex flex-col justify-between"
                     >
-                      <div className="space-y-1">
+                      <div>
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-bold text-slate-900">{cert.name}</span>
-                          <GlassBadge variant="success" size="xs">
-                            {cert.ministry}
-                          </GlassBadge>
+                          <span className="text-xs font-bold text-[#111111]">{cert.name}</span>
+                          <span className="text-[10px] text-[#52745D] font-semibold">Verified</span>
                         </div>
-                        <p className="text-xs font-semibold text-emerald-800 leading-snug">
-                          {cert.degree}
-                        </p>
-                        <p className="text-[11px] text-slate-500">{cert.institution}</p>
-                        <div className="flex items-center gap-2 pt-0.5">
-                          <span className="text-[10px] text-slate-400 font-mono">
-                            ID: {cert.verificationId}
-                          </span>
-                          <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-0.5">
-                            <FiCheck className="text-xs" /> Verified
-                          </span>
-                        </div>
+                        <p className="text-xs font-medium text-[#111111]">{cert.degree}</p>
+                        <p className="text-[10px] text-[#62615D]">{cert.institution}</p>
                       </div>
 
-                      <div className="mt-2.5 pt-2 border-t border-slate-100 flex justify-end">
-                        <button
-                          type="button"
-                          disabled={loading}
+                      <div className="pt-2 border-t border-[#DDD9CF] flex justify-end">
+                        <GlassButton
+                          variant="primary"
+                          size="xs"
+                          loading={loading}
                           onClick={() => handleSyncDigiLocker(cert.employeeId)}
-                          className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-xs flex items-center gap-1 active:scale-95 disabled:opacity-50"
                         >
-                          <FiCheckCircle className="text-xs" />
-                          <span>Verify & Ingest</span>
-                        </button>
+                          Verify & Ingest
+                        </GlassButton>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
             )}
-          </GlassCard>
+          </div>
         )}
 
-        {/* STEP 2: REVIEW EXTRACTED DOSSIER & INFERRED RUBRICS */}
+        {/* STEP 2: REVIEW DOSSIER */}
         {step === 2 && dossier && (
-          <GlassCard variant="solid" className="p-6 sm:p-8 border-white/80 shadow-glass-lg space-y-6">
-            {/* Header / Identity Summary */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/80 pb-4">
-              <div className="flex items-center gap-3.5">
-                <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white font-bold text-lg flex items-center justify-center shadow-md">
-                  {dossier.name
-                    ?.split(' ')
-                    .map((n) => n[0])
-                    .join('')
-                    .substring(0, 2)
-                    .toUpperCase()}
+          <div className="rounded-2xl bg-[#FFFDF8] border border-[#DDD9CF] p-6 sm:p-8 space-y-5 shadow-xs">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#DDD9CF] pb-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-lg font-bold text-[#111111]">{dossier.name}</h2>
+                  <GlassBadge variant="success" size="xs">
+                    e-HRMS Verified
+                  </GlassBadge>
                 </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h2 className="text-xl font-extrabold text-slate-900">{dossier.name}</h2>
-                    <GlassBadge variant="success" size="xs" dot>
-                      e-HRMS Verified
-                    </GlassBadge>
-                  </div>
-                  <p className="text-xs text-slate-600 font-medium">
-                    {dossier.cadre || 'Civil Services'} &bull; Batch of {dossier.batchYear || 2021} &bull; {dossier.employeeId}
-                  </p>
-                </div>
+                <p className="text-xs text-[#62615D]">
+                  {dossier.cadre || 'Civil Services'} &bull; Batch of {dossier.batchYear || 2021} &bull; {dossier.employeeId}
+                </p>
               </div>
 
-              <div className="text-left sm:text-right">
-                <span className="text-[11px] text-slate-400 block">Assigned Ministry</span>
-                <span className="text-xs font-bold text-slate-900">
-                  {dossier.departmentName || 'MoSPI'}
-                </span>
-              </div>
+              <span className="text-xs font-semibold text-[#111111] bg-[#F8F6F0] px-2.5 py-1 rounded border border-[#DDD9CF]">
+                {dossier.departmentName || 'MoSPI'}
+              </span>
             </div>
 
-            {/* Performance & APAR Evaluation summary */}
             {dossier.pastAppraisalsSummary && (
-              <div className="p-3.5 rounded-xl bg-blue-50/80 border border-blue-200/80 text-xs text-blue-950 flex items-start gap-2.5">
-                <FiAward className="text-blue-600 text-base flex-shrink-0 mt-0.5" />
-                <div>
-                  <span className="font-bold block">Past Service Appraisal & SPARROW Record:</span>
-                  <span className="text-slate-700">{dossier.pastAppraisalsSummary}</span>
-                </div>
+              <div className="p-3 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-xs text-[#62615D]">
+                <strong className="text-[#111111]">APAR Performance Record:</strong> {dossier.pastAppraisalsSummary}
               </div>
             )}
 
-            {/* Past Postings Timeline */}
-            <div className="space-y-3">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                <FiBriefcase className="text-indigo-600" />
-                <span>Historical Postings & Ministry Records ({dossier.serviceHistory?.length || 0})</span>
+            {/* Postings */}
+            <div className="space-y-2">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#111111]">
+                Service History ({dossier.serviceHistory?.length || 0})
               </h3>
-
-              <div className="space-y-2.5">
+              <div className="space-y-2">
                 {(dossier.serviceHistory || []).map((post, idx) => (
-                  <div
-                    key={idx}
-                    className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 text-xs space-y-1.5"
-                  >
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-                      <span className="font-bold text-slate-900 text-sm">{post.designation}</span>
-                      <span className="text-[11px] font-semibold text-slate-500 bg-white px-2 py-0.5 rounded-md border border-slate-200 w-fit">
-                        {post.duration}
-                      </span>
+                  <div key={idx} className="p-3 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-xs space-y-0.5">
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-[#111111]">{post.designation}</span>
+                      <span className="text-[10px] text-[#8A8882]">{post.duration}</span>
                     </div>
-
-                    <p className="text-xs text-blue-800 font-semibold">{post.organization}</p>
-                    {post.domain && (
-                      <p className="text-[11px] text-slate-500">Domain: {post.domain}</p>
-                    )}
-
-                    {post.keyContributions && post.keyContributions.length > 0 && (
-                      <ul className="list-disc list-inside text-[11px] text-slate-600 pt-1 space-y-0.5">
-                        {post.keyContributions.map((kc, kIdx) => (
-                          <li key={kIdx}>{kc}</li>
-                        ))}
-                      </ul>
-                    )}
+                    <p className="text-[11px] text-[#3348A8]">{post.organization}</p>
+                    {post.domain && <p className="text-[10px] text-[#8A8882]">Domain: {post.domain}</p>}
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Verified Certifications (iGOT / ISTM / DigiLocker) */}
-            <div className="space-y-3">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                <FiCheckCircle className="text-emerald-600" />
-                <span>Verified Training & Educational Accreditations</span>
+            {/* Inferred Competencies */}
+            <div className="space-y-2">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#111111]">
+                Inferred Baseline Competencies
               </h3>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {(dossier.certifications || []).map((cert, idx) => (
-                  <div
-                    key={idx}
-                    className="p-3.5 rounded-xl bg-emerald-50/60 border border-emerald-200/70 text-xs flex items-start gap-2.5"
-                  >
-                    <FiAward className="text-emerald-700 text-base flex-shrink-0 mt-0.5" />
-                    <div className="space-y-0.5">
-                      <span className="font-bold text-slate-900 block leading-snug">{cert.title}</span>
-                      <span className="text-[11px] text-slate-600 block">{cert.issuingAuthority}</span>
-                      <div className="flex items-center gap-2 pt-1">
-                        <GlassBadge variant="success" size="xs">
-                          Verified Credential
-                        </GlassBadge>
-                        {cert.completionDate && (
-                          <span className="text-[10px] text-slate-400">
-                            {new Date(cert.completionDate).toLocaleDateString('en-IN', {
-                              year: 'numeric',
-                              month: 'short',
-                            })}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Inferred Competency Rubrics (Level 1 to 5) */}
-            <div className="space-y-3 pt-2">
-              <div className="flex items-center justify-between">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                  <RiSparklingFill className="text-amber-500" />
-                  <span>AI Inferred Baseline Competencies</span>
-                </h3>
-                <span className="text-[11px] text-slate-500">
-                  Calculated from past postings & certifications
-                </span>
-              </div>
-
               <div className="space-y-2">
                 {(dossier.inferredCompetencies || []).map((comp, idx) => (
                   <div
                     key={idx}
-                    className="p-3.5 rounded-xl bg-white border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
+                    className="p-3 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs"
                   >
-                    <div className="space-y-0.5 max-w-md">
-                      <span className="font-bold text-slate-900 block">{comp.competencyName}</span>
-                      <p className="text-[11px] text-slate-500 leading-snug">{comp.rationale}</p>
+                    <div>
+                      <span className="font-semibold text-[#111111] block">{comp.competencyName}</span>
+                      <p className="text-[11px] text-[#8A8882]">{comp.rationale}</p>
                     </div>
 
-                    <div className="flex items-center gap-2.5 self-end sm:self-center">
-                      <span className="text-[11px] text-slate-500 font-medium">Initial Score:</span>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <span className="text-[11px] text-[#62615D]">Baseline:</span>
                       <select
                         value={comp.suggestedLevel}
                         onChange={(e) => handleUpdateCompetencyLevel(idx, e.target.value)}
-                        className="px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-300 font-bold text-xs text-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        className="px-2 py-0.5 rounded bg-[#FFFDF8] border border-[#DDD9CF] font-bold text-xs text-[#111111]"
                       >
-                        <option value={1}>L1 - Beginner</option>
-                        <option value={2}>L2 - Basic</option>
-                        <option value={3}>L3 - Intermediate</option>
+                        <option value={1}>L1 - Basic</option>
+                        <option value={2}>L2 - Working</option>
+                        <option value={3}>L3 - Proficient</option>
                         <option value={4}>L4 - Advanced</option>
                         <option value={5}>L5 - Expert</option>
                       </select>
@@ -844,69 +600,68 @@ export default function OfficerOnboarding() {
             </div>
 
             {/* Actions */}
-            <div className="pt-4 border-t border-slate-200/80 flex items-center justify-between">
+            <div className="pt-3 border-t border-[#DDD9CF] flex items-center justify-between">
               <GlassButton
-                variant="outline"
-                size="md"
+                variant="secondary"
+                size="sm"
                 icon={FiArrowLeft}
                 onClick={() => setStep(1)}
               >
-                Change Source
+                Change Record
               </GlassButton>
 
               <GlassButton
                 variant="primary"
-                size="lg"
+                size="md"
                 iconRight={FiCheckCircle}
                 loading={loading}
                 onClick={handleCompleteOnboarding}
               >
-                {loading ? 'Initializing Officer Profile...' : 'Confirm & Complete Onboarding'}
+                Confirm & Complete Onboarding
               </GlassButton>
             </div>
-          </GlassCard>
+          </div>
         )}
 
-        {/* STEP 3: SUCCESS & LAUNCH DASHBOARD */}
+        {/* STEP 3: SUCCESS */}
         {step === 3 && (
-          <GlassCard variant="solid" className="p-8 sm:p-12 border-white/80 shadow-glass-lg text-center space-y-6 max-w-xl mx-auto">
-            <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto text-3xl shadow-sm">
+          <div className="rounded-2xl bg-[#FFFDF8] border border-[#DDD9CF] p-8 sm:p-10 text-center space-y-5 max-w-lg mx-auto shadow-xs">
+            <div className="w-12 h-12 rounded-full bg-[#EAF2EC] text-[#52745D] border border-[#C5DDCB] flex items-center justify-center mx-auto text-2xl">
               <FiCheckCircle />
             </div>
 
-            <div className="space-y-2">
-              <h2 className="text-2xl font-extrabold text-slate-900">
+            <div className="space-y-1">
+              <h2 className="text-xl font-bold text-[#111111]">
                 Welcome to Karmayogi AI, {onboardedUser?.name || 'Officer'}!
               </h2>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                Your past service dossier, <strong>e-HRMS postings</strong>, and accredited courses have been successfully mapped into your official government competency profile.
+              <p className="text-xs text-[#62615D]">
+                Your service dossier has been mapped to your official government competency profile.
               </p>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 text-left text-xs space-y-2">
+            <div className="p-4 rounded-xl bg-[#F8F6F0] border border-[#DDD9CF] text-left text-xs space-y-1.5">
               <div className="flex justify-between">
-                <span className="text-slate-500">Officer PRAN / ID:</span>
-                <span className="font-mono font-bold text-slate-900">{onboardedUser?.employeeId}</span>
+                <span className="text-[#8A8882]">Officer ID:</span>
+                <span className="font-mono font-semibold text-[#111111]">{onboardedUser?.employeeId}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Designation & Ministry:</span>
-                <span className="font-bold text-slate-900">
+                <span className="text-[#8A8882]">Designation:</span>
+                <span className="font-semibold text-[#111111]">
                   {onboardedUser?.positionId?.title || 'Statistical Officer'} &bull; {onboardedUser?.departmentId?.shortName || 'MoSPI'}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Baseline Competencies Initialized:</span>
-                <span className="font-bold text-emerald-700">
-                  {onboardedUser?.competencyProfile?.length || 3} Active Rubrics
+                <span className="text-[#8A8882]">Competencies Initialized:</span>
+                <span className="font-bold text-[#52745D]">
+                  {onboardedUser?.competencyProfile?.length || 3} Active
                 </span>
               </div>
             </div>
 
-            <div className="pt-2 flex flex-col sm:flex-row gap-2.5">
+            <div className="pt-2 flex flex-col sm:flex-row gap-2">
               <GlassButton
-                variant="outline"
-                size="lg"
-                icon={FiRefreshCw}
+                variant="secondary"
+                size="md"
                 onClick={() => {
                   setStep(1);
                   setDossier(null);
@@ -919,22 +674,22 @@ export default function OfficerOnboarding() {
 
               <GlassButton
                 variant="primary"
-                size="lg"
+                size="md"
                 iconRight={FiArrowRight}
                 onClick={() => navigate('/employee/dashboard')}
-                className="w-full justify-center shadow-md shadow-blue-500/20"
+                className="w-full justify-center"
               >
                 Enter Officer Dashboard
               </GlassButton>
             </div>
-          </GlassCard>
+          </div>
         )}
       </main>
 
       {/* Footer */}
-      <footer className="max-w-5xl mx-auto w-full text-center relative z-10 pt-4">
-        <p className="text-[11px] text-slate-400">
-          Karmayogi AI &bull; Smart India Hackathon 2026 Prototype &bull; Capacity Building Commission
+      <footer className="max-w-4xl mx-auto w-full text-center pt-4">
+        <p className="text-[10px] text-[#8A8882]">
+          Karmayogi AI &bull; National Civil Services Capacity Building Platform &bull; MoSPI
         </p>
       </footer>
     </div>

@@ -2,14 +2,11 @@ import React, { useEffect, useState } from 'react';
 import {
   FiHelpCircle,
   FiPlus,
-  FiEdit2,
   FiTrash2,
   FiSearch,
   FiRefreshCw,
   FiX,
   FiCheckCircle,
-  FiAward,
-  FiZap,
 } from 'react-icons/fi';
 import {
   getQuestionBank,
@@ -31,7 +28,6 @@ export default function AdminQuestions() {
   const [modalOpen, setModalOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  // Manual Question Create Form
   const [formData, setFormData] = useState({
     competencyId: '',
     difficulty: 3,
@@ -137,58 +133,53 @@ export default function AdminQuestions() {
   return (
     <div className="space-y-6 pb-12">
       {/* Header Banner */}
-      <GlassCard variant="solid" className="p-6 sm:p-8 border-white/80 space-y-2 shadow-glass">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <GlassBadge variant="purple" size="xs">
-                Question Bank
-              </GlassBadge>
-              <span className="text-xs text-slate-400 font-medium">
-                {questions.length} Production Items
-              </span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Approved Assessment Question Bank
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-600 max-w-2xl font-normal leading-relaxed">
-              Live repository of validated 4-option MCQs across all 6 competencies, serving employee evaluations and role readiness exams.
-            </p>
+      <div className="rounded-2xl bg-[#FFFDF8] border border-[#DDD9CF] p-5 sm:p-6 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-[#F8F6F0] text-[#62615D] border border-[#DDD9CF]">
+              {questions.length} Items in Production Bank
+            </span>
+            <span className="text-[11px] text-[#8A8882]">National Examination Items</span>
           </div>
-
-          <div className="flex items-center gap-3">
-            <GlassButton
-              variant="primary"
-              size="md"
-              icon={FiPlus}
-              className="bg-gradient-to-r from-indigo-700 to-slate-900 text-white"
-              onClick={handleOpenCreate}
-            >
-              Add Question
-            </GlassButton>
-            <GlassButton
-              variant="glass"
-              size="md"
-              icon={FiRefreshCw}
-              loading={loading}
-              onClick={loadData}
-            >
-              Refresh
-            </GlassButton>
-          </div>
+          <h1 className="text-xl sm:text-2xl font-bold text-[#111111] tracking-tight mt-1.5">
+            Approved Question Bank
+          </h1>
+          <p className="text-xs sm:text-sm text-[#62615D] mt-0.5">
+            Validated 4-option MCQs across all 6 core official competencies, serving role evaluations and readiness exams.
+          </p>
         </div>
-      </GlassCard>
 
-      {/* Search & Filters */}
-      <GlassCard className="p-4 flex flex-col md:flex-row items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <GlassButton
+            variant="primary"
+            size="sm"
+            icon={FiPlus}
+            onClick={handleOpenCreate}
+          >
+            Add Question
+          </GlassButton>
+          <GlassButton
+            variant="secondary"
+            size="sm"
+            icon={FiRefreshCw}
+            loading={loading}
+            onClick={loadData}
+          >
+            Refresh
+          </GlassButton>
+        </div>
+      </div>
+
+      {/* Toolbar */}
+      <div className="rounded-xl bg-[#FFFDF8] border border-[#DDD9CF] p-3.5 flex flex-col md:flex-row items-center justify-between gap-3 shadow-xs">
         <div className="relative w-full md:w-80">
-          <FiSearch className="absolute left-3.5 top-3 text-slate-400 text-sm" />
+          <FiSearch className="absolute left-3 top-2.5 text-[#8A8882] text-xs" />
           <input
             type="text"
             placeholder="Search by question text..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 rounded-xl bg-white/70 border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 font-medium"
+            className="w-full pl-9 pr-3 py-1.5 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-xs text-[#111111] placeholder:text-[#8A8882] focus:outline-none focus:border-[#111111]"
           />
         </div>
 
@@ -196,7 +187,7 @@ export default function AdminQuestions() {
           <select
             value={competencyFilter}
             onChange={(e) => setCompetencyFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-white/70 border border-slate-200 text-xs text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="px-3 py-1.5 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-xs text-[#111111] font-medium focus:outline-none"
           >
             <option value="all">All Competencies</option>
             {competencies.map((c) => (
@@ -209,79 +200,78 @@ export default function AdminQuestions() {
           <select
             value={difficultyFilter}
             onChange={(e) => setDifficultyFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-white/70 border border-slate-200 text-xs text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="px-3 py-1.5 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-xs text-[#111111] font-medium focus:outline-none"
           >
             <option value="all">All Difficulties</option>
-            <option value="1">Level 1 - Beginner</option>
-            <option value="2">Level 2 - Basic</option>
-            <option value="3">Level 3 - Intermediate</option>
-            <option value="4">Level 4 - Advanced</option>
-            <option value="5">Level 5 - Expert</option>
+            <option value="1">L1 - Basic</option>
+            <option value="2">L2 - Working</option>
+            <option value="3">L3 - Proficient</option>
+            <option value="4">L4 - Advanced</option>
+            <option value="5">L5 - Expert</option>
           </select>
         </div>
-      </GlassCard>
+      </div>
 
-      {/* Questions Cards */}
+      {/* Questions List */}
       {loading ? (
-        <div className="py-16 text-center text-xs text-slate-400 space-y-3">
-          <FiRefreshCw className="animate-spin text-indigo-600 text-2xl mx-auto" />
+        <div className="py-16 text-center text-xs text-[#8A8882] space-y-2">
+          <FiRefreshCw className="animate-spin text-[#111111] text-xl mx-auto" />
           <p>Loading questions from database...</p>
         </div>
       ) : filteredQuestions.length === 0 ? (
-        <GlassCard className="p-8 text-center text-xs text-slate-500">
+        <div className="rounded-xl bg-[#FFFDF8] border border-[#DDD9CF] p-8 text-center text-xs text-[#8A8882]">
           No approved questions match your search or filter.
-        </GlassCard>
+        </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {filteredQuestions.map((q, idx) => (
-            <GlassCard key={q._id || idx} className="p-6 space-y-4 border-white/80">
+            <div
+              key={q._id || idx}
+              className="rounded-xl bg-[#FFFDF8] border border-[#DDD9CF] p-5 space-y-3 shadow-xs"
+            >
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <GlassBadge variant="primary" size="xs">
+                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-[#F8F6F0] text-[#62615D] border border-[#DDD9CF]">
                       {q.competencyId?.name || 'Competency'}
-                    </GlassBadge>
-                    <span className="text-[11px] font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100">
-                      Level {q.difficulty || 3} Proficiency
+                    </span>
+                    <span className="text-[10px] font-semibold text-[#111111] bg-[#F8F6F0] px-1.5 py-0.5 rounded border border-[#DDD9CF]">
+                      Level {q.difficulty || 3}
                     </span>
                     <GlassBadge variant="success" size="xs">
-                      Approved Bank Item
+                      Active
                     </GlassBadge>
                   </div>
-                  <h3 className="text-sm sm:text-base font-bold text-slate-900 leading-snug pt-1">
+                  <h3 className="text-xs sm:text-sm font-bold text-[#111111] leading-snug pt-0.5">
                     {q.question}
                   </h3>
                 </div>
 
-                <div className="flex items-center gap-2 self-end sm:self-start">
-                  <button
-                    onClick={() => handleDelete(q._id)}
-                    className="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50"
-                    title="Delete Question"
-                  >
-                    <FiTrash2 className="text-sm" />
-                  </button>
-                </div>
+                <button
+                  onClick={() => handleDelete(q._id)}
+                  className="p-1.5 rounded text-[#8A8882] hover:text-[#A54C45] hover:bg-[#F8E9E7] transition-colors self-end sm:self-start"
+                  title="Delete Question"
+                >
+                  <FiTrash2 className="text-sm" />
+                </button>
               </div>
 
               {/* Options */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
                 {(q.options || []).map((opt) => {
                   const isCorrect = opt.id === q.correctAnswer;
                   return (
                     <div
                       key={opt.id}
-                      className={`p-3 rounded-xl border flex items-start gap-2.5 text-xs ${
+                      className={`p-2.5 rounded-lg border text-xs flex items-start gap-2 ${
                         isCorrect
-                          ? 'bg-emerald-50/80 border-emerald-300 text-emerald-950 font-bold'
-                          : 'bg-slate-50 border-slate-200 text-slate-700'
+                          ? 'bg-[#EAF2EC] border-[#C5DDCB] text-[#111111] font-semibold'
+                          : 'bg-[#F8F6F0] border-[#DDD9CF] text-[#62615D]'
                       }`}
                     >
                       <span
-                        className={`w-6 h-6 rounded-lg flex items-center justify-center font-bold text-[11px] flex-shrink-0 ${
-                          isCorrect
-                            ? 'bg-emerald-600 text-white shadow-xs'
-                            : 'bg-slate-200 text-slate-600'
+                        className={`w-5 h-5 rounded flex items-center justify-center font-bold text-[10px] flex-shrink-0 ${
+                          isCorrect ? 'bg-[#52745D] text-white' : 'bg-[#DDD9CF] text-[#111111]'
                         }`}
                       >
                         {opt.id}
@@ -291,33 +281,33 @@ export default function AdminQuestions() {
                   );
                 })}
               </div>
-            </GlassCard>
+            </div>
           ))}
         </div>
       )}
 
-      {/* CREATE MANUAL QUESTION MODAL */}
+      {/* CREATE QUESTION MODAL */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/25 backdrop-blur-xs">
-          <div className="relative w-full max-w-2xl max-h-[90vh] bg-white/95 backdrop-blur-md rounded-2xl border border-white/80 p-6 shadow-glass-lg space-y-4 overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-slate-200/60 pb-3">
-              <h3 className="text-base font-bold text-slate-900">Add Item to Question Bank</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/35 backdrop-blur-xs">
+          <div className="relative w-full max-w-xl max-h-[85vh] bg-[#FFFDF8] rounded-2xl border border-[#DDD9CF] p-6 shadow-xl space-y-4 overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-[#DDD9CF] pb-3">
+              <h3 className="text-sm font-bold text-[#111111]">Add Item to Question Bank</h3>
               <button
                 onClick={() => setModalOpen(false)}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-slate-600"
+                className="p-1 rounded text-[#8A8882] hover:text-[#111111]"
               >
-                <FiX className="text-lg" />
+                <FiX className="text-base" />
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4 text-left">
+            <form onSubmit={handleSubmit} className="space-y-3">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-700 uppercase">Competency</label>
+                  <label className="text-[11px] font-bold text-[#111111] uppercase">Competency</label>
                   <select
                     value={formData.competencyId}
                     onChange={(e) => setFormData({ ...formData, competencyId: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500/20"
+                    className="w-full px-3 py-1.5 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-xs text-[#111111]"
                   >
                     {competencies.map((c) => (
                       <option key={c._id} value={c._id}>
@@ -327,87 +317,79 @@ export default function AdminQuestions() {
                   </select>
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-700 uppercase">Difficulty Level</label>
+                  <label className="text-[11px] font-bold text-[#111111] uppercase">Difficulty Level</label>
                   <select
                     value={formData.difficulty}
                     onChange={(e) => setFormData({ ...formData, difficulty: Number(e.target.value) })}
-                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500/20"
+                    className="w-full px-3 py-1.5 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-xs text-[#111111]"
                   >
-                    <option value="1">Level 1 - Beginner</option>
-                    <option value="2">Level 2 - Basic</option>
-                    <option value="3">Level 3 - Intermediate</option>
-                    <option value="4">Level 4 - Advanced</option>
-                    <option value="5">Level 5 - Expert</option>
+                    <option value="1">L1 - Basic</option>
+                    <option value="2">L2 - Working</option>
+                    <option value="3">L3 - Proficient</option>
+                    <option value="4">L4 - Advanced</option>
+                    <option value="5">L5 - Expert</option>
                   </select>
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-700 uppercase">Question Prompt</label>
+                <label className="text-[11px] font-bold text-[#111111] uppercase">Question Prompt</label>
                 <textarea
                   rows="3"
                   required
                   placeholder="Enter the official question prompt..."
                   value={formData.question}
                   onChange={(e) => setFormData({ ...formData, question: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500/20"
+                  className="w-full p-2.5 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-xs text-[#111111]"
                 />
               </div>
 
-              <div className="space-y-2 pt-2 border-t border-slate-200/60">
-                <label className="text-xs font-bold text-slate-700 uppercase block">
-                  4 Multiple Choice Options (A, B, C, D)
+              <div className="space-y-2 pt-1 border-t border-[#DDD9CF]">
+                <label className="text-[11px] font-bold text-[#111111] uppercase block">
+                  4 Options (A, B, C, D)
                 </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="space-y-1">
-                    <span className="text-[11px] font-bold text-slate-600">Option A:</span>
-                    <input
-                      type="text"
-                      required
-                      value={formData.optionA}
-                      onChange={(e) => setFormData({ ...formData, optionA: e.target.value })}
-                      className="w-full px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-xs"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <span className="text-[11px] font-bold text-slate-600">Option B:</span>
-                    <input
-                      type="text"
-                      required
-                      value={formData.optionB}
-                      onChange={(e) => setFormData({ ...formData, optionB: e.target.value })}
-                      className="w-full px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-xs"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <span className="text-[11px] font-bold text-slate-600">Option C:</span>
-                    <input
-                      type="text"
-                      required
-                      value={formData.optionC}
-                      onChange={(e) => setFormData({ ...formData, optionC: e.target.value })}
-                      className="w-full px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-xs"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <span className="text-[11px] font-bold text-slate-600">Option D:</span>
-                    <input
-                      type="text"
-                      required
-                      value={formData.optionD}
-                      onChange={(e) => setFormData({ ...formData, optionD: e.target.value })}
-                      className="w-full px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-xs"
-                    />
-                  </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <input
+                    type="text"
+                    required
+                    placeholder="Option A"
+                    value={formData.optionA}
+                    onChange={(e) => setFormData({ ...formData, optionA: e.target.value })}
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-xs text-[#111111]"
+                  />
+                  <input
+                    type="text"
+                    required
+                    placeholder="Option B"
+                    value={formData.optionB}
+                    onChange={(e) => setFormData({ ...formData, optionB: e.target.value })}
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-xs text-[#111111]"
+                  />
+                  <input
+                    type="text"
+                    required
+                    placeholder="Option C"
+                    value={formData.optionC}
+                    onChange={(e) => setFormData({ ...formData, optionC: e.target.value })}
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-xs text-[#111111]"
+                  />
+                  <input
+                    type="text"
+                    required
+                    placeholder="Option D"
+                    value={formData.optionD}
+                    onChange={(e) => setFormData({ ...formData, optionD: e.target.value })}
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-xs text-[#111111]"
+                  />
                 </div>
               </div>
 
-              <div className="space-y-1 pt-2">
-                <label className="text-xs font-bold text-slate-700 uppercase">Correct Answer</label>
+              <div className="space-y-1 pt-1">
+                <label className="text-[11px] font-bold text-[#111111] uppercase">Correct Option</label>
                 <select
                   value={formData.correctAnswer}
                   onChange={(e) => setFormData({ ...formData, correctAnswer: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-emerald-800"
+                  className="w-full px-3 py-1.5 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-xs font-semibold text-[#111111]"
                 >
                   <option value="A">Option A</option>
                   <option value="B">Option B</option>
@@ -416,8 +398,8 @@ export default function AdminQuestions() {
                 </select>
               </div>
 
-              <div className="pt-3 border-t border-slate-200/60 flex justify-end gap-2">
-                <GlassButton variant="glass" size="sm" onClick={() => setModalOpen(false)}>
+              <div className="pt-2 border-t border-[#DDD9CF] flex justify-end gap-2">
+                <GlassButton variant="secondary" size="sm" onClick={() => setModalOpen(false)}>
                   Cancel
                 </GlassButton>
                 <GlassButton variant="primary" size="sm" type="submit" loading={submitting}>
@@ -428,7 +410,6 @@ export default function AdminQuestions() {
           </div>
         </div>
       )}
-
     </div>
   );
 }

@@ -14,22 +14,23 @@ export default function GlassCard({
   ...props
 }) {
   const variantStyles = {
-    default: 'bg-white border border-slate-200/80 shadow-xs',
-    solid: 'bg-white border border-slate-200 shadow-xs',
-    subtle: 'bg-slate-50/70 border border-slate-200/60 shadow-none',
-    tinted: 'bg-blue-50/60 border border-blue-100 shadow-xs',
-    danger: 'bg-rose-50/50 border border-rose-200/70 shadow-xs',
-    success: 'bg-emerald-50/50 border border-emerald-200/70 shadow-xs',
+    default: 'bg-[#FFFDF8] border border-[#DDD9CF] shadow-warm',
+    solid: 'bg-[#FFFDF8] border border-[#C9C4B8] shadow-warm',
+    subtle: 'bg-[#F8F6F0] border border-[#DDD9CF] shadow-none',
+    tinted: 'bg-[#E9EDFF]/60 border border-[#3348A8]/25 shadow-warm',
+    danger: 'bg-[#F8E9E7] border border-[#A54C45]/25 shadow-none',
+    success: 'bg-[#EAF2EC] border border-[#52745D]/25 shadow-none',
+    warning: 'bg-[#F7EEDC] border border-[#A8752E]/25 shadow-none',
   };
 
   const interactiveStyles = interactive
-    ? 'glass-card-interactive cursor-pointer active:scale-[0.99]'
+    ? 'cursor-pointer transition-all duration-150 hover:border-[#C9C4B8] hover:shadow-warm-md active:scale-[0.995]'
     : '';
 
   return (
     <div
       onClick={onClick}
-      className={`rounded-2xl ${variantStyles[variant] || variantStyles.default} ${padding} ${interactiveStyles} ${className}`}
+      className={`rounded-xl ${variantStyles[variant] || variantStyles.default} ${padding} ${interactiveStyles} ${className}`}
       {...props}
     >
       {children}

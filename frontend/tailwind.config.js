@@ -7,53 +7,45 @@ export default {
   theme: {
     extend: {
       colors: {
-        canvas: "#F4F7FB",
-        gov: {
-          50: "#F0F5FF",
-          100: "#E0ECFF",
-          200: "#B9D5FF",
-          300: "#7CAFFF",
-          400: "#3882FF",
-          500: "#0055D6",
-          600: "#0043B0",
-          700: "#00348C",
-          800: "#00286E",
-          900: "#001D52",
+        canvas: "#F4F1E9",
+        surface: {
+          DEFAULT: "#FFFDF8",
+          subtle: "#F8F6F0",
+          warm: "#F1EDE3",
         },
-        karmayogi: {
-          blue: "#1E40AF",
-          navy: "#0F172A",
-          slate: "#334155",
-          accent: "#0284C7",
-          cyan: "#06B6D4",
-          violet: "#6366F1",
-          lavender: "#8B5CF6",
-          emerald: "#059669",
-          amber: "#D97706",
-          rose: "#E11D48",
+        border: {
+          warm: "#DDD9CF",
+          strong: "#C9C4B8",
+          subtle: "#EAE6DC",
         },
-        glass: {
-          base: "rgba(255, 255, 255, 0.65)",
-          surface: "rgba(255, 255, 255, 0.75)",
-          solid: "rgba(255, 255, 255, 0.90)",
-          border: "rgba(255, 255, 255, 0.65)",
-          borderSubtle: "rgba(226, 232, 240, 0.70)",
-          highlight: "rgba(255, 255, 255, 0.85)",
-        }
-      },
-      boxShadow: {
-        glass: "0 8px 30px -4px rgba(31, 38, 135, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)",
-        "glass-sm": "0 4px 16px -2px rgba(31, 38, 135, 0.04), 0 1px 3px 0 rgba(0, 0, 0, 0.02)",
-        "glass-lg": "0 16px 40px -6px rgba(31, 38, 135, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.03)",
-        "glass-inset": "inset 0 1px 1px 0 rgba(255, 255, 255, 0.8)",
+        govText: {
+          primary: "#171717",
+          secondary: "#62615D",
+          muted: "#8A8882",
+        },
+        primaryBlack: "#111111",
+        accent: {
+          blue: "#3348A8",
+          light: "#E9EDFF",
+          dark: "#253685",
+        },
+        semantic: {
+          success: "#52745D",
+          successLight: "#EAF2EC",
+          warning: "#A8752E",
+          warningLight: "#F7EEDC",
+          danger: "#A54C45",
+          dangerLight: "#F8E9E7",
+        },
       },
       fontFamily: {
         sans: ["Inter", "system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
       },
-      backdropBlur: {
-        xs: "2px",
-        glass: "14px",
-      }
+      boxShadow: {
+        warm: "0 1px 3px 0 rgba(28, 25, 23, 0.04), 0 1px 2px -1px rgba(28, 25, 23, 0.02)",
+        "warm-md": "0 4px 12px -2px rgba(28, 25, 23, 0.06), 0 2px 4px -1px rgba(28, 25, 23, 0.03)",
+        "warm-lg": "0 12px 24px -4px rgba(28, 25, 23, 0.08), 0 4px 6px -2px rgba(28, 25, 23, 0.04)",
+      },
     },
   },
   plugins: [],

@@ -110,153 +110,167 @@ export default function Departments() {
   return (
     <div className="space-y-6 pb-12">
       {/* Header Banner */}
-      <GlassCard variant="solid" className="p-6 sm:p-8 border-white/80 space-y-2 shadow-glass">
+      <div className="rounded-2xl bg-[#FFFDF8] border border-[#DDD9CF] p-6 sm:p-8 space-y-3 shadow-xs">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
-              <GlassBadge variant="purple" size="xs">
+              <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#F8F6F0] text-[#62615D] border border-[#DDD9CF]">
                 Master Data
-              </GlassBadge>
-              <span className="text-xs text-slate-400 font-medium">
+              </span>
+              <span className="text-xs text-[#8A8882] font-medium">
                 {departments.length} Ministries & Departments
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#111111] tracking-tight">
               Departments & Ministries
             </h1>
-            <p className="text-xs sm:text-sm text-slate-600 max-w-2xl font-normal leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#62615D] max-w-2xl font-normal leading-relaxed">
               Administrative structures, ministries, and autonomous division hierarchy participating in civil services capacity building.
             </p>
           </div>
 
           <div className="flex items-center gap-3">
-            <GlassButton
-              variant="primary"
-              size="md"
-              icon={FiPlus}
-              className="bg-gradient-to-r from-indigo-700 to-slate-900 text-white"
+            <button
+              type="button"
               onClick={handleOpenCreate}
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#111111] hover:bg-[#222222] text-[#FFFDF8] text-xs font-semibold shadow-xs transition-colors"
             >
-              Add Department
-            </GlassButton>
-            <GlassButton
-              variant="glass"
-              size="md"
-              icon={FiRefreshCw}
-              loading={loading}
+              <FiPlus className="text-sm" />
+              <span>Add Department</span>
+            </button>
+            <button
+              type="button"
               onClick={loadData}
+              disabled={loading}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-[#FFFDF8] hover:bg-[#F8F6F0] text-[#111111] border border-[#DDD9CF] text-xs font-medium transition-colors shadow-xs disabled:opacity-50"
             >
-              Refresh
-            </GlassButton>
+              <FiRefreshCw className={`text-xs ${loading ? 'animate-spin' : ''}`} />
+              <span>Refresh</span>
+            </button>
           </div>
         </div>
-      </GlassCard>
+      </div>
 
       {/* Search Toolbar */}
-      <GlassCard className="p-4 flex items-center justify-between gap-3">
+      <div className="rounded-xl bg-[#FFFDF8] border border-[#DDD9CF] p-4 shadow-xs">
         <div className="relative w-full max-w-md">
-          <FiSearch className="absolute left-3.5 top-3 text-slate-400 text-sm" />
+          <FiSearch className="absolute left-3.5 top-3 text-[#8A8882] text-sm" />
           <input
             type="text"
             placeholder="Search by department name or acronym..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 rounded-xl bg-white/70 border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 font-medium"
+            className="w-full pl-10 pr-4 py-2 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-xs text-[#111111] placeholder:text-[#8A8882] focus:outline-none focus:border-[#111111] font-medium"
           />
         </div>
-      </GlassCard>
+      </div>
 
       {/* Departments Grid */}
       {loading ? (
-        <div className="py-16 text-center text-xs text-slate-400 space-y-3">
-          <FiRefreshCw className="animate-spin text-indigo-600 text-2xl mx-auto" />
+        <div className="py-16 text-center text-xs text-[#8A8882] space-y-3">
+          <FiRefreshCw className="animate-spin text-[#111111] text-2xl mx-auto" />
           <p>Loading departments from database...</p>
         </div>
       ) : filteredDepts.length === 0 ? (
-        <GlassCard className="p-8 text-center text-xs text-slate-500">
+        <div className="rounded-xl bg-[#FFFDF8] border border-[#DDD9CF] p-8 text-center text-xs text-[#62615D] shadow-xs">
           No departments found. Click "+ Add Department" to create one.
-        </GlassCard>
+        </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {filteredDepts.map((dept) => (
-            <GlassCard key={dept._id} className="p-6 space-y-4 flex flex-col justify-between">
+            <div key={dept._id} className="rounded-2xl bg-[#FFFDF8] border border-[#DDD9CF] p-6 space-y-4 flex flex-col justify-between shadow-xs hover:border-[#C9C4B8] transition-all">
               <div className="space-y-3">
-                <div className="flex items-start justify-between gap-2">
-                  <div className="space-y-1">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="space-y-1.5">
                     <div className="flex items-center gap-2">
-                      <GlassBadge variant="primary" size="xs">
-                        {dept.shortName || 'Govt Body'}
-                      </GlassBadge>
+                      <span className="px-2.5 py-0.5 rounded-md text-xs font-bold tracking-wide bg-[#F4F1E9] text-[#111111] border border-[#DDD9CF]">
+                        {dept.shortName || 'GOVT'}
+                      </span>
                       {dept.code && (
-                        <span className="text-[11px] font-mono text-slate-400">
+                        <span className="px-2 py-0.5 rounded-md text-[11px] font-mono font-medium text-[#62615D] bg-[#F8F6F0] border border-[#DDD9CF]">
                           {dept.code}
                         </span>
                       )}
                     </div>
-                    <h3 className="text-base font-bold text-slate-900 leading-snug">
+                    <h3 className="text-base sm:text-lg font-bold text-[#111111] leading-snug">
                       {dept.name}
                     </h3>
                   </div>
 
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-1.5 shrink-0">
                     <button
+                      type="button"
                       onClick={() => handleOpenEdit(dept)}
-                      className="p-2 rounded-xl text-slate-400 hover:text-indigo-600 hover:bg-indigo-50"
-                      title="Edit"
+                      className="p-1.5 rounded-lg text-[#62615D] hover:text-[#111111] hover:bg-[#F4F1E9] border border-[#DDD9CF] transition-colors"
+                      title="Edit Department"
                     >
-                      <FiEdit2 className="text-sm" />
+                      <FiEdit2 className="text-xs" />
                     </button>
                     <button
+                      type="button"
                       onClick={() => handleDelete(dept._id)}
-                      className="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50"
-                      title="Delete"
+                      className="p-1.5 rounded-lg text-[#8A8882] hover:text-[#A54C45] hover:bg-[#FDF2F2] border border-[#DDD9CF] hover:border-[#F5C2C0] transition-colors"
+                      title="Delete Department"
                     >
-                      <FiTrash2 className="text-sm" />
+                      <FiTrash2 className="text-xs" />
                     </button>
                   </div>
                 </div>
 
-                <p className="text-xs text-slate-600">
-                  {dept.description || 'Ministry unit participating in Mission Karmayogi workforce intelligence.'}
+                <p className="text-xs text-[#62615D] leading-relaxed line-clamp-2">
+                  {dept.description || 'Ministry unit participating in Mission Karmayogi civil services capacity building.'}
                 </p>
 
-                {/* Counts Pill */}
-                <div className="grid grid-cols-2 gap-2 p-3 rounded-xl bg-slate-50 border border-slate-200/60 text-center text-xs">
-                  <div>
-                    <span className="text-[10px] text-slate-400 font-bold uppercase block">Enrolled Officers</span>
-                    <span className="text-sm font-bold text-slate-800 flex items-center justify-center gap-1 mt-0.5">
-                      <FiUsers className="text-xs text-indigo-600" /> {dept.officerCount || 0}
-                    </span>
+                {/* Metrics Grid */}
+                <div className="grid grid-cols-2 gap-3 pt-1">
+                  <div className="px-3.5 py-2.5 rounded-xl bg-[#F8F6F0] border border-[#DDD9CF] flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-[#F4F1E9] border border-[#DDD9CF] flex items-center justify-center text-[#111111] shrink-0">
+                      <FiUsers className="text-sm" />
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-semibold uppercase tracking-wider text-[#8A8882] block">Enrolled Officers</span>
+                      <span className="text-sm font-bold text-[#111111] leading-none">{dept.officerCount || 0}</span>
+                    </div>
                   </div>
-                  <div className="border-l border-slate-200/80">
-                    <span className="text-[10px] text-slate-400 font-bold uppercase block">Positions</span>
-                    <span className="text-sm font-bold text-slate-800 flex items-center justify-center gap-1 mt-0.5">
-                      <FiBriefcase className="text-xs text-indigo-600" /> {dept.positionCount || 0}
-                    </span>
+                  <div className="px-3.5 py-2.5 rounded-xl bg-[#F8F6F0] border border-[#DDD9CF] flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-[#F4F1E9] border border-[#DDD9CF] flex items-center justify-center text-[#62615D] shrink-0">
+                      <FiBriefcase className="text-sm" />
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-semibold uppercase tracking-wider text-[#8A8882] block">Positions</span>
+                      <span className="text-sm font-bold text-[#111111] leading-none">{dept.positionCount || 0}</span>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="pt-2 border-t border-slate-200/50 flex items-center justify-between text-[11px] text-slate-500">
-                <span>Status: Active Ministry</span>
-                <span className="text-indigo-700 font-semibold">Mission Karmayogi Active</span>
+              <div className="pt-3 border-t border-[#DDD9CF] flex items-center justify-between text-xs">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-[#52745D]/10 text-[#52745D] border border-[#52745D]/20">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#52745D]"></span>
+                  Active Ministry
+                </span>
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-[#F8F6F0] text-[#62615D] border border-[#DDD9CF]">
+                  <FiCheckCircle className="text-xs text-[#52745D]" />
+                  Mission Karmayogi Active
+                </span>
               </div>
-            </GlassCard>
+            </div>
           ))}
         </div>
       )}
 
       {/* CREATE / EDIT MODAL */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/25 backdrop-blur-xs">
-          <div className="relative w-full max-w-md bg-white/95 backdrop-blur-md rounded-2xl border border-white/80 p-6 shadow-glass-lg space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-200/60 pb-3">
-              <h3 className="text-base font-bold text-slate-900">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
+          <div className="relative w-full max-w-md bg-[#FFFDF8] rounded-2xl border border-[#DDD9CF] p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-[#DDD9CF] pb-3">
+              <h3 className="text-base font-bold text-[#111111]">
                 {editingDept ? 'Edit Department' : 'Create Department'}
               </h3>
               <button
+                type="button"
                 onClick={() => setModalOpen(false)}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-slate-600"
+                className="p-1.5 rounded-lg text-[#8A8882] hover:text-[#111111]"
               >
                 <FiX className="text-lg" />
               </button>
@@ -264,59 +278,67 @@ export default function Departments() {
 
             <form onSubmit={handleSubmit} className="space-y-3.5 text-left">
               <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-700 uppercase">Department Full Name</label>
+                <label className="text-[11px] font-bold text-[#111111] uppercase tracking-wider">Department Full Name</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Ministry of Statistics and Programme Implementation"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500/20"
+                  className="w-full px-3 py-2 rounded-lg bg-[#FFFDF8] border border-[#DDD9CF] text-xs text-[#111111] focus:outline-none focus:border-[#111111]"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-700 uppercase">Acronym / Short</label>
+                  <label className="text-[11px] font-bold text-[#111111] uppercase tracking-wider">Acronym / Short</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. MoSPI"
                     value={formData.shortName}
                     onChange={(e) => setFormData({ ...formData, shortName: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500/20"
+                    className="w-full px-3 py-2 rounded-lg bg-[#FFFDF8] border border-[#DDD9CF] text-xs text-[#111111] focus:outline-none focus:border-[#111111]"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-700 uppercase">Code</label>
+                  <label className="text-[11px] font-bold text-[#111111] uppercase tracking-wider">Code</label>
                   <input
                     type="text"
                     placeholder="e.g. MOSPI-01"
                     value={formData.code}
                     onChange={(e) => setFormData({ ...formData, code: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500/20"
+                    className="w-full px-3 py-2 rounded-lg bg-[#FFFDF8] border border-[#DDD9CF] text-xs text-[#111111] focus:outline-none focus:border-[#111111]"
                   />
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-700 uppercase">Description</label>
+                <label className="text-[11px] font-bold text-[#111111] uppercase tracking-wider">Description</label>
                 <textarea
                   rows="3"
                   placeholder="Brief description of ministry mandate..."
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500/20"
+                  className="w-full px-3 py-2 rounded-lg bg-[#FFFDF8] border border-[#DDD9CF] text-xs text-[#111111] focus:outline-none focus:border-[#111111]"
                 />
               </div>
 
-              <div className="pt-3 border-t border-slate-200/60 flex justify-end gap-2">
-                <GlassButton variant="glass" size="sm" onClick={() => setModalOpen(false)}>
+              <div className="pt-3 border-t border-[#DDD9CF] flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setModalOpen(false)}
+                  className="px-3.5 py-2 rounded-lg bg-[#FFFDF8] hover:bg-[#F8F6F0] text-[#111111] border border-[#DDD9CF] text-xs font-medium"
+                >
                   Cancel
-                </GlassButton>
-                <GlassButton variant="primary" size="sm" type="submit" loading={submitting}>
-                  {editingDept ? 'Update Department' : 'Create Department'}
-                </GlassButton>
+                </button>
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="px-4 py-2 rounded-lg bg-[#111111] hover:bg-[#222222] text-[#FFFDF8] text-xs font-semibold shadow-xs disabled:opacity-50"
+                >
+                  {submitting ? 'Saving...' : editingDept ? 'Update Department' : 'Create Department'}
+                </button>
               </div>
             </form>
           </div>

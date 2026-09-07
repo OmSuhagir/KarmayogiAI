@@ -27,7 +27,6 @@ export default function EmployeeLogin() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Quick fill helper for prototype evaluation
   const handleFillDemo = () => {
     setEmail('rahul@example.com');
     setPassword('password123');
@@ -38,7 +37,6 @@ export default function EmployeeLogin() {
     e.preventDefault();
     setError('');
 
-    // Field validation
     if (!email.trim()) {
       setError('Please enter your government email address.');
       return;
@@ -67,74 +65,61 @@ export default function EmployeeLogin() {
   };
 
   return (
-    <div className="min-h-screen ambient-canvas bg-canvas text-slate-800 flex flex-col justify-between relative px-4 py-8 sm:py-12">
-      {/* Ambient Blurred Glowing Elements */}
-      <div className="ambient-glow-1" />
-      <div className="ambient-glow-2" />
-      <div className="ambient-glow-3" />
-
-      {/* Top Bar / Clean Header Branding */}
-      <header className="max-w-5xl mx-auto w-full flex items-center justify-between relative z-10">
+    <div className="min-h-screen bg-[#F4F1E9] text-[#171717] flex flex-col justify-between px-4 py-8 sm:py-12">
+      {/* Top Bar */}
+      <header className="max-w-4xl mx-auto w-full flex items-center justify-between pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
-            <RiGovernmentLine className="text-2xl" />
+          <div className="w-9 h-9 rounded-lg bg-[#111111] text-[#FFFDF8] flex items-center justify-center font-bold">
+            <RiGovernmentLine className="text-xl" />
           </div>
           <div>
-            <span className="text-lg font-extrabold text-slate-900 tracking-tight block leading-tight">
+            <span className="text-sm font-bold text-[#111111] tracking-tight block">
               Karmayogi AI
             </span>
-            <span className="text-[11px] text-slate-500 font-medium tracking-wide block">
-              Competency Intelligence Platform
+            <span className="text-[10px] text-[#8A8882] block">
+              Competency Intelligence Platform &middot; MoSPI
             </span>
           </div>
         </div>
 
-        <GlassBadge variant="primary" size="sm" icon={FiShield}>
+        <span className="text-xs font-semibold px-2.5 py-1 rounded bg-[#F8F6F0] text-[#62615D] border border-[#DDD9CF]">
           Officer Portal
-        </GlassBadge>
+        </span>
       </header>
 
-      {/* Main Glass Login Card */}
-      <main className="max-w-md w-full mx-auto my-auto relative z-10 py-6">
-        <GlassCard variant="solid" className="p-7 sm:p-9 border-white/80 shadow-glass-lg">
-          
-          {/* Card Header */}
-          <div className="text-center space-y-2 mb-6">
-            <div className="flex justify-center mb-1">
-              <GlassBadge variant="purple" size="sm">
-                Employee Portal
-              </GlassBadge>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Welcome back
+      {/* Main Login Card */}
+      <main className="max-w-md w-full mx-auto my-auto py-6">
+        <div className="rounded-2xl bg-[#FFFDF8] border border-[#DDD9CF] p-7 sm:p-9 shadow-xs space-y-6">
+          <div className="text-center space-y-1">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[#8A8882]">
+              Civil Services Authentication
+            </span>
+            <h1 className="text-2xl font-bold text-[#111111] tracking-tight">
+              Officer Sign In
             </h1>
-            <p className="text-xs sm:text-sm text-slate-600 font-normal">
-              Sign in to continue your role competency journey.
+            <p className="text-xs text-[#62615D]">
+              Access your role competency profile, skill gaps, and learning roadmap.
             </p>
           </div>
 
-          {/* Error Alert */}
           {error && (
-            <div className="mb-5 p-3.5 rounded-xl bg-rose-50/90 border border-rose-200/90 text-rose-800 text-xs flex items-start gap-2.5 shadow-xs">
-              <FiAlertCircle className="text-rose-600 text-base flex-shrink-0 mt-0.5" />
-              <div className="flex-1 font-medium">{error}</div>
+            <div className="p-3 rounded-lg bg-[#F8E9E7] border border-[#E8C2BF] text-[#A54C45] text-xs flex items-center gap-2">
+              <FiAlertCircle className="text-base flex-shrink-0" />
+              <span>{error}</span>
             </div>
           )}
 
-          {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            
-            {/* Email Input */}
-            <div className="space-y-1.5">
+            <div className="space-y-1">
               <label
                 htmlFor="email"
-                className="block text-xs font-semibold uppercase tracking-wider text-slate-700"
+                className="block text-xs font-bold uppercase tracking-wider text-[#111111]"
               >
                 Government Email
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                  <FiMail className="text-base" />
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#8A8882]">
+                  <FiMail className="text-sm" />
                 </div>
                 <input
                   id="email"
@@ -142,26 +127,23 @@ export default function EmployeeLogin() {
                   autoComplete="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="e.g. rahul@example.com"
+                  placeholder="rahul@example.com"
                   disabled={loading}
-                  className="w-full pl-10 pr-4 py-2.5 text-sm rounded-xl bg-white/70 border border-slate-200/80 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all backdrop-blur-xs disabled:opacity-50"
+                  className="w-full pl-9 pr-3 py-2 text-xs sm:text-sm rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-[#111111] placeholder:text-[#8A8882] focus:outline-none focus:border-[#111111]"
                 />
               </div>
             </div>
 
-            {/* Password Input */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <label
-                  htmlFor="password"
-                  className="block text-xs font-semibold uppercase tracking-wider text-slate-700"
-                >
-                  Password
-                </label>
-              </div>
+            <div className="space-y-1">
+              <label
+                htmlFor="password"
+                className="block text-xs font-bold uppercase tracking-wider text-[#111111]"
+              >
+                Password
+              </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                  <FiLock className="text-base" />
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#8A8882]">
+                  <FiLock className="text-sm" />
                 </div>
                 <input
                   id="password"
@@ -171,96 +153,71 @@ export default function EmployeeLogin() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
                   disabled={loading}
-                  className="w-full pl-10 pr-11 py-2.5 text-sm rounded-xl bg-white/70 border border-slate-200/80 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all backdrop-blur-xs disabled:opacity-50"
+                  className="w-full pl-9 pr-10 py-2 text-xs sm:text-sm rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-[#111111] placeholder:text-[#8A8882] focus:outline-none focus:border-[#111111]"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 focus:outline-none transition-colors"
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-[#8A8882] hover:text-[#111111]"
                 >
-                  {showPassword ? (
-                    <FiEyeOff className="text-base" />
-                  ) : (
-                    <FiEye className="text-base" />
-                  )}
+                  {showPassword ? <FiEyeOff /> : <FiEye />}
                 </button>
               </div>
             </div>
 
-            {/* Demo Helper Pill */}
-            <div className="pt-1">
-              <button
-                type="button"
-                onClick={handleFillDemo}
-                className="w-full py-1.5 px-3 rounded-lg bg-blue-50/60 hover:bg-blue-100/70 border border-blue-200/70 text-blue-800 text-[11px] font-medium flex items-center justify-center gap-1.5 transition-colors"
-              >
-                <FiKey className="text-xs" />
-                <span>Fill Demo Officer: <strong>rahul@example.com</strong></span>
-              </button>
-            </div>
+            {/* Quick Demo Pill */}
+            <button
+              type="button"
+              onClick={handleFillDemo}
+              className="w-full py-1.5 px-3 rounded bg-[#F8F6F0] hover:bg-[#EAE6DB] border border-[#DDD9CF] text-[#111111] text-xs font-medium flex items-center justify-center gap-1.5 transition-colors"
+            >
+              <FiKey className="text-xs" />
+              <span>Fill Demo Officer (rahul@example.com)</span>
+            </button>
 
-            {/* Submit Button */}
-            <div className="pt-2">
-              <GlassButton
-                type="submit"
-                variant="primary"
-                size="lg"
-                loading={loading}
-                iconRight={FiArrowRight}
-                className="w-full justify-center shadow-md shadow-blue-500/20"
-              >
-                {loading ? 'Signing in...' : 'Sign In to Portal'}
-              </GlassButton>
-            </div>
+            <GlassButton
+              type="submit"
+              variant="primary"
+              size="md"
+              loading={loading}
+              iconRight={FiArrowRight}
+              className="w-full justify-center"
+            >
+              {loading ? 'Signing in...' : 'Sign In to Portal'}
+            </GlassButton>
 
-            {/* Onboard Officer Callout */}
+            {/* Quick Link to Onboarding */}
             <div className="pt-2">
               <Link
                 to="/onboarding"
-                className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100/80 hover:to-indigo-100/80 border border-blue-200/80 text-blue-900 text-xs font-bold flex items-center justify-between transition-all shadow-xs group"
+                className="w-full p-3 rounded-xl bg-[#F8F6F0] hover:bg-[#EAE6DB] border border-[#DDD9CF] text-xs flex items-center justify-between transition-colors"
               >
-                <div className="flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-lg bg-blue-600 text-white flex items-center justify-center text-xs shadow-xs">
-                    +
-                  </span>
-                  <div className="text-left">
-                    <span className="block leading-tight">New Officer Joining?</span>
-                    <span className="text-[10px] text-blue-600 font-medium">
-                      Sync e-HRMS 2.0 & Service Book
-                    </span>
-                  </div>
+                <div>
+                  <span className="font-bold text-[#111111] block">New Officer Ingestion?</span>
+                  <span className="text-[11px] text-[#62615D]">e-HRMS 2.0 & Service Dossier</span>
                 </div>
-                <FiArrowRight className="text-blue-700 group-hover:translate-x-1 transition-transform" />
+                <FiArrowRight className="text-[#111111]" />
               </Link>
             </div>
           </form>
+        </div>
 
-          {/* Security & Access Note */}
-          <div className="mt-6 pt-5 border-t border-slate-200/60 flex items-center justify-center gap-2 text-[11px] text-slate-500">
-            <FiCheckCircle className="text-emerald-600 text-xs flex-shrink-0" />
-            <span>National Competency Framework for Civil Services</span>
-          </div>
-        </GlassCard>
-
-        {/* Distinct Separation to Admin Login */}
-        <div className="text-center mt-5">
-          <p className="text-xs text-slate-500">
+        <div className="text-center mt-4">
+          <p className="text-xs text-[#62615D]">
             Department Administrator or MDO Manager?{' '}
             <Link
               to="/login/admin"
-              className="text-blue-600 font-semibold hover:text-blue-800 hover:underline transition-colors ml-0.5"
+              className="font-semibold text-[#111111] hover:underline"
             >
-              Go to Admin Login
+              Admin Login &rarr;
             </Link>
           </p>
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="max-w-5xl mx-auto w-full text-center relative z-10 pt-4">
-        <p className="text-[11px] text-slate-400">
-          Karmayogi AI &bull; Smart India Hackathon 2026 Prototype &bull; Capacity Building Commission
+      <footer className="max-w-4xl mx-auto w-full text-center pt-4">
+        <p className="text-[10px] text-[#8A8882]">
+          Karmayogi AI &bull; National Civil Services Capacity Building Platform &bull; MoSPI
         </p>
       </footer>
     </div>

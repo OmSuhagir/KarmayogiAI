@@ -158,58 +158,57 @@ export default function AdminAssessments() {
   return (
     <div className="space-y-6 pb-12">
       {/* Header Banner */}
-      <GlassCard variant="solid" className="p-6 sm:p-8 border-white/80 space-y-2 shadow-glass">
+      <div className="rounded-2xl bg-[#FFFDF8] border border-[#DDD9CF] p-6 sm:p-8 space-y-3 shadow-xs">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
-              <GlassBadge variant="purple" size="xs">
+              <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#F8F6F0] text-[#62615D] border border-[#DDD9CF]">
                 Evaluation Blueprints
-              </GlassBadge>
-              <span className="text-xs text-slate-400 font-medium">
+              </span>
+              <span className="text-xs text-[#8A8882] font-medium">
                 {assessments.length} Active Blueprints
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#111111] tracking-tight">
               Role Assessment Blueprints & Governance
             </h1>
-            <p className="text-xs sm:text-sm text-slate-600 max-w-2xl font-normal leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#62615D] max-w-2xl font-normal leading-relaxed">
               Configure and publish competency assessments, set question allocations per rubric, and control examination timers for civil service officers.
             </p>
           </div>
 
           <div className="flex items-center gap-3">
-            <GlassButton
-              variant="primary"
-              size="md"
-              icon={FiPlus}
-              className="bg-gradient-to-r from-indigo-700 to-slate-900 text-white"
+            <button
+              type="button"
               onClick={handleOpenCreate}
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#111111] hover:bg-[#222222] text-[#FFFDF8] text-xs font-semibold shadow-xs transition-colors"
             >
-              Configure Assessment
-            </GlassButton>
-            <GlassButton
-              variant="glass"
-              size="md"
-              icon={FiRefreshCw}
-              loading={loading}
+              <FiPlus className="text-sm" />
+              <span>Configure Assessment</span>
+            </button>
+            <button
+              type="button"
               onClick={loadData}
+              disabled={loading}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-[#FFFDF8] hover:bg-[#F8F6F0] text-[#111111] border border-[#DDD9CF] text-xs font-medium transition-colors shadow-xs disabled:opacity-50"
             >
-              Refresh
-            </GlassButton>
+              <FiRefreshCw className={`text-xs ${loading ? 'animate-spin' : ''}`} />
+              <span>Refresh</span>
+            </button>
           </div>
         </div>
-      </GlassCard>
+      </div>
 
       {/* Assessments Grid */}
       {loading ? (
-        <div className="py-16 text-center text-xs text-slate-400 space-y-3">
-          <FiRefreshCw className="animate-spin text-indigo-600 text-2xl mx-auto" />
+        <div className="py-16 text-center text-xs text-[#8A8882] space-y-3">
+          <FiRefreshCw className="animate-spin text-[#111111] text-2xl mx-auto" />
           <p>Loading assessment blueprints from database...</p>
         </div>
       ) : assessments.length === 0 ? (
-        <GlassCard className="p-8 text-center text-xs text-slate-500">
+        <div className="rounded-xl bg-[#FFFDF8] border border-[#DDD9CF] p-8 text-center text-xs text-[#62615D] shadow-xs">
           No assessment blueprints configured. Click "+ Configure Assessment" to create one.
-        </GlassCard>
+        </div>
       ) : (
         <div className="space-y-4">
           {assessments.map((ass) => {
@@ -220,72 +219,79 @@ export default function AdminAssessments() {
             );
 
             return (
-              <GlassCard key={ass._id} className="p-6 space-y-4 border-white/80">
+              <div key={ass._id} className="rounded-2xl bg-[#FFFDF8] border border-[#DDD9CF] p-6 space-y-4 shadow-xs hover:border-[#C9C4B8] transition-all">
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
-                  <div className="space-y-1">
+                  <div className="space-y-1.5">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <GlassBadge variant={isActive ? 'success' : 'default'} size="xs" dot>
+                      <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
+                        isActive
+                          ? 'bg-[#52745D]/10 text-[#52745D] border-[#52745D]/20'
+                          : 'bg-[#F8F6F0] text-[#62615D] border-[#DDD9CF]'
+                      }`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${isActive ? 'bg-[#52745D]' : 'bg-[#8A8882]'}`}></span>
                         {isActive ? 'Published & Active' : 'Draft / Unpublished'}
-                      </GlassBadge>
+                      </span>
 
-                      <GlassBadge variant="primary" size="xs">
-                        {ass.positionId?.title || 'Statistical Officer'}
-                      </GlassBadge>
+                      <span className="px-2.5 py-0.5 rounded-md text-xs font-bold tracking-wide uppercase bg-[#F4F1E9] text-[#111111] border border-[#DDD9CF]">
+                        {ass.positionId?.title || 'Civil Service Cadre'}
+                      </span>
 
-                      <span className="text-xs text-slate-500 font-medium flex items-center gap-1">
-                        <FiClock className="text-xs" /> {ass.durationMinutes || 45} mins
+                      <span className="px-2 py-0.5 rounded-md text-xs font-medium text-[#62615D] bg-[#F8F6F0] border border-[#DDD9CF] inline-flex items-center gap-1">
+                        <FiClock className="text-xs text-[#62615D]" /> {ass.durationMinutes || 45} mins
                       </span>
                     </div>
 
-                    <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug pt-1">
+                    <h3 className="text-base sm:text-lg font-bold text-[#111111] leading-snug pt-0.5">
                       {ass.title}
                     </h3>
                   </div>
 
-                  <div className="flex items-center gap-2 self-end sm:self-start">
+                  <div className="flex items-center gap-2 self-end sm:self-start shrink-0">
                     <button
+                      type="button"
                       onClick={() => handleToggleStatus(ass)}
                       className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
                         isActive
-                          ? 'bg-amber-50 text-amber-800 border-amber-200 hover:bg-amber-100'
-                          : 'bg-emerald-600 text-white border-transparent hover:bg-emerald-700'
+                          ? 'bg-[#FFFDF8] text-[#62615D] hover:bg-[#F8F6F0] border-[#DDD9CF]'
+                          : 'bg-[#111111] text-[#FFFDF8] hover:bg-[#222222] border-[#111111]'
                       }`}
                     >
                       {isActive ? 'Unpublish' : 'Publish'}
                     </button>
 
                     <button
+                      type="button"
                       onClick={() => handleDelete(ass._id)}
-                      className="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50"
+                      className="p-1.5 rounded-lg text-[#8A8882] hover:text-[#A54C45] hover:bg-[#FDF2F2] border border-[#DDD9CF] hover:border-[#F5C2C0] transition-colors"
                       title="Delete Assessment"
                     >
-                      <FiTrash2 className="text-sm" />
+                      <FiTrash2 className="text-xs" />
                     </button>
                   </div>
                 </div>
 
-                {/* Competency Allocation Pills */}
-                <div className="pt-2">
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">
+                {/* Competency Allocation Badges */}
+                <div className="pt-3 border-t border-[#DDD9CF]">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-[#8A8882] mb-2.5">
                     Competency Question Allocation ({totalQuestions} total items):
                   </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
                     {(ass.competencies || []).map((c, cIdx) => (
                       <div
                         key={c.competencyId?._id || cIdx}
-                        className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center justify-between text-xs"
+                        className="px-3.5 py-2.5 rounded-xl bg-[#F8F6F0] border border-[#DDD9CF] flex items-center justify-between text-xs hover:border-[#C9C4B8] transition-colors"
                       >
-                        <span className="font-semibold text-slate-800 truncate pr-2">
+                        <span className="font-semibold text-[#111111] truncate pr-2">
                           {c.competencyId?.name || 'Competency'}
                         </span>
-                        <span className="text-[11px] font-bold text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded">
+                        <span className="px-2.5 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider bg-[#FFFDF8] text-[#111111] border border-[#DDD9CF] shrink-0">
                           {c.questionCount} Questions
                         </span>
                       </div>
                     ))}
                   </div>
                 </div>
-              </GlassCard>
+              </div>
             );
           })}
         </div>
@@ -293,40 +299,41 @@ export default function AdminAssessments() {
 
       {/* CONFIGURE ASSESSMENT MODAL */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/25 backdrop-blur-xs">
-          <div className="relative w-full max-w-2xl max-h-[90vh] bg-white/95 backdrop-blur-md rounded-2xl border border-white/80 p-6 shadow-glass-lg space-y-4 overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-slate-200/60 pb-3">
-              <h3 className="text-base font-bold text-slate-900">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
+          <div className="relative w-full max-w-2xl max-h-[90vh] bg-[#FFFDF8] rounded-2xl border border-[#DDD9CF] p-6 shadow-2xl space-y-4 overflow-y-auto text-left">
+            <div className="flex items-center justify-between border-b border-[#DDD9CF] pb-3">
+              <h3 className="text-base font-bold text-[#111111]">
                 Configure Assessment Blueprint
               </h3>
               <button
+                type="button"
                 onClick={() => setModalOpen(false)}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-slate-600"
+                className="p-1.5 rounded-lg text-[#8A8882] hover:text-[#111111]"
               >
                 <FiX className="text-lg" />
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4 text-left">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-700 uppercase">Assessment Title</label>
+                <label className="text-[11px] font-bold text-[#111111] uppercase tracking-wider">Assessment Title</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Statistical Officer Baseline Evaluation"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500/20"
+                  className="w-full px-3 py-2 rounded-lg bg-[#FFFDF8] border border-[#DDD9CF] text-xs text-[#111111] focus:outline-none focus:border-[#111111]"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-700 uppercase">Target Position</label>
+                  <label className="text-[11px] font-bold text-[#111111] uppercase tracking-wider">Target Position</label>
                   <select
                     value={formData.positionId}
                     onChange={(e) => setFormData({ ...formData, positionId: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500/20"
+                    className="w-full px-3 py-2 rounded-lg bg-[#FFFDF8] border border-[#DDD9CF] text-xs text-[#111111] focus:outline-none focus:border-[#111111]"
                   >
                     {positions.map((p) => (
                       <option key={p._id} value={p._id}>
@@ -336,31 +343,31 @@ export default function AdminAssessments() {
                   </select>
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-700 uppercase">Duration (Minutes)</label>
+                  <label className="text-[11px] font-bold text-[#111111] uppercase tracking-wider">Duration (Minutes)</label>
                   <input
                     type="number"
                     min="10"
                     max="180"
                     value={formData.durationMinutes}
                     onChange={(e) => setFormData({ ...formData, durationMinutes: Number(e.target.value) })}
-                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500/20"
+                    className="w-full px-3 py-2 rounded-lg bg-[#FFFDF8] border border-[#DDD9CF] text-xs text-[#111111] focus:outline-none focus:border-[#111111]"
                   />
                 </div>
               </div>
 
               {/* Competency Question Allocation List */}
-              <div className="space-y-2 pt-2 border-t border-slate-200/60">
-                <label className="text-xs font-bold text-slate-700 uppercase block">
+              <div className="space-y-2 pt-2 border-t border-[#DDD9CF]">
+                <label className="text-[11px] font-bold text-[#111111] uppercase tracking-wider block">
                   Select Competencies & Allocate Item Counts
                 </label>
                 <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
                   {formData.competencyList.map((comp, idx) => (
                     <div
                       key={comp.competencyId}
-                      className={`p-3 rounded-xl border transition-all flex items-center justify-between gap-3 text-xs ${
+                      className={`p-3 rounded-lg border transition-all flex items-center justify-between gap-3 text-xs ${
                         comp.included
-                          ? 'bg-indigo-50/70 border-indigo-200 text-indigo-950'
-                          : 'bg-slate-50 border-slate-200 text-slate-500'
+                          ? 'bg-[#F8F6F0] border-[#DDD9CF] text-[#111111]'
+                          : 'bg-[#FFFDF8] border-[#DDD9CF]/50 text-[#8A8882]'
                       }`}
                     >
                       <label className="flex items-center gap-2.5 cursor-pointer flex-1 min-w-0">
@@ -368,21 +375,21 @@ export default function AdminAssessments() {
                           type="checkbox"
                           checked={comp.included}
                           onChange={() => handleToggleCompetency(idx)}
-                          className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500"
+                          className="w-4 h-4 rounded text-[#111111] focus:ring-[#111111]"
                         />
-                        <span className="font-bold truncate">{comp.name}</span>
+                        <span className="font-semibold truncate">{comp.name}</span>
                       </label>
 
                       {comp.included && (
                         <div className="flex items-center gap-2 flex-shrink-0">
-                          <span className="text-[11px] font-semibold text-slate-500">Items:</span>
+                          <span className="text-[11px] font-medium text-[#62615D]">Items:</span>
                           <input
                             type="number"
                             min="1"
                             max="10"
                             value={comp.questionCount}
                             onChange={(e) => handleCountChange(idx, e.target.value)}
-                            className="w-14 px-2 py-1 rounded-lg bg-white border border-indigo-200 text-xs font-bold text-indigo-900 text-center"
+                            className="w-14 px-2 py-1 rounded bg-[#FFFDF8] border border-[#DDD9CF] text-xs font-semibold text-[#111111] text-center focus:outline-none"
                           />
                         </div>
                       )}
@@ -391,13 +398,21 @@ export default function AdminAssessments() {
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-slate-200/60 flex justify-end gap-2">
-                <GlassButton variant="glass" size="sm" onClick={() => setModalOpen(false)}>
+              <div className="pt-3 border-t border-[#DDD9CF] flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setModalOpen(false)}
+                  className="px-3.5 py-2 rounded-lg bg-[#FFFDF8] hover:bg-[#F8F6F0] text-[#111111] border border-[#DDD9CF] text-xs font-medium"
+                >
                   Cancel
-                </GlassButton>
-                <GlassButton variant="primary" size="sm" type="submit" loading={submitting}>
+                </button>
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="px-4 py-2 rounded-lg bg-[#111111] hover:bg-[#222222] text-[#FFFDF8] text-xs font-semibold shadow-xs disabled:opacity-50"
+                >
                   Save Blueprint
-                </GlassButton>
+                </button>
               </div>
             </form>
           </div>

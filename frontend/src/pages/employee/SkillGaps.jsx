@@ -6,14 +6,13 @@ import {
   FiArrowRight,
   FiZap,
   FiRefreshCw,
-  FiTrendingUp,
-  FiShield,
 } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 import { getEmployeeCompetencyAudit } from '../../services/employeeService';
 import GlassCard from '../../components/common/GlassCard';
 import GlassButton from '../../components/common/GlassButton';
 import GlassBadge from '../../components/common/GlassBadge';
+import ProficiencyScale from '../../components/common/ProficiencyScale';
 
 export default function SkillGaps() {
   const { user } = useAuth();
@@ -41,6 +40,12 @@ export default function SkillGaps() {
     loadGaps();
   }, [user?._id]);
 
+  const totalGaps = competencies.filter((c) => (c.gap || 0) > 0).length;
+  const criticalCount = competencies.filter((c) => (c.gap || 0) >= 3).length;
+  const highCount = competencies.filter((c) => (c.gap || 0) === 2).length;
+  const mediumCount = competencies.filter((c) => (c.gap || 0) === 1).length;
+  const metCount = competencies.filter((c) => (c.gap || 0) <= 0).length;
+
   const filteredItems = competencies.filter((item) => {
     const gap = item.gap || 0;
     if (activeFilter === 'all') return true;
@@ -51,177 +56,201 @@ export default function SkillGaps() {
     return true;
   });
 
-  const totalGaps = competencies.filter((c) => (c.gap || 0) > 0).length;
-  const criticalCount = competencies.filter((c) => (c.gap || 0) >= 3).length;
-  const highCount = competencies.filter((c) => (c.gap || 0) === 2).length;
-  const mediumCount = competencies.filter((c) => (c.gap || 0) === 1).length;
-
   return (
     <div className="space-y-6 pb-12">
       {/* Header Banner */}
-      <GlassCard variant="solid" className="p-6 sm:p-8 border-white/80">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <GlassBadge variant="high" size="xs" dot>
-                Gap Intelligence
-              </GlassBadge>
-              <span className="text-xs text-slate-400 font-medium">
-                {totalGaps} Identified Gaps
-              </span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Skill Gap Analysis
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-600 max-w-2xl font-normal leading-relaxed">
-              Priority is assigned dynamically to guide personalized capacity building.
-            </p>
+      <div className="rounded-2xl bg-[#FFFDF8] border border-[#DDD9CF] p-5 sm:p-6 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-[#F8F6F0] text-[#62615D] border border-[#DDD9CF]">
+              {totalGaps} Identified Gaps
+            </span>
+            <span className="text-[11px] text-[#8A8882]">Prioritized for Capacity Building</span>
           </div>
-
-          <GlassButton
-            variant="primary"
-            size="md"
-            icon={FiZap}
-            onClick={() => navigate('/employee/recommendations')}
-          >
-            Recommended Learning
-          </GlassButton>
+          <h1 className="text-xl sm:text-2xl font-bold text-[#111111] tracking-tight">
+            Capability Gaps
+          </h1>
+          <p className="text-xs sm:text-sm text-[#62615D]">
+            Delta between your current evaluated proficiency and the benchmark levels required for your MoSPI cadre.
+          </p>
         </div>
-      </GlassCard>
+
+        <GlassButton
+          variant="primary"
+          size="sm"
+          iconRight={FiArrowRight}
+          onClick={() => navigate('/employee/recommendations')}
+        >
+          View Recommended Learning
+        </GlassButton>
+      </div>
+
+      {/* Summary KPI Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="p-3.5 rounded-xl bg-[#FFFDF8] border border-[#DDD9CF] space-y-1">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-[#8A8882]">Total Gaps</span>
+          <div className="text-2xl font-bold text-[#111111]">{totalGaps}</div>
+          <span className="text-[11px] text-[#62615D]">Requires progression</span>
+        </div>
+
+        <div className="p-3.5 rounded-xl bg-[#FFFDF8] border border-[#DDD9CF] space-y-1">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-[#A54C45]">Critical (+3 Lvls)</span>
+          <div className="text-2xl font-bold text-[#A54C45]">{criticalCount}</div>
+          <span className="text-[11px] text-[#62615D]">High urgency</span>
+        </div>
+
+        <div className="p-3.5 rounded-xl bg-[#FFFDF8] border border-[#DDD9CF] space-y-1">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-[#A8752E]">High Priority (+2)</span>
+          <div className="text-2xl font-bold text-[#A8752E]">{highCount}</div>
+          <span className="text-[11px] text-[#62615D]">Target this quarter</span>
+        </div>
+
+        <div className="p-3.5 rounded-xl bg-[#FFFDF8] border border-[#DDD9CF] space-y-1">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-[#52745D]">Benchmarks Met</span>
+          <div className="text-2xl font-bold text-[#52745D]">{metCount}</div>
+          <span className="text-[11px] text-[#62615D]">Certified proficient</span>
+        </div>
+      </div>
 
       {/* Filter Tabs */}
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
         <button
+          type="button"
           onClick={() => setActiveFilter('all')}
-          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${activeFilter === 'all'
-            ? 'bg-blue-600 text-white shadow-xs'
-            : 'bg-white/70 text-slate-600 hover:bg-white border border-white/80'
-            }`}
+          className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+            activeFilter === 'all'
+              ? 'bg-[#111111] text-[#FFFDF8] font-semibold'
+              : 'bg-[#FFFDF8] text-[#62615D] hover:text-[#111111] border border-[#DDD9CF]'
+          }`}
         >
-          All Competencies ({competencies.length})
+          All ({competencies.length})
         </button>
         <button
+          type="button"
           onClick={() => setActiveFilter('critical')}
-          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${activeFilter === 'critical'
-            ? 'bg-rose-600 text-white shadow-xs'
-            : 'bg-white/70 text-rose-700 hover:bg-white border border-white/80'
-            }`}
+          className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+            activeFilter === 'critical'
+              ? 'bg-[#111111] text-[#FFFDF8] font-semibold'
+              : 'bg-[#FFFDF8] text-[#62615D] hover:text-[#111111] border border-[#DDD9CF]'
+          }`}
         >
           Critical ({criticalCount})
         </button>
         <button
+          type="button"
           onClick={() => setActiveFilter('high')}
-          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${activeFilter === 'high'
-            ? 'bg-amber-600 text-white shadow-xs'
-            : 'bg-white/70 text-amber-800 hover:bg-white border border-white/80'
-            }`}
+          className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+            activeFilter === 'high'
+              ? 'bg-[#111111] text-[#FFFDF8] font-semibold'
+              : 'bg-[#FFFDF8] text-[#62615D] hover:text-[#111111] border border-[#DDD9CF]'
+          }`}
         >
           High Priority ({highCount})
         </button>
         <button
+          type="button"
           onClick={() => setActiveFilter('medium')}
-          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${activeFilter === 'medium'
-            ? 'bg-sky-600 text-white shadow-xs'
-            : 'bg-white/70 text-sky-800 hover:bg-white border border-white/80'
-            }`}
+          className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+            activeFilter === 'medium'
+              ? 'bg-[#111111] text-[#FFFDF8] font-semibold'
+              : 'bg-[#FFFDF8] text-[#62615D] hover:text-[#111111] border border-[#DDD9CF]'
+          }`}
         >
           Medium ({mediumCount})
         </button>
         <button
+          type="button"
           onClick={() => setActiveFilter('met')}
-          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${activeFilter === 'met'
-            ? 'bg-emerald-600 text-white shadow-xs'
-            : 'bg-white/70 text-emerald-800 hover:bg-white border border-white/80'
-            }`}
+          className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+            activeFilter === 'met'
+              ? 'bg-[#111111] text-[#FFFDF8] font-semibold'
+              : 'bg-[#FFFDF8] text-[#62615D] hover:text-[#111111] border border-[#DDD9CF]'
+          }`}
         >
-          Target Met ({competencies.length - totalGaps})
+          Benchmarks Met ({metCount})
         </button>
       </div>
 
-      {/* Gap Cards Grid */}
+      {/* Gaps List / Grid */}
       {loading ? (
-        <div className="py-16 text-center text-xs text-slate-400 space-y-3">
-          <FiRefreshCw className="animate-spin text-blue-600 text-2xl mx-auto" />
+        <div className="py-16 text-center text-xs text-[#8A8882] space-y-2">
+          <FiRefreshCw className="animate-spin text-[#111111] text-xl mx-auto" />
           <p>Analyzing skill gaps...</p>
         </div>
+      ) : filteredItems.length === 0 ? (
+        <div className="py-12 text-center text-xs text-[#8A8882]">
+          No competencies match the selected filter.
+        </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {filteredItems.map((item, idx) => {
             const comp = item.competency || {};
             const current = item.currentLevel || 1;
             const expected = item.expectedLevel || 1;
             const gap = item.gap || 0;
-            const priorityVariant = gap >= 3 ? 'critical' : gap === 2 ? 'high' : gap === 1 ? 'medium' : 'low';
-            const priorityText = gap >= 3 ? 'Critical' : gap === 2 ? 'High' : gap === 1 ? 'Medium' : 'Target Met';
 
             return (
-              <GlassCard key={comp._id || idx} className="p-6 space-y-4 flex flex-col justify-between">
+              <div
+                key={comp._id || idx}
+                className="rounded-xl bg-[#FFFDF8] border border-[#DDD9CF] p-5 space-y-4 flex flex-col justify-between"
+              >
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <GlassBadge variant={gap > 0 ? priorityVariant : 'success'} size="xs" dot={gap > 0}>
-                      {priorityText} Priority
-                    </GlassBadge>
-
-                    {gap > 0 ? (
-                      <span className="text-xs font-bold text-rose-600">
-                        -{gap} Level Gap
-                      </span>
-                    ) : (
-                      <span className="text-xs font-bold text-emerald-600">
-                        Target Met
-                      </span>
-                    )}
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-[#F8F6F0] text-[#62615D] border border-[#DDD9CF]">
+                          {comp.category || 'Functional'}
+                        </span>
+                        {gap > 0 ? (
+                          <GlassBadge variant="carmine" size="xs">
+                            Gap: +{gap} {gap === 1 ? 'Level' : 'Levels'}
+                          </GlassBadge>
+                        ) : (
+                          <GlassBadge variant="success" size="xs">
+                            Requirement Met
+                          </GlassBadge>
+                        )}
+                      </div>
+                      <h2 className="text-sm font-bold text-[#111111] leading-snug">
+                        {comp.name}
+                      </h2>
+                    </div>
                   </div>
 
-                  <div>
-                    <h2 className="text-base font-bold text-slate-900 leading-snug">
-                      {comp.name}
-                    </h2>
-                    <p className="text-xs text-slate-500 mt-0.5">
-                      {comp.description}
-                    </p>
-                  </div>
+                  <p className="text-xs text-[#62615D] line-clamp-2 leading-relaxed">
+                    {comp.description}
+                  </p>
 
-                  {/* Level Comparison Matrix */}
-                  <div className="grid grid-cols-3 gap-2 p-3 rounded-xl bg-slate-50/80 border border-slate-200/60 text-center">
-                    <div>
-                      <span className="text-[10px] text-slate-400 font-bold uppercase block">Current</span>
-                      <span className="text-sm font-bold text-slate-800">L{current}</span>
-                    </div>
-                    <div className="border-x border-slate-200/80">
-                      <span className="text-[10px] text-slate-400 font-bold uppercase block">Required</span>
-                      <span className="text-sm font-bold text-blue-700">L{expected}</span>
-                    </div>
-                    <div>
-                      <span className="text-[10px] text-slate-400 font-bold uppercase block">Gap</span>
-                      <span className={`text-sm font-bold ${gap > 0 ? 'text-rose-600' : 'text-emerald-600'}`}>
-                        {gap > 0 ? `-${gap}` : '0'}
-                      </span>
-                    </div>
+                  <div className="pt-1">
+                    <ProficiencyScale
+                      currentLevel={current}
+                      targetLevel={expected}
+                      compact={false}
+                      showLabels={true}
+                    />
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-slate-200/60 flex items-center justify-between">
-                  <span className="text-[11px] text-slate-500">
-                    Category: <strong>{comp.category || 'Functional'}</strong>
+                <div className="pt-3 border-t border-[#DDD9CF] flex items-center justify-between">
+                  <span className="text-[11px] text-[#8A8882]">
+                    Target: <strong>Level {expected}</strong>
                   </span>
 
                   {gap > 0 ? (
                     <GlassButton
                       variant="outline"
                       size="xs"
-                      iconRight={FiArrowRight}
                       onClick={() => navigate('/employee/recommendations')}
                     >
-                      View Learning
+                      Start Learning Path &rarr;
                     </GlassButton>
                   ) : (
-                    <span className="text-xs text-emerald-700 font-medium flex items-center gap-1">
-                      <FiCheckCircle className="text-xs" /> Satisfied
+                    <span className="text-xs text-[#52745D] font-medium flex items-center gap-1">
+                      <FiCheckCircle className="text-xs" /> Benchmark Achieved
                     </span>
                   )}
                 </div>
-              </GlassCard>
+              </div>
             );
           })}
         </div>

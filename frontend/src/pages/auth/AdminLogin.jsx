@@ -8,8 +8,7 @@ import {
   FiEyeOff,
   FiArrowRight,
   FiAlertCircle,
-  FiCheckCircle,
-  FiUsers,
+  FiKey,
 } from 'react-icons/fi';
 import { RiGovernmentLine } from 'react-icons/ri';
 import { useAuth } from '../../context/AuthContext';
@@ -27,7 +26,6 @@ export default function AdminLogin() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // One-click demo fill for rapid evaluation
   const handleFillDemo = () => {
     setEmail('admin@karmayogi.gov.in');
     setPassword('admin123');
@@ -62,159 +60,150 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen ambient-canvas bg-canvas flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 relative selection:bg-indigo-100 selection:text-indigo-900 antialiased">
-      {/* Ambient background glow orbs */}
-      <div className="ambient-glow-1" />
-      <div className="ambient-glow-2" />
-      <div className="ambient-glow-3" />
-
-      <div className="w-full max-w-md space-y-6 relative z-10">
-        
-        {/* BRAND HEADER */}
-        <div className="text-center space-y-2">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-700 via-indigo-800 to-slate-900 text-white shadow-lg shadow-indigo-500/20 mb-1">
-            <RiGovernmentLine className="text-3xl" />
+    <div className="min-h-screen bg-[#F4F1E9] text-[#171717] flex flex-col justify-between px-4 py-8 sm:py-12">
+      {/* Top Header */}
+      <header className="max-w-4xl mx-auto w-full flex items-center justify-between pb-4">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-lg bg-[#111111] text-[#FFFDF8] flex items-center justify-center font-bold">
+            <RiGovernmentLine className="text-xl" />
           </div>
-          
-          <div className="flex items-center justify-center gap-2">
-            <span className="text-xl font-extrabold text-slate-900 tracking-tight">
-              Karmayogi AI
+          <div>
+            <span className="text-sm font-bold text-[#111111] tracking-tight block">
+              Karmayogi AI &middot; Governance
             </span>
-            <GlassBadge variant="purple" size="xs">
-              Administrator Portal
-            </GlassBadge>
+            <span className="text-[10px] text-[#8A8882] block">
+              Workforce Intelligence & Oversight
+            </span>
           </div>
-
-          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
-            Workforce Intelligence Portal
-          </h1>
-
-          <p className="text-xs sm:text-sm text-slate-600 max-w-sm mx-auto leading-relaxed">
-            Manage workforce competency frameworks, monitor capacity-building velocity, and oversee AI-assisted assessment content.
-          </p>
         </div>
 
-        {/* LOGIN FORM CARD */}
-        <GlassCard variant="solid" className="p-6 sm:p-8 border-white/80 shadow-glass-lg space-y-6">
-          
-          {/* Quick Demo Fill Pill */}
-          <div className="p-3 rounded-xl bg-indigo-50/80 border border-indigo-100 flex items-center justify-between gap-2">
-            <div className="text-[11px] text-indigo-900 font-medium">
-              <span className="font-bold block">Prototype Admin Credentials</span>
-              <span className="text-indigo-700">admin@karmayogi.gov.in / admin123</span>
-            </div>
-            <GlassButton
-              type="button"
-              variant="outline"
-              size="xs"
-              onClick={handleFillDemo}
-            >
-              Fill Demo Admin
-            </GlassButton>
+        <Link
+          to="/login/employee"
+          className="text-xs font-semibold text-[#62615D] hover:text-[#111111]"
+        >
+          Officer Portal &rarr;
+        </Link>
+      </header>
+
+      {/* Main Login Card */}
+      <main className="max-w-md w-full mx-auto my-auto py-6">
+        <div className="rounded-2xl bg-[#FFFDF8] border border-[#DDD9CF] p-7 sm:p-9 shadow-xs space-y-6">
+          <div className="text-center space-y-1">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[#8A8882]">
+              Administrative Supervision
+            </span>
+            <h1 className="text-2xl font-bold text-[#111111] tracking-tight">
+              Workforce Governance
+            </h1>
+            <p className="text-xs text-[#62615D]">
+              Sign in to manage competency frameworks, monitor capacity metrics, and review assessment items.
+            </p>
           </div>
 
-          {/* Error Alert */}
           {error && (
-            <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center gap-2.5 shadow-xs">
-              <FiAlertCircle className="text-base text-rose-600 flex-shrink-0" />
-              <span className="font-medium">{error}</span>
+            <div className="p-3 rounded-lg bg-[#F8E9E7] border border-[#E8C2BF] text-[#A54C45] text-xs flex items-center gap-2">
+              <FiAlertCircle className="text-base flex-shrink-0" />
+              <span>{error}</span>
             </div>
           )}
 
-          {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            
-            {/* Email Field */}
-            <div className="space-y-1.5 text-left">
+            <div className="space-y-1">
               <label
-                htmlFor="admin-email"
-                className="block text-xs font-bold uppercase tracking-wider text-slate-600"
+                htmlFor="email"
+                className="block text-xs font-bold uppercase tracking-wider text-[#111111]"
               >
-                Administrative Email
+                Administrator Email
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                  <FiMail className="text-base" />
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#8A8882]">
+                  <FiMail className="text-sm" />
                 </div>
                 <input
-                  id="admin-email"
+                  id="email"
                   type="email"
+                  autoComplete="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="admin@karmayogi.gov.in"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/70 border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all font-medium"
-                  required
+                  disabled={loading}
+                  className="w-full pl-9 pr-3 py-2 text-xs sm:text-sm rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-[#111111] placeholder:text-[#8A8882] focus:outline-none focus:border-[#111111]"
                 />
               </div>
             </div>
 
-            {/* Password Field */}
-            <div className="space-y-1.5 text-left">
-              <div className="flex items-center justify-between">
-                <label
-                  htmlFor="admin-password"
-                  className="block text-xs font-bold uppercase tracking-wider text-slate-600"
-                >
-                  Password
-                </label>
-              </div>
+            <div className="space-y-1">
+              <label
+                htmlFor="password"
+                className="block text-xs font-bold uppercase tracking-wider text-[#111111]"
+              >
+                Password
+              </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                  <FiLock className="text-base" />
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#8A8882]">
+                  <FiLock className="text-sm" />
                 </div>
                 <input
-                  id="admin-password"
+                  id="password"
                   type={showPassword ? 'text' : 'password'}
+                  autoComplete="current-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter administrator password"
-                  className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-white/70 border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all font-medium"
-                  required
+                  disabled={loading}
+                  className="w-full pl-9 pr-10 py-2 text-xs sm:text-sm rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-[#111111] placeholder:text-[#8A8882] focus:outline-none focus:border-[#111111]"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600"
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-[#8A8882] hover:text-[#111111]"
                 >
-                  {showPassword ? <FiEyeOff className="text-sm" /> : <FiEye className="text-sm" />}
+                  {showPassword ? <FiEyeOff /> : <FiEye />}
                 </button>
               </div>
             </div>
 
-            {/* Submit Button */}
-            <div className="pt-2">
-              <GlassButton
-                type="submit"
-                variant="primary"
-                size="lg"
-                loading={loading}
-                className="w-full justify-center bg-gradient-to-r from-indigo-700 to-slate-900 hover:from-indigo-800 hover:to-black text-white shadow-md shadow-indigo-500/20"
-                iconRight={FiArrowRight}
-              >
-                {loading ? 'Authenticating Administrator...' : 'Sign In as Administrator'}
-              </GlassButton>
-            </div>
-          </form>
+            {/* Demo Helper */}
+            <button
+              type="button"
+              onClick={handleFillDemo}
+              className="w-full py-1.5 px-3 rounded bg-[#F8F6F0] hover:bg-[#EAE6DB] border border-[#DDD9CF] text-[#111111] text-xs font-medium flex items-center justify-center gap-1.5 transition-colors"
+            >
+              <FiKey className="text-xs" />
+              <span>Fill Demo Admin (admin@karmayogi.gov.in)</span>
+            </button>
 
-          {/* Portal Switcher Link */}
-          <div className="pt-4 border-t border-slate-200/60 text-center text-xs text-slate-500">
-            <span>Are you a civil service officer? </span>
+            <GlassButton
+              type="submit"
+              variant="primary"
+              size="md"
+              loading={loading}
+              iconRight={FiArrowRight}
+              className="w-full justify-center"
+            >
+              {loading ? 'Authenticating...' : 'Sign In as Administrator'}
+            </GlassButton>
+          </form>
+        </div>
+
+        <div className="text-center mt-4">
+          <p className="text-xs text-[#62615D]">
+            Looking for Officer Portal?{' '}
             <Link
               to="/login/employee"
-              className="font-bold text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center gap-1"
+              className="font-semibold text-[#111111] hover:underline"
             >
-              Switch to Employee Portal &rarr;
+              Officer Login &rarr;
             </Link>
-          </div>
-        </GlassCard>
+          </p>
+        </div>
+      </main>
 
-        {/* Footer Note */}
-        <p className="text-center text-[11px] text-slate-400">
-          Mission Karmayogi &bull; National Programme for Civil Services Capacity Building
+      <footer className="max-w-4xl mx-auto w-full text-center pt-4">
+        <p className="text-[10px] text-[#8A8882]">
+          Karmayogi AI &bull; Workforce Governance & Capacity Building Commission
         </p>
-
-      </div>
+      </footer>
     </div>
   );
 }

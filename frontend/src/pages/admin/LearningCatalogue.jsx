@@ -166,58 +166,57 @@ export default function LearningCatalogue() {
   return (
     <div className="space-y-6 pb-12">
       {/* Header Banner */}
-      <GlassCard variant="solid" className="p-6 sm:p-8 border-white/80 space-y-2 shadow-glass">
+      <div className="rounded-2xl bg-[#FFFDF8] border border-[#DDD9CF] p-6 sm:p-8 space-y-3 shadow-xs">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
-              <GlassBadge variant="purple" size="xs">
+              <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#F8F6F0] text-[#62615D] border border-[#DDD9CF]">
                 Capacity Building Hub
-              </GlassBadge>
-              <span className="text-xs text-slate-400 font-medium">
+              </span>
+              <span className="text-xs text-[#8A8882] font-medium">
                 {resources.length} Official Learning Modules
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#111111] tracking-tight">
               Learning Resources & Document Upload
             </h1>
-            <p className="text-xs sm:text-sm text-slate-600 max-w-2xl font-normal leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#62615D] max-w-2xl font-normal leading-relaxed">
               Upload official manuals and training material. Mapped to competencies and target proficiency levels, approved resources immediately feed AI question generation and employee learning recommendations.
             </p>
           </div>
 
           <div className="flex items-center gap-3">
-            <GlassButton
-              variant="primary"
-              size="md"
-              icon={FiUploadCloud}
-              className="bg-gradient-to-r from-indigo-700 to-slate-900 text-white shadow-md shadow-indigo-500/20"
+            <button
+              type="button"
               onClick={handleOpenUpload}
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#111111] hover:bg-[#222222] text-[#FFFDF8] text-xs font-semibold shadow-xs transition-colors"
             >
-              + Upload Learning Resource
-            </GlassButton>
-            <GlassButton
-              variant="glass"
-              size="md"
-              icon={FiRefreshCw}
-              loading={loading}
+              <FiUploadCloud className="text-sm" />
+              <span>Upload Learning Resource</span>
+            </button>
+            <button
+              type="button"
               onClick={loadData}
+              disabled={loading}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-[#FFFDF8] hover:bg-[#F8F6F0] text-[#111111] border border-[#DDD9CF] text-xs font-medium transition-colors shadow-xs disabled:opacity-50"
             >
-              Refresh
-            </GlassButton>
+              <FiRefreshCw className={`text-xs ${loading ? 'animate-spin' : ''}`} />
+              <span>Refresh</span>
+            </button>
           </div>
         </div>
-      </GlassCard>
+      </div>
 
       {/* Search & Competency Filter Toolbar */}
-      <GlassCard className="p-4 flex flex-col md:flex-row items-center justify-between gap-3">
+      <div className="rounded-xl bg-[#FFFDF8] border border-[#DDD9CF] p-4 flex flex-col md:flex-row items-center justify-between gap-3 shadow-xs">
         <div className="relative w-full md:w-80">
-          <FiSearch className="absolute left-3.5 top-3 text-slate-400 text-sm" />
+          <FiSearch className="absolute left-3.5 top-3 text-[#8A8882] text-sm" />
           <input
             type="text"
             placeholder="Search by course title or provider..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 rounded-xl bg-white/70 border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 font-medium"
+            className="w-full pl-10 pr-4 py-2 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-xs text-[#111111] placeholder:text-[#8A8882] focus:outline-none focus:border-[#111111] font-medium"
           />
         </div>
 
@@ -225,7 +224,7 @@ export default function LearningCatalogue() {
           <select
             value={competencyFilter}
             onChange={(e) => setCompetencyFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-white/70 border border-slate-200 text-xs text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="px-3 py-2 rounded-lg bg-[#F8F6F0] border border-[#DDD9CF] text-xs text-[#111111] font-medium focus:outline-none focus:border-[#111111]"
           >
             <option value="all">All Competencies</option>
             {competencies.map((c) => (
@@ -235,18 +234,18 @@ export default function LearningCatalogue() {
             ))}
           </select>
         </div>
-      </GlassCard>
+      </div>
 
       {/* Resources Table / List */}
       {loading ? (
-        <div className="py-16 text-center text-xs text-slate-400 space-y-3">
-          <FiRefreshCw className="animate-spin text-indigo-600 text-2xl mx-auto" />
+        <div className="py-16 text-center text-xs text-[#8A8882] space-y-3">
+          <FiRefreshCw className="animate-spin text-[#111111] text-2xl mx-auto" />
           <p>Loading learning resources from database...</p>
         </div>
       ) : filteredResources.length === 0 ? (
-        <GlassCard className="p-8 text-center text-xs text-slate-500">
+        <div className="rounded-xl bg-[#FFFDF8] border border-[#DDD9CF] p-8 text-center text-xs text-[#62615D] shadow-xs">
           No learning resources found. Click "+ Upload Learning Resource" to add one.
-        </GlassCard>
+        </div>
       ) : (
         <div className="space-y-3">
           {filteredResources.map((res) => {
@@ -254,40 +253,44 @@ export default function LearningCatalogue() {
             const mappedComps = res.competencies || [];
 
             return (
-              <GlassCard
+              <div
                 key={res._id}
-                className="p-5 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 hover:bg-white/90 transition-all border-white/80"
+                className="rounded-xl bg-[#FFFDF8] border border-[#DDD9CF] p-5 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 shadow-xs hover:border-[#C9C4B8] transition-all"
               >
                 <div className="flex items-start sm:items-center gap-3.5 min-w-0">
-                  <div className="w-11 h-11 rounded-2xl bg-indigo-50 text-indigo-700 border border-indigo-100 flex items-center justify-center flex-shrink-0 shadow-xs">
-                    <FiBookOpen className="text-xl" />
+                  <div className="w-11 h-11 rounded-xl bg-[#F8F6F0] border border-[#DDD9CF] text-[#111111] flex items-center justify-center flex-shrink-0 shadow-xs">
+                    <FiBookOpen className="text-lg" />
                   </div>
 
                   <div className="space-y-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <h3 className="text-sm font-bold text-slate-900 leading-snug">
+                      <h3 className="text-sm font-bold text-[#111111] leading-snug">
                         {res.title}
                       </h3>
-                      <GlassBadge variant="default" size="xs">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-semibold uppercase bg-[#F8F6F0] text-[#62615D] border border-[#DDD9CF]">
                         {res.provider || 'iGOT'}
-                      </GlassBadge>
-                      <GlassBadge variant={isApproved ? 'success' : 'high'} size="xs" dot>
-                        {isApproved ? 'Approved for iGOT Hub' : 'Inactive / Draft'}
-                      </GlassBadge>
+                      </span>
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-semibold uppercase border ${
+                        isApproved
+                          ? 'bg-[#EAF2EC] text-[#52745D] border-[#C5DDCB]'
+                          : 'bg-[#F7EEDC] text-[#A8752E] border-[#ECD9BA]'
+                      }`}>
+                        &bull; {isApproved ? 'Approved for iGOT Hub' : 'Inactive / Draft'}
+                      </span>
                     </div>
 
-                    <div className="flex items-center gap-3 text-xs text-slate-500 flex-wrap">
+                    <div className="flex items-center gap-3 text-xs text-[#62615D] flex-wrap">
                       <span className="flex items-center gap-1">
                         <FiClock className="text-xs" /> {res.durationMinutes || 120} mins
                       </span>
                       <span>&bull;</span>
-                      <span className="font-semibold text-indigo-700">
+                      <span className="font-semibold text-[#111111]">
                         Target Proficiency: Level {res.level || 3}
                       </span>
                       {res.externalId && (
                         <>
                           <span>&bull;</span>
-                          <span className="font-mono text-[10px] text-slate-400">
+                          <span className="font-mono text-[10px] text-[#8A8882]">
                             {res.externalId}
                           </span>
                         </>
@@ -299,7 +302,7 @@ export default function LearningCatalogue() {
                       {mappedComps.map((c, cIdx) => (
                         <span
                           key={c.competencyId?._id || cIdx}
-                          className="px-2 py-0.5 rounded-md bg-indigo-50 border border-indigo-100 text-[10px] font-bold text-indigo-900"
+                          className="px-2 py-0.5 rounded bg-[#F8F6F0] border border-[#DDD9CF] text-[10px] font-semibold text-[#111111]"
                         >
                           {c.competencyId?.name || 'Competency'} (Target: L{res.level || 3})
                         </span>
@@ -309,37 +312,39 @@ export default function LearningCatalogue() {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex items-center gap-2 w-full lg:w-auto justify-end pt-2 lg:pt-0 border-t lg:border-t-0 border-slate-200/50">
-                  <GlassButton
-                    variant="glass"
-                    size="xs"
-                    icon={FiZap}
+                <div className="flex items-center gap-2 w-full lg:w-auto justify-end pt-2 lg:pt-0 border-t lg:border-t-0 border-[#DDD9CF]">
+                  <button
+                    type="button"
                     onClick={() => navigate('/admin/ai-question-review')}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#FFFDF8] hover:bg-[#F8F6F0] border border-[#DDD9CF] text-xs font-medium text-[#111111] transition-colors"
                     title="Generate Assessment Questions from this Material"
                   >
-                    AI Questions
-                  </GlassButton>
+                    <FiZap className="text-[#3348A8] text-xs" />
+                    <span>AI Questions</span>
+                  </button>
 
                   <button
+                    type="button"
                     onClick={() => handleToggleStatus(res._id, res.status)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
                       isApproved
-                        ? 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
-                        : 'bg-indigo-600 text-white border-transparent hover:bg-indigo-700'
+                        ? 'bg-[#EAF2EC] text-[#52745D] border-[#C5DDCB] hover:bg-[#DCECE0]'
+                        : 'bg-[#111111] text-[#FFFDF8] hover:bg-[#222222] border-[#111111]'
                     }`}
                   >
                     {isApproved ? 'Approved' : 'Approve Resource'}
                   </button>
 
                   <button
+                    type="button"
                     onClick={() => handleDelete(res._id)}
-                    className="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50"
+                    className="p-2 rounded-lg text-[#8A8882] hover:text-[#A54C45] hover:bg-[#F8E9E7] transition-colors"
                     title="Delete Resource"
                   >
                     <FiTrash2 className="text-sm" />
                   </button>
                 </div>
-              </GlassCard>
+              </div>
             );
           })}
         </div>
@@ -347,31 +352,32 @@ export default function LearningCatalogue() {
 
       {/* UPLOAD LEARNING RESOURCE MODAL */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/25 backdrop-blur-xs">
-          <div className="relative w-full max-w-2xl max-h-[90vh] bg-white/95 backdrop-blur-md rounded-2xl border border-white/80 p-6 shadow-glass-lg space-y-4 overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-slate-200/60 pb-3">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
+          <div className="relative w-full max-w-2xl max-h-[90vh] bg-[#FFFDF8] rounded-2xl border border-[#DDD9CF] p-6 shadow-2xl space-y-4 overflow-y-auto text-left">
+            <div className="flex items-center justify-between border-b border-[#DDD9CF] pb-3">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-900 flex items-center justify-center font-bold">
+                <div className="w-8 h-8 rounded-lg bg-[#111111] text-[#FFFDF8] flex items-center justify-center font-bold">
                   <FiUploadCloud className="text-base" />
                 </div>
-                <h3 className="text-base font-bold text-slate-900">
+                <h3 className="text-base font-bold text-[#111111]">
                   Upload & Map Learning Resource
                 </h3>
               </div>
               <button
+                type="button"
                 onClick={() => setModalOpen(false)}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-slate-600"
+                className="p-1.5 rounded-lg text-[#8A8882] hover:text-[#111111]"
               >
                 <FiX className="text-lg" />
               </button>
             </div>
 
-            <form onSubmit={handleUploadSubmit} className="space-y-4 text-left">
+            <form onSubmit={handleUploadSubmit} className="space-y-4">
               {/* File Drag & Drop Simulation */}
-              <div className="p-4 rounded-xl border-2 border-dashed border-indigo-200 bg-indigo-50/40 text-center space-y-2">
-                <FiUploadCloud className="text-2xl text-indigo-600 mx-auto" />
-                <div className="text-xs text-slate-700">
-                  <label className="font-bold text-indigo-700 hover:underline cursor-pointer">
+              <div className="p-4 rounded-xl border-2 border-dashed border-[#DDD9CF] bg-[#F8F6F0] text-center space-y-2">
+                <FiUploadCloud className="text-2xl text-[#111111] mx-auto" />
+                <div className="text-xs text-[#111111]">
+                  <label className="font-bold text-[#3348A8] hover:underline cursor-pointer">
                     <span>Choose Official Document (PDF, DOCX, TXT)</span>
                     <input
                       type="file"
@@ -380,8 +386,8 @@ export default function LearningCatalogue() {
                       className="hidden"
                     />
                   </label>
-                  <p className="text-[11px] text-slate-400 mt-0.5">
-                    Selected file: <strong className="text-slate-800">{formData.fileName || 'None'}</strong>
+                  <p className="text-[11px] text-[#8A8882] mt-0.5">
+                    Selected file: <strong className="text-[#111111]">{formData.fileName || 'None'}</strong>
                   </p>
                 </div>
               </div>
@@ -389,25 +395,25 @@ export default function LearningCatalogue() {
               {/* Title & Provider */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-700 uppercase">Resource Title</label>
+                  <label className="text-[11px] font-bold text-[#111111] uppercase tracking-wider">Resource Title</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. Sampling Techniques & Survey Design"
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500/20"
+                    className="w-full px-3 py-2 rounded-lg bg-[#FFFDF8] border border-[#DDD9CF] text-xs text-[#111111] focus:outline-none focus:border-[#111111]"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-700 uppercase">Issuing Authority / Provider</label>
+                  <label className="text-[11px] font-bold text-[#111111] uppercase tracking-wider">Issuing Authority / Provider</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. iGOT Karmayogi / MoSPI"
                     value={formData.provider}
                     onChange={(e) => setFormData({ ...formData, provider: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500/20"
+                    className="w-full px-3 py-2 rounded-lg bg-[#FFFDF8] border border-[#DDD9CF] text-xs text-[#111111] focus:outline-none focus:border-[#111111]"
                   />
                 </div>
               </div>
@@ -415,11 +421,11 @@ export default function LearningCatalogue() {
               {/* Competency Mapping & Target Level */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-700 uppercase">Target Competency</label>
+                  <label className="text-[11px] font-bold text-[#111111] uppercase tracking-wider">Target Competency</label>
                   <select
                     value={formData.competencyId}
                     onChange={(e) => setFormData({ ...formData, competencyId: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500/20"
+                    className="w-full px-3 py-2 rounded-lg bg-[#FFFDF8] border border-[#DDD9CF] text-xs text-[#111111] focus:outline-none focus:border-[#111111]"
                   >
                     {competencies.map((c) => (
                       <option key={c._id} value={c._id}>
@@ -429,15 +435,15 @@ export default function LearningCatalogue() {
                   </select>
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-700 uppercase">Target Proficiency Level</label>
+                  <label className="text-[11px] font-bold text-[#111111] uppercase tracking-wider">Target Proficiency Level</label>
                   <select
                     value={formData.level}
                     onChange={(e) => setFormData({ ...formData, level: Number(e.target.value) })}
-                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500/20"
+                    className="w-full px-3 py-2 rounded-lg bg-[#FFFDF8] border border-[#DDD9CF] text-xs text-[#111111] focus:outline-none focus:border-[#111111]"
                   >
-                    <option value="1">Level 1 - Beginner</option>
-                    <option value="2">Level 2 - Basic</option>
-                    <option value="3">Level 3 - Intermediate</option>
+                    <option value="1">Level 1 - Basic</option>
+                    <option value="2">Level 2 - Working</option>
+                    <option value="3">Level 3 - Proficient</option>
                     <option value="4">Level 4 - Advanced</option>
                     <option value="5">Level 5 - Expert</option>
                   </select>
@@ -447,22 +453,22 @@ export default function LearningCatalogue() {
               {/* Duration & Status */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-700 uppercase">Duration (Minutes)</label>
+                  <label className="text-[11px] font-bold text-[#111111] uppercase tracking-wider">Duration (Minutes)</label>
                   <input
                     type="number"
                     min="10"
                     max="1000"
                     value={formData.durationMinutes}
                     onChange={(e) => setFormData({ ...formData, durationMinutes: Number(e.target.value) })}
-                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500/20"
+                    className="w-full px-3 py-2 rounded-lg bg-[#FFFDF8] border border-[#DDD9CF] text-xs text-[#111111] focus:outline-none focus:border-[#111111]"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-700 uppercase">Approval Status</label>
+                  <label className="text-[11px] font-bold text-[#111111] uppercase tracking-wider">Approval Status</label>
                   <select
                     value={formData.status}
                     onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500/20"
+                    className="w-full px-3 py-2 rounded-lg bg-[#FFFDF8] border border-[#DDD9CF] text-xs text-[#111111] focus:outline-none focus:border-[#111111]"
                   >
                     <option value="approved">Approved & Publish to iGOT Hub</option>
                     <option value="pending_review">Pending Review</option>
@@ -473,9 +479,9 @@ export default function LearningCatalogue() {
 
               {/* Extracted Text Preview (Knowledge Source for Gemini AI) */}
               <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-700 uppercase flex items-center justify-between">
+                <label className="text-[11px] font-bold text-[#111111] uppercase tracking-wider flex items-center justify-between">
                   <span>Document Text Content (AI Question Knowledge Source)</span>
-                  <span className="text-[10px] text-purple-700 font-semibold">Gemini Ingestion Ready</span>
+                  <span className="text-[10px] text-[#3348A8] font-semibold">Gemini Ingestion Ready</span>
                 </label>
                 <textarea
                   rows="3"
@@ -483,23 +489,25 @@ export default function LearningCatalogue() {
                   placeholder="Paste or preview official extracted document text..."
                   value={formData.extractedText}
                   onChange={(e) => setFormData({ ...formData, extractedText: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-mono focus:ring-2 focus:ring-indigo-500/20"
+                  className="w-full px-3 py-2 rounded-lg bg-[#FFFDF8] border border-[#DDD9CF] text-xs font-mono text-[#111111] focus:outline-none focus:border-[#111111]"
                 />
               </div>
 
-              <div className="pt-3 border-t border-slate-200/60 flex justify-end gap-2">
-                <GlassButton variant="glass" size="sm" onClick={() => setModalOpen(false)}>
+              <div className="pt-3 border-t border-[#DDD9CF] flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setModalOpen(false)}
+                  className="px-3.5 py-2 rounded-lg bg-[#FFFDF8] hover:bg-[#F8F6F0] text-[#111111] border border-[#DDD9CF] text-xs font-medium"
+                >
                   Cancel
-                </GlassButton>
-                <GlassButton
-                  variant="primary"
-                  size="sm"
+                </button>
+                <button
                   type="submit"
-                  loading={submitting}
-                  className="bg-gradient-to-r from-indigo-700 to-slate-900 text-white"
+                  disabled={submitting}
+                  className="px-4 py-2 rounded-lg bg-[#111111] hover:bg-[#222222] text-[#FFFDF8] text-xs font-semibold shadow-xs disabled:opacity-50"
                 >
                   Save & Map to Framework
-                </GlassButton>
+                </button>
               </div>
             </form>
           </div>
